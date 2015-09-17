@@ -3,29 +3,44 @@ package com.test.hibernate.dao;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
+import com.panipuri.vo.ItemVo;
 import com.test.hibernate.Item;
 
-public class ItemDaoImpl extends HibernateDaoSupport{
-	public void addItem(String itemName, BigDecimal itemPrice, String itemDetails) {
+public class ItemDaoImpl {
+	private SessionFactory sessionFactory;
+    
+    public void setSessionFactory(SessionFactory sf){
+        this.sessionFactory = sf;
+    }
+	public void addItem(ItemVo itemVo) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
 		Item item = new Item();
-		item.setItemDetails(itemDetails);
-		item.setItemName(itemName);
-		item.setItemPrice(itemPrice);
-		getHibernateTemplate().save(item);
+		item.setItemDetails(itemVo.getItemDetails().get(0));
+		item.setItemName(itemVo.getItemName());
+		item.setItemPrice(itemVo.getItemPrice());
+		session.save(item);
+		session.getTransaction().commit();
+		session.close();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Item> getAllAvailableItems() {
-		DetachedCriteria allAvailableItemsCriteria = DetachedCriteria.forClass(Item.class);
-		List<Item> allAvailableItems = getHibernateTemplate().findByCriteria(allAvailableItemsCriteria);
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		List<Item> allAvailableItems = (List<Item>)session.createCriteria(Item.class).list();
+		session.getTransaction().commit();
+		session.close();
 		return allAvailableItems;
 	}
 	
 	public void updateItemDetails(String itemName, BigDecimal itemPrice, String itemDetails, long itemId) {
-		Item selectedItem = (Item)getHibernateTemplate().get(Item.class, itemId);
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		Item selectedItem = (Item)session.get(Item.class, itemId);
 		if(null != selectedItem) {
 			if(null != itemName && !itemName.trim().equals("")) {
 				selectedItem.setItemName(itemName);
@@ -36,14 +51,20 @@ public class ItemDaoImpl extends HibernateDaoSupport{
 			if(null != itemDetails && !itemDetails.trim().equals("")) {
 				selectedItem.setItemDetails(itemDetails);
 			}
-			getHibernateTemplate().update(selectedItem);
+			session.update(selectedItem);
 		}
+		session.getTransaction().commit();
+		session.close();
 		
 	}
 	
 	public void deleteItem(long itemId) {
-		Item selectedItem = (Item)getHibernateTemplate().get(Item.class, itemId);
-		getHibernateTemplate().delete(selectedItem);
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Item selectedItem = (Item)session.get(Item.class, itemId);
+		session.delete(selectedItem);
+		session.getTransaction().commit();
+		session.close();
 		
 	}
 }

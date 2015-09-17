@@ -2,7 +2,9 @@ package com.test.hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +17,8 @@ public class AvailableDeliveryArea {
 	@Id
 	@Column(name="zipcode")
 	private long zipcode;
+	@OneToOne(fetch=FetchType.EAGER)
+	private MasterDeliveryArea area;
 	/**
 	 * @return the city
 	 */
@@ -50,5 +54,17 @@ public class AvailableDeliveryArea {
 	 */
 	public void setZipcode(long zipcode) {
 		this.zipcode = zipcode;
+	}
+	/**
+	 * @return the area
+	 */
+	public MasterDeliveryArea getArea() {
+		return area;
+	}
+	/**
+	 * @param area the area to set
+	 */
+	public void setArea(MasterDeliveryArea area) {
+		this.area = area;
 	}
 }

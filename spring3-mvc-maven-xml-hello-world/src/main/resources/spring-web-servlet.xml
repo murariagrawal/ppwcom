@@ -10,12 +10,14 @@
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 	<context:component-scan base-package="com.test" />
+	<context:component-scan base-package="com.panipuri" />
 	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 
 		<property name="annotatedClasses">
 			<list>
+			    
 				<value>com.test.hibernate.Address</value>
 				<value>com.test.hibernate.AvailableDeliveryArea</value>
 				<value>com.test.hibernate.AvailableTopping</value>
@@ -36,7 +38,8 @@
 				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
 				<prop key="hibernate.current_session_context_class">thread</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">create</prop>
+<!-- 				<prop key="hibernate.hbm2ddl.auto">create</prop> -->
+				<prop key="hibernate.default_schema">PIYUSH</prop>
 			</props>
 		</property>
 	</bean>
@@ -74,6 +77,10 @@
 		</property>
 	</bean>
 	
-	
+	<bean id="customerDaoImpl" class="com.test.hibernate.dao.CustomerDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
 
 </beans>

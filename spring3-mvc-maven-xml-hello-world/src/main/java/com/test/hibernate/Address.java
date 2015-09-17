@@ -1,11 +1,14 @@
 package com.test.hibernate;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -15,9 +18,10 @@ import javax.persistence.Table;
 public class Address {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name="address_id", unique= true)
+	@Column(name="address_id")
 	private long addressId;
 	@ManyToOne(fetch= FetchType.LAZY)
+	@JoinColumn(name="customer_id")
 	private Customer customer;
 	@Column(name="name")
 	private String name;
@@ -35,6 +39,11 @@ public class Address {
 	private String state;
 	@Column(name="country")
 	private String country;
+	
+	@Column(name="latitude")
+	private BigDecimal latitude;
+	@Column(name="longitude")
+	private BigDecimal longitude;
 	/**
 	 * @return the addressId
 	 */
@@ -155,6 +164,30 @@ public class Address {
 	 */
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+	/**
+	 * @return the latitude
+	 */
+	public BigDecimal getLatitude() {
+		return latitude;
+	}
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
+	}
+	/**
+	 * @return the longitude
+	 */
+	public BigDecimal getLongitude() {
+		return longitude;
+	}
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
 	}
 	
 }

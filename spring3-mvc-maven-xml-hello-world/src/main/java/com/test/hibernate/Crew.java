@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +25,9 @@ public class Crew {
 	private long salary;
 	@Column(name="is_available")
 	private boolean isAvailable;
+	@OneToOne
+	private MasterDeliveryArea area;
+	
 	/**
 	 * @return the crewId
 	 */
@@ -95,5 +99,17 @@ public class Crew {
 	 */
 	public void setAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
+	}
+	/**
+	 * @return the area
+	 */
+	public MasterDeliveryArea getArea() {
+		return area;
+	}
+	/**
+	 * @param area the area to set
+	 */
+	public void setArea(MasterDeliveryArea area) {
+		this.area = area;
 	}
 }

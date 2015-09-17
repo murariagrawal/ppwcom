@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 @Entity
-@Table(name="order")
+@Table(name="my_order")
 public class Order {
 	/**
 	 * Order id which is an auto generated field
@@ -64,9 +65,9 @@ public class Order {
 	private Timestamp orderedTime;
 	@OneToOne(targetEntity=DeliverySlot.class)
 	private DeliverySlot deliverySlotSelected;
-	@OneToMany( targetEntity=OrderItems.class)
+	@OneToMany( targetEntity=OrderItems.class, mappedBy="order", cascade=CascadeType.ALL)
 	private List<OrderItems> orderItems;
-	@OneToMany(targetEntity=OrderToppings.class)
+	@OneToMany(targetEntity=OrderToppings.class, mappedBy="order", cascade=CascadeType.ALL)
 	private List<OrderToppings> orderToppings;
 	/**
 	 * @return the orderId

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -15,24 +17,14 @@ public class OrderToppings {
 	@Column
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long orderToppingId;
-	@Column(name="order_id")
-	private long orderId;
+	@ManyToOne
+	@JoinColumn(name="order_id")
+	private Order order;
 	@OneToOne(targetEntity=AvailableTopping.class)
 	private AvailableTopping topping;
 	@Column
 	private int quantity;
-	/**
-	 * @return the orderId
-	 */
-	public long getOrderId() {
-		return orderId;
-	}
-	/**
-	 * @param orderId the orderId to set
-	 */
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
-	}
+	
 	/**
 	 * @return the topping
 	 */
@@ -68,5 +60,17 @@ public class OrderToppings {
 	 */
 	public void setOrderToppingId(long orderToppingId) {
 		this.orderToppingId = orderToppingId;
+	}
+	/**
+	 * @return the order
+	 */
+	public Order getOrder() {
+		return order;
+	}
+	/**
+	 * @param order the order to set
+	 */
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 }

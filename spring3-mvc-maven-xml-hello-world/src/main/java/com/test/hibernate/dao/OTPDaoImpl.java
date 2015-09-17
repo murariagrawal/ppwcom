@@ -3,33 +3,47 @@ package com.test.hibernate.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.test.hibernate.OneTimePassword;
 import com.test.hibernate.Order;
 
-public class OTPDaoImpl extends HibernateDaoSupport {
+public class OTPDaoImpl {
+	private SessionFactory sessionFactory;
+    
+    public void setSessionFactory(SessionFactory sf){
+        this.sessionFactory = sf;
+    }
 	public void deleteOldOTPs() {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
 		long oldTime = new Date().getTime();
 		oldTime = oldTime - (15*60*100);
-		DetachedCriteria oldOtpCriteria = DetachedCriteria.forClass(OneTimePassword.class).add(Restrictions.le("generatedTime", oldTime));
-		List<OneTimePassword> oldOtps = getHibernateTemplate().findByCriteria(oldOtpCriteria);
-		getHibernateTemplate().deleteAll(oldOtps);
+		
+		List<OneTimePassword> oldOtps = (List<OneTimePassword>)session.createCriteria(OneTimePassword.class).add(Restrictions.le("generatedTime", oldTime));
+		session.delete(oldOtps);
+		session.getTransaction().commit();
+		session.close();
 		
 	}
 	public OneTimePassword getOTPDetails(String otp, String contactNumber, long OrderId) {
-		OneTimePassword oneTimePassword =  (OneTimePassword)getHibernateTemplate().get(OneTimePassword.class, otp);
+		Session session = this.sessionFactory.getCurrentSession();
+		OneTimePassword oneTimePassword =  (OneTimePassword)session.get(OneTimePassword.class, otp);
 		return oneTimePassword;
 	}
 	public void addOTP(String otp, long orderId, String contactNumber) {
-		Order order = (Order) getHibernateTemplate().get(Order.class, orderId);
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		Order order = (Order) session.get(Order.class, orderId);
 		OneTimePassword oneTimePassword = new OneTimePassword();
 		oneTimePassword.setContactNumber(contactNumber);
 		oneTimePassword.setOtp(otp);
 		oneTimePassword.setOrder(order);		
 		oneTimePassword.setGeneratedTime(new Date().getTime());
-		getHibernateTemplate().save(oneTimePassword);
+		session.save(oneTimePassword);
+		session.getTransaction().commit();
+		session.close();
 	}
 }

@@ -2,28 +2,40 @@ package com.test.hibernate.dao;
 
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import com.test.hibernate.DeliverySlot;
 
-public class DeliverySlotDaoImpl extends HibernateDaoSupport{
+public class DeliverySlotDaoImpl {
+	
+	private SessionFactory sessionFactory;
+    
+    public void setSessionFactory(SessionFactory sf){
+        this.sessionFactory = sf;
+    }
 	public void addDeliverySlot(String startTime, String endTime, int slotQuantity) {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
 		DeliverySlot deliverySlot = new DeliverySlot();
 		deliverySlot.setEndTime(endTime);
 		deliverySlot.setStartTime(startTime);
 		deliverySlot.setSlotQuantity(slotQuantity);
-		getHibernateTemplate().save(deliverySlot);
+		session.save(deliverySlot);
+		session.getTransaction().commit();
+		session.close();
 	}
 	
 	public List<DeliverySlot> getAvailableDeliverySlots() {
-		DetachedCriteria fetAvailableDeliverySlots = DetachedCriteria.forClass(DeliverySlot.class);
+		Session session = this.sessionFactory.getCurrentSession();		
 		@SuppressWarnings("unchecked")
-		List<DeliverySlot> deliverySlots = (List<DeliverySlot>) getHibernateTemplate().findByCriteria(fetAvailableDeliverySlots);
+		List<DeliverySlot> deliverySlots = (List<DeliverySlot>) session.createCriteria(DeliverySlot.class);
 		return deliverySlots;
 	}
 	public void updateDeliverySlot(String startTime, int slotQuantity, String endTime, long deliverySlotId) {
-		DeliverySlot selectedDeliverySlot = (DeliverySlot)getHibernateTemplate().get(DeliverySlot.class, deliverySlotId);
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		DeliverySlot selectedDeliverySlot = (DeliverySlot)session.get(DeliverySlot.class, deliverySlotId);
 		if(null != selectedDeliverySlot) {
 			if(null != startTime && !startTime.trim().equals("")) {
 				selectedDeliverySlot.setStartTime(startTime);
@@ -32,14 +44,19 @@ public class DeliverySlotDaoImpl extends HibernateDaoSupport{
 			if(null != endTime && !endTime.trim().equals("")) {
 				selectedDeliverySlot.setEndTime(endTime);
 			}
-			getHibernateTemplate().update(selectedDeliverySlot);
+			session.update(selectedDeliverySlot);
 		}
-		
+		session.getTransaction().commit();
+		session.close();
 	}
 	
 	public void deleteDeliverySlot(long deliverySlotId) {
-		DeliverySlot selectedDeliverySlot = (DeliverySlot)getHibernateTemplate().get(DeliverySlot.class, deliverySlotId);
-		getHibernateTemplate().delete(selectedDeliverySlot);
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		DeliverySlot selectedDeliverySlot = (DeliverySlot)session.get(DeliverySlot.class, deliverySlotId);
+		session.delete(selectedDeliverySlot);
+		session.getTransaction().commit();
+		session.close();
 		
 	}
 }

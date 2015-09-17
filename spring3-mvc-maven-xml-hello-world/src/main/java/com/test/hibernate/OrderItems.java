@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -16,24 +18,15 @@ public class OrderItems {
 	@Column
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long orderItemId;
-	@Column(name="order_id")
-	private long orderId;
+	@ManyToOne
+	@JoinColumn(name="order_id")
+	
+	private Order order;
 	@OneToOne(targetEntity=Item.class)
 	private Item item;
 	@Column
 	private int quantity;
-	/**
-	 * @return the orderId
-	 */
-	public long getOrderId() {
-		return orderId;
-	}
-	/**
-	 * @param orderId the orderId to set
-	 */
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
-	}
+	
 	
 	/**
 	 * @return the quantity
@@ -70,6 +63,18 @@ public class OrderItems {
 	 */
 	public void setOrderItemId(long orderItemId) {
 		this.orderItemId = orderItemId;
+	}
+	/**
+	 * @return the order
+	 */
+	public Order getOrder() {
+		return order;
+	}
+	/**
+	 * @param order the order to set
+	 */
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
 }

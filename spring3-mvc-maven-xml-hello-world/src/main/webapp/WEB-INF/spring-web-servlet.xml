@@ -18,7 +18,7 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>com.test.hibernate.Address</value>
-				<value>com.test.hibernate.AvailableDeliveryArea</value>
+				<value>com.test.hibernate.AvailableZipcodes</value>
 				<value>com.test.hibernate.AvailableTopping</value>
 				<value>com.test.hibernate.CashInvoice</value>
 				<value>com.test.hibernate.Crew</value>
@@ -30,6 +30,8 @@
 				<value>com.test.hibernate.Order</value>
 				<value>com.test.hibernate.OrderItems</value>
 				<value>com.test.hibernate.OrderToppings</value>
+				<value>com.test.hibernate.DailyDeliverySlots</value>
+				<value>com.test.hibernate.MasterDeliveryArea</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -76,6 +78,11 @@
 	</bean>
 	
 	<bean id="customerDaoImpl" class="com.test.hibernate.dao.CustomerDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="availableDeliveryAreaDaoImpl" class="com.test.hibernate.dao.AvailableDeliveryAreaDaoImpl">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

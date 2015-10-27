@@ -27,12 +27,14 @@ public class CustomerInformationFetchService {
 				deliveryAddress.setAddressId(address.getAddressId());
 				deliveryAddress.setAddressLine1(address.getAddressLine1());
 				deliveryAddress.setAddressline2(address.getAddressLine2());
-				deliveryAddress.setAddressLine3(address.getAddressLine3());
+				deliveryAddress.setLandmark(address.getLandmark());
 				deliveryAddress.setCity(address.getCity());
 				deliveryAddress.setState(address.getState());
 				deliveryAddress.setZipcode(""+address.getZipcode());
 				addressList.add(deliveryAddress);
 			}
+			addressListTemp.get(0).getCustomer().getCustomerFirstName();
+			addressListTemp.get(0).getCustomer().getCustomerLastName();
 		}
 		AddressVo deliveryAddress1 = new AddressVo();
 		deliveryAddress1.setAddressId(1121);

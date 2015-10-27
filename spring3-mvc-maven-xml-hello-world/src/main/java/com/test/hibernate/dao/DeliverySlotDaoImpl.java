@@ -1,10 +1,13 @@
 package com.test.hibernate.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
+import com.test.hibernate.AvailableZipcodes;
 import com.test.hibernate.DeliverySlot;
 
 public class DeliverySlotDaoImpl {
@@ -26,10 +29,14 @@ public class DeliverySlotDaoImpl {
 		session.close();
 	}
 	
-	public List<DeliverySlot> getAvailableDeliverySlots() {
+	public List<AvailableZipcodes> getAvailableDeliverySlots(String zipcode) {
 		Session session = this.sessionFactory.getCurrentSession();		
 		@SuppressWarnings("unchecked")
-		List<DeliverySlot> deliverySlots = (List<DeliverySlot>) session.createCriteria(DeliverySlot.class);
+		
+		List<AvailableZipcodes> deliverySlots = (List<AvailableZipcodes>) session.createCriteria(AvailableZipcodes.class, "deliveryArea")
+													.createAlias("deliveryArea.area.deliverySlots","slot")
+													.add(Restrictions.eq("deliveryArea.zipcode", zipcode))
+													.add(Restrictions.eq("slot.slotdate", new Date()));
 		return deliverySlots;
 	}
 	public void updateDeliverySlot(String startTime, int slotQuantity, String endTime, long deliverySlotId) {

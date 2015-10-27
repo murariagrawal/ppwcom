@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +22,9 @@ public class DeliverySlot {
 	private String endTime;
 	@Column(nullable=false)
 	private int slotQuantity;
+	@ManyToOne
+	@JoinColumn(name="delivery_area_id")
+	private MasterDeliveryArea deliveryArea; 
 	/**
 	 * @return the deliverySlotId
 	 */
@@ -67,6 +72,18 @@ public class DeliverySlot {
 	 */
 	public void setSlotQuantity(int slotQuantity) {
 		this.slotQuantity = slotQuantity;
+	}
+	/**
+	 * @return the deliveryArea
+	 */
+	public MasterDeliveryArea getDeliveryArea() {
+		return deliveryArea;
+	}
+	/**
+	 * @param deliveryArea the deliveryArea to set
+	 */
+	public void setDeliveryArea(MasterDeliveryArea deliveryArea) {
+		this.deliveryArea = deliveryArea;
 	}
 	
 

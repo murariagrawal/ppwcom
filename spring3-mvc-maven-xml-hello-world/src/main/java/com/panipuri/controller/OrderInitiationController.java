@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.panipuri.service.CustomerInformationFetchService;
+import com.panipuri.service.DeliveryDetailsService;
 import com.panipuri.service.OrderCreationService;
-import com.panipuri.vo.ToppingVo;
 import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.ItemVo;
+import com.panipuri.vo.ToppingVo;
 
 @Controller
 public class OrderInitiationController {
@@ -26,6 +26,8 @@ public class OrderInitiationController {
 	private CustomerInformationFetchService customerInformationFetchService;
 	@Autowired
 	private OrderCreationService orderCreationService;
+	@Autowired
+	private DeliveryDetailsService deliveryDetailsService;
 	
 
 	@RequestMapping(method = RequestMethod.POST, value="/deliveryDetails")
@@ -94,6 +96,7 @@ public class OrderInitiationController {
 		String zipcode = request.getParameter("zipcodeAddr");
 		ModelAndView mv = null;
 		List<AddressVo> addressList = getAddressList();
+		deliveryDetailsService.fetchDeliverySlots(zipcode);
 				//customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
 		mv = new ModelAndView("deliveryDetails");
 		mv.addObject("addressList",addressList);

@@ -29,8 +29,8 @@ public class Address {
 	private String addressLine1;
 	@Column(name="address_line_2")
 	private String addressLine2;
-	@Column(name="address_line_3")
-	private String addressLine3;
+	@Column(name="landmark")
+	private String landmark;
 	@Column(name="zipcode")
 	private int zipcode;
 	@Column(name="city")
@@ -93,18 +93,7 @@ public class Address {
 	public void setAddressLine2(String addressLine2) {
 		this.addressLine2 = addressLine2;
 	}
-	/**
-	 * @return the addressLine3
-	 */
-	public String getAddressLine3() {
-		return addressLine3;
-	}
-	/**
-	 * @param addressLine3 the addressLine3 to set
-	 */
-	public void setAddressLine3(String addressLine3) {
-		this.addressLine3 = addressLine3;
-	}
+	
 	/**
 	 * @return the zipcode
 	 */
@@ -188,6 +177,18 @@ public class Address {
 	 */
 	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
+	}
+	/**
+	 * @return the landmark
+	 */
+	public String getLandmark() {
+		return landmark;
+	}
+	/**
+	 * @param landmark the landmark to set
+	 */
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
 	}
 	
 }

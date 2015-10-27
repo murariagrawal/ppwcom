@@ -1,13 +1,15 @@
 package com.test.hibernate.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
-import com.test.hibernate.AvailableDeliveryArea;
+import com.test.hibernate.AvailableZipcodes;
 import com.test.hibernate.Crew;
+import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.MasterDeliveryArea;
 
 public class AvailableDeliveryAreaDaoImpl {
@@ -17,32 +19,62 @@ public class AvailableDeliveryAreaDaoImpl {
 		this.sessionFactory = sf;
 	}
 
-	public void addDeliveryArea(String city, String state, long zipcode, String areaName) {
+	public void addZipcodeToDeliveryArea(List<Long> zipcodes, String areaName) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		MasterDeliveryArea masterDeliveryArea = null;
 		List<MasterDeliveryArea> allAvailableDeliveryArea = (List<MasterDeliveryArea>) session
-				.createCriteria(MasterDeliveryArea.class).add(Restrictions.eq("", areaName));
+				.createCriteria(MasterDeliveryArea.class).add(Restrictions.eq("areaName", areaName));
 		if(null!= allAvailableDeliveryArea && !allAvailableDeliveryArea.isEmpty()) {
 			masterDeliveryArea =  allAvailableDeliveryArea.get(0);
 			
 		}
-		AvailableDeliveryArea deliveryArea = new AvailableDeliveryArea();
-		deliveryArea.setCity(city);
-		deliveryArea.setState(state);
-		deliveryArea.setZipcode(zipcode);
-		deliveryArea.setArea(masterDeliveryArea);
-		session.save(deliveryArea);
+		List<AvailableZipcodes> areaZipcodes = new ArrayList<AvailableZipcodes>();
+		if(null != zipcodes) {
+			for(Long zipcode:zipcodes) {
+				AvailableZipcodes deliveryArea = new AvailableZipcodes();
+				deliveryArea.setZipcode(zipcode);
+				areaZipcodes.add(deliveryArea);
+				
+			}
+		}
+		if(null == masterDeliveryArea.getZipcodes()) {
+			masterDeliveryArea.setZipcodes(areaZipcodes);
+		} else {
+			masterDeliveryArea.getZipcodes().addAll(areaZipcodes);
+		}
+		session.update(masterDeliveryArea);
 		session.getTransaction().commit();
 		session.close();
 	}
 
-	public void addMasterDeliveryArea(String areaName) {
+	public void addMasterDeliveryArea(String areaName,String city, String state, List<Long> zipcodes,  List<DeliverySlot> deliverySlots) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
-		MasterDeliveryArea deliveryArea = new MasterDeliveryArea();
-		deliveryArea.setAreaName(areaName);
-		session.save(deliveryArea);
+		MasterDeliveryArea masterDeliveryArea = new MasterDeliveryArea();
+		masterDeliveryArea.setAreaName(areaName);
+		List<AvailableZipcodes> areaZipcodes = new ArrayList<AvailableZipcodes>();
+		if(null != zipcodes) {
+			for(Long zipcode:zipcodes) {
+				AvailableZipcodes deliveryArea = new AvailableZipcodes();
+				deliveryArea.setZipcode(zipcode);
+				deliveryArea.setArea(masterDeliveryArea);
+				areaZipcodes.add(deliveryArea);
+				
+			}
+		}
+		if(null != deliverySlots) {
+			for(DeliverySlot deliverySlot:deliverySlots) {
+				
+				deliverySlot.setDeliveryArea(masterDeliveryArea);
+				
+			}
+		}
+		masterDeliveryArea.setCity(city);
+		masterDeliveryArea.setState(state);
+		masterDeliveryArea.setDeliverySlots(deliverySlots);
+		masterDeliveryArea.setZipcodes(areaZipcodes);
+		session.save(masterDeliveryArea);
 		session.getTransaction().commit();
 		session.close();
 	}
@@ -52,7 +84,7 @@ public class AvailableDeliveryAreaDaoImpl {
 		Session session = this.sessionFactory.openSession();
 
 		List<MasterDeliveryArea> allAvailableDeliveryArea = (List<MasterDeliveryArea>) session
-				.createCriteria(MasterDeliveryArea.class).add(Restrictions.eq("", areaName));
+				.createCriteria(MasterDeliveryArea.class).add(Restrictions.eq("areaName", areaName));
 		if(null!= allAvailableDeliveryArea && !allAvailableDeliveryArea.isEmpty()) {
 			return allAvailableDeliveryArea.get(0);
 			
@@ -61,19 +93,19 @@ public class AvailableDeliveryAreaDaoImpl {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvailableDeliveryArea> getAllAvailableDeliveryArea() {
+	public List<MasterDeliveryArea> getAllAvailableDeliveryArea() {
 		Session session = this.sessionFactory.openSession();
 
-		List<AvailableDeliveryArea> allAvailableDeliveryArea = (List<AvailableDeliveryArea>) session
-				.createCriteria(AvailableDeliveryArea.class);
+		List<MasterDeliveryArea> allAvailableDeliveryArea = (List<MasterDeliveryArea>) session
+				.createCriteria(MasterDeliveryArea.class);
 		return allAvailableDeliveryArea;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvailableDeliveryArea> isInAvaialbleDeliveryArea(long zipcode) {
+	public List<AvailableZipcodes> isInAvaialbleDeliveryArea(long zipcode) {
 		Session session = this.sessionFactory.openSession();
-		List<AvailableDeliveryArea> allAvailableCrews = (List<AvailableDeliveryArea>) session
-				.createCriteria(AvailableDeliveryArea.class).add(Restrictions.eq("zipcode", zipcode));
+		List<AvailableZipcodes> allAvailableCrews = (List<AvailableZipcodes>) session
+				.createCriteria(AvailableZipcodes.class).add(Restrictions.eq("zipcode", zipcode));
 		return allAvailableCrews;
 	}
 

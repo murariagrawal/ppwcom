@@ -1,4 +1,4 @@
-package com.panipuri.controller;
+package com.panipuri.controller.admin;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

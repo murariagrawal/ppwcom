@@ -29,7 +29,8 @@ public class LoginController {
 			mv = new ModelAndView("redirect:home");
 			
 		} else if(null!= username && username.equals("anil")) {
-			mv = new ModelAndView("adminHome");
+			mv = new ModelAndView("redirect:adminhome");
+			
 		} else {
 			mv = new ModelAndView("home");
 			mv.addObject("message","Logged in");
@@ -51,6 +52,13 @@ public class LoginController {
 		mv = new ModelAndView("homePaniPuri");	
 		mv.addObject("itemList", itemList);
 		mv.addObject("orderId", "");
+		return mv;
+	}
+	@RequestMapping(method = RequestMethod.GET, value="/adminhome")
+	public ModelAndView homeAdmin() {
+		ModelAndView mv = null;		
+		mv = new ModelAndView("adminHome");
+		
 		return mv;
 	}
 	/**

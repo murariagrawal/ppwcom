@@ -59,13 +59,19 @@ $(document).ready(function () {
     });
     function bindDeliveryEvents() {
 	    $('#phoneNumber').on("keyup",function() {
-	    	
-	    	
 	    	var length = $(this).val().length;
 	    	if(length && length == 10) {
 	    		getAddressDetails();
 	    	}
 	    });
+	    $("#zipcodeAddr").on('input', function(){
+			alert($(this).val());
+			var length = $(this).val().length;
+			alert(length);
+	    	if(length && length == 6) {
+	    		getDeliverySlots();
+	    	}
+		});
     }
     function getAddressDetails() {		
 		ajax.postForm("fetchDeliveryDetails?F=J", $("#deliveryForm")).done(function(data) {		
@@ -86,20 +92,8 @@ $(document).ready(function () {
 					ulIndividual = ulIndividual+liIndividual;
 				}
 				
-				liIndividual = "<li>";
-					if(d.city) {
-						liIndividual = liIndividual+"<span id='city'>"+d.city+"</span>";
-					}
-					if(d.state) {
-						if(d.city) {
-							liIndividual = liIndividual+", "
-						}
-						liIndividual = liIndividual+"<span id='state'>"+d.state+"</span>";
-					}
-					if(d.zipcode) {
-						if(d.state) {
-							liIndividual = liIndividual+", "
-						}
+				liIndividual = "<li>";					
+					if(d.zipcode) {						
 						liIndividual = liIndividual+"<span id='zipcode'>"+d.zipcode+"</span>";
 					}
 					
@@ -118,7 +112,8 @@ $(document).ready(function () {
 			ulFinal = ulFinal+"</ul>";
 			
 			$('#myModal').modal(); 
-			var addressDiv = $("#addressDiv");			
+			var addressDiv = $("#addressDiv");	
+			addressDiv.empty();
 			addressDiv.append(ulFinal);
 			bindAddressEvents();
 			
@@ -133,24 +128,16 @@ $(document).ready(function () {
     	$( ".well-sm" ).on('click', function(e) {
 			$("#addr1").val($(this).find("#addressLine1").html())
 			$("#addr2").val($(this).find("#addressLine2").html())
-			$("#cityAddr").val($(this).find("#city").html())
-			$("#stateAddr").val($(this).find("#state").html())
 			$("#zipcodeAddr").val($(this).find("#zipcode").html())
 			
 			$('#myModal').modal('hide');
-			
+			getDeliverySlots();
 		});
-		$("#zipcodeAddr").on("change", function(e){
-			alert($(this).val());
-			var length = $(this).val().length;
-			alert(length);
-	    	if(length && length == 6) {
-	    		getDeliverySlots();
-	    	}
-		});
+		
     }
     
-    function getDeliverySlots() {		
+    function getDeliverySlots() {	
+    	alert();
 		ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {	
 			
 		}).fail(function(data) {

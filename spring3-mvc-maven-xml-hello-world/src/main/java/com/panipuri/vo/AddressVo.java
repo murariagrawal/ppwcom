@@ -2,9 +2,11 @@ package com.panipuri.vo;
 
 public class AddressVo {
 	private long addressId;
+	private String firstName;
+	private String lastName;
 	private String addressLine1;
 	private String addressline2;
-	private String addressLine3;
+	private String landmark;
 	private String zipcode;
 	private String contactNumber;
 	private String city;
@@ -46,18 +48,7 @@ public class AddressVo {
 	public void setAddressline2(String addressline2) {
 		this.addressline2 = addressline2;
 	}
-	/**
-	 * @return the addressLine3
-	 */
-	public String getAddressLine3() {
-		return addressLine3;
-	}
-	/**
-	 * @param addressLine3 the addressLine3 to set
-	 */
-	public void setAddressLine3(String addressLine3) {
-		this.addressLine3 = addressLine3;
-	}
+	
 	/**
 	 * @return the zipcode
 	 */
@@ -117,5 +108,41 @@ public class AddressVo {
 	 */
 	public void setDeliverySlot(String deliverySlot) {
 		this.deliverySlot = deliverySlot;
+	}
+	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return lastName;
+	}
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	/**
+	 * @return the landmark
+	 */
+	public String getLandmark() {
+		return landmark;
+	}
+	/**
+	 * @param landmark the landmark to set
+	 */
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
 	}
 }

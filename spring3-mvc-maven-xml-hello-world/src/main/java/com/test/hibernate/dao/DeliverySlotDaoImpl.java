@@ -1,5 +1,6 @@
 package com.test.hibernate.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -29,16 +30,14 @@ public class DeliverySlotDaoImpl {
 	}
 	
 	public List<AvailableZipcodes> getAvailableDeliverySlots(String zipcode) {
-		Session session = this.sessionFactory.openSession();
-		session.beginTransaction();
-		List<AvailableZipcodes> zipcodes = (List<AvailableZipcodes>) session.createCriteria(AvailableZipcodes.class, "zipcodes")													
-													.add(Restrictions.eq("zipcodes.zipcode", new Long(zipcode))).list();
-		if(null != zipcodes && !zipcodes.isEmpty()) {
-			zipcodes.get(0).getArea().getDeliverySlots();
-		}
-		session.getTransaction().commit();
-		session.close();
-		return zipcodes;
+		Session session = this.sessionFactory.getCurrentSession();		
+		@SuppressWarnings("unchecked")
+		
+		List<AvailableZipcodes> deliverySlots = (List<AvailableZipcodes>) session.createCriteria(AvailableZipcodes.class, "deliveryArea")
+													.createAlias("deliveryArea.area.deliverySlots","slot")
+													.add(Restrictions.eq("deliveryArea.zipcode", zipcode))
+													.add(Restrictions.eq("slot.slotdate", new Date()));
+		return deliverySlots;
 	}
 	public void updateDeliverySlot(String startTime, int slotQuantity, String endTime, long deliverySlotId) {
 		Session session = this.sessionFactory.getCurrentSession();

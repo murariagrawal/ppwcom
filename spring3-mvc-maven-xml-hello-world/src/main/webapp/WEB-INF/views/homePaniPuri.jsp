@@ -195,7 +195,8 @@
 						</ul>
 					</div>
 					<div class="tab-pane" role="tabpanel" id="step3">
-						<div id="verifyDetailsDiv"></div>
+						<h3>Step 3</h3>
+						<p>This is step 3</p>
 						<ul class="list-inline pull-right">
 							<li><button type="button" class="btn btn-default prev-step">Previous</button></li>
 							<li><button type="button" class="btn btn-default next-step">Skip</button></li>

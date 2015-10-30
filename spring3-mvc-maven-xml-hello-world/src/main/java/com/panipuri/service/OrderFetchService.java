@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -12,16 +11,10 @@ import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
-import com.test.hibernate.Order;
-import com.test.hibernate.dao.OderDaoImpl;
 @Component
 @Lazy
 public class OrderFetchService {
-	@Autowired
-	private OderDaoImpl oderDaoImpl;
-	public Order getOrderDetails(String orderId) {
-		
-		Order orderDetails = oderDaoImpl.getOrderDetails(orderId);
+	public OrderVo getOrderDetails(String orderId) {
 		OrderVo orderVo = new OrderVo();
 		List<ItemVo> itemList = getItemList();
 		List<ToppingVo> toppingList = getToppingList();
@@ -44,12 +37,8 @@ public class OrderFetchService {
 		orderVo.setItemList(itemList);
 		orderVo.setToppingList(toppingList);
 		orderVo.setTotalPrice(totalPrice);
-		return orderDetails;
+		return orderVo;
 		
-	}
-
-	public void setOderDaoImpl(OderDaoImpl oderDaoImpl) {
-		this.oderDaoImpl = oderDaoImpl;
 	}
 
 	private List<ToppingVo> getToppingList() {

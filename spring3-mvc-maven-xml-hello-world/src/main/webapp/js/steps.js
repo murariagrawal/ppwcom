@@ -47,10 +47,8 @@ $(document).ready(function () {
     
     $("#continueToDelivery").on("click", function(e) {		
 		ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {			
-			ajax.loadFragment("html/deliverydetails.html").done(function(out) {				
-				$("#deliveryDetailsDiv").empty();
-				$("#deliveryDetailsDiv").append(out);
-				$("input[id=deliveryOrderId]").val(data.orderId);
+			ajax.loadFragment("html/deliverydetails.html").done(function(data) {
+				$("#deliveryDetailsDiv").append(data);
 				bindDeliveryEvents();
 			}).fail(function(data) {	        	
 	        	alert("failed");
@@ -131,7 +129,7 @@ $(document).ready(function () {
 			$("#addr1").val($(this).find("#addressLine1").html())
 			$("#addr2").val($(this).find("#addressLine2").html())
 			$("#zipcodeAddr").val($(this).find("#zipcode").html())
-			$("#deliveryAddressId").val($(this).find("#addressId").html())
+			
 			$('#myModal').modal('hide');
 			getDeliverySlots();
 		});
@@ -148,34 +146,7 @@ $(document).ready(function () {
         });
     }
     
-    $("#continueToVerify").on("click", function(e) {		
-		ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
-			ajax.loadFragment("html/orderverification.html").done(function(out) {
-				$("#verifyDetailsDiv").append(out);
-				bindVerifyEvents(data);
-			}).fail(function(data) {	        	
-	        	alert("failed");
-	        });						
-        }).fail(function(data) {        	
-        	alert("failed");
-        });
-    });
-    function bindVerifyEvents(data) {
-	    $('#phoneNumber').on("keyup",function() {
-	    	var length = $(this).val().length;
-	    	if(length && length == 10) {
-	    		getAddressDetails();
-	    	}
-	    });
-	    $("#zipcodeAddr").on('input', function(){
-			alert($(this).val());
-			var length = $(this).val().length;
-			alert(length);
-	    	if(length && length == 6) {
-	    		getDeliverySlots();
-	    	}
-		});
-    }
+    
     $(".prev-step").click(function (e) {
 
         var $active = $('.wizard .nav-tabs li.active');

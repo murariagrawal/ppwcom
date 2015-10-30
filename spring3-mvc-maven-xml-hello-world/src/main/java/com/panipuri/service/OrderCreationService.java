@@ -15,9 +15,9 @@ import com.test.hibernate.dao.OderDaoImpl;
 public class OrderCreationService {
 	@Autowired
 	OderDaoImpl oderDaoImpl;
-	public StatusVo createOrder(List<ItemVo> selectedItems, List<ToppingVo> selectedToppings) {
-		oderDaoImpl.addOrder(selectedItems, selectedToppings);
+	public Long createOrder(List<ItemVo> selectedItems, List<ToppingVo> selectedToppings, String orderId) {
+		Long orderIdLong = oderDaoImpl.addOrder(selectedItems, selectedToppings, orderId);
 		
-		return new StatusVo();
+		return orderIdLong;
 	}
 }

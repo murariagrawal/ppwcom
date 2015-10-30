@@ -72,9 +72,9 @@ public class OrderInitiationController {
                 }
             }            
         }
-        orderCreationService.createOrder(selectedItems, selectedToppings);
+        Long orderIdLong = orderCreationService.createOrder(selectedItems, selectedToppings, orderId);
         mv = new ModelAndView("deliveryDetails");
-        mv.addObject("orderId", orderId);
+        mv.addObject("orderId", orderIdLong);
 		return mv;
 	}
 	
@@ -113,7 +113,7 @@ public class OrderInitiationController {
 		address1.setState("Maharashtra");
 		address1.setZipcode("411021");
 		AddressVo address2= new AddressVo();
-		address2.setAddressId(123);
+		address2.setAddressId(124);
 		address2.setAddressLine1("D 303, Kool homes, Behind Maratha mandir");
 		address2.setAddressline2("NDA road, Bavdhan");
 		address2.setCity("Pune");

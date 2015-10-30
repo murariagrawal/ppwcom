@@ -21,8 +21,15 @@ public class OderDaoImpl  {
     public void setSessionFactory(SessionFactory sf){
         this.sessionFactory = sf;
     }
-	public void addOrder(List<ItemVo> itemList, List<ToppingVo> toppingList) {
-		Order order = new Order();
+	public Long addOrder(List<ItemVo> itemList, List<ToppingVo> toppingList, String orderId) {
+		Order order = null;
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		if(null !=orderId && !orderId.equals("")) {
+			 order = (Order)session.get(Order.class, new Long(orderId));
+		} else {
+			order = new Order();
+		}
 		List<OrderItems> orderItems = new ArrayList<OrderItems>();
 		List<OrderToppings> orderToppings = new ArrayList<OrderToppings>();
 		if(null != itemList) {
@@ -48,15 +55,21 @@ public class OderDaoImpl  {
 		order.setOrderItems(orderItems);
 		order.setOrderToppings(orderToppings);
 		order.setStatus(Status.INITIATED);
-		Session session = this.sessionFactory.openSession();
-		session.beginTransaction();
+		
 		session.save(order);
 		session.getTransaction().commit();
 		session.close();
+		return order.getOrderId();
 	}
 	public Order getOrderDetails(String orderId) {
-		Session session = this.sessionFactory.getCurrentSession();
-		Order orderDetails = (Order)session.get(Order.class, orderId);
+		Session session = this.sessionFactory.openSession();
+		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
+		orderDetails.getCustomer();
+		orderDetails.getDeliveryAddress();
+		orderDetails.getDeliverySlotSelected();
+		orderDetails.getDeliveryCrew();
+		orderDetails.getOrderItems();
+		orderDetails.getOrderToppings();
 		return orderDetails;
 	}
 	

@@ -30,7 +30,7 @@ public class Order {
 	 * This is a one to one mapping with the customer object on the 
 	 * basis of the customer id column in the order table.
 	 */
-	@OneToOne(fetch=FetchType.LAZY, targetEntity=Customer.class)
+	@OneToOne(fetch=FetchType.EAGER, targetEntity=Customer.class)
 	private Customer customer;
 	@Transient
 	private DiscountInformation discountInfo;
@@ -55,19 +55,19 @@ public class Order {
 	 * This is a One to One mapping between the address table on the address id column in the order table.
 	 *
 	 */
-	@OneToOne(targetEntity=Address.class)
+	@OneToOne(fetch=FetchType.EAGER,targetEntity=Address.class)
 	private Address deliveryAddress;
-	@OneToOne(targetEntity=Address.class)
+	@OneToOne(fetch=FetchType.EAGER,targetEntity=Address.class)
 	private Crew deliveryCrew;
 	@Column
 	private Status status;
 	@Column(name="ordered_time")
 	private Timestamp orderedTime;
-	@OneToOne(targetEntity=DeliverySlot.class)
+	@OneToOne(fetch=FetchType.EAGER,targetEntity=DeliverySlot.class)
 	private DeliverySlot deliverySlotSelected;
-	@OneToMany( targetEntity=OrderItems.class, mappedBy="order", cascade=CascadeType.ALL)
+	@OneToMany( fetch=FetchType.EAGER,targetEntity=OrderItems.class, mappedBy="order", cascade=CascadeType.ALL)
 	private List<OrderItems> orderItems;
-	@OneToMany(targetEntity=OrderToppings.class, mappedBy="order", cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.EAGER,targetEntity=OrderToppings.class, mappedBy="order", cascade=CascadeType.ALL)
 	private List<OrderToppings> orderToppings;
 	/**
 	 * @return the orderId

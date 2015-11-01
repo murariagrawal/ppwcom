@@ -4,7 +4,8 @@
 		<div class="panel-body">
 			<form role="form" id="deliveryForm" class="formoid-solid-blue"  action="verifyOrder"
 				method="post">
-
+				<input type="hidden" name="deliveryOrderId" id="deliveryOrderId">
+				<input type="hidden" name="deliveryAddressId" id="deliveryAddressId">
 				<div class="element-phone">
 					<label class="title"></label>
 					<div class="item-cont">
@@ -47,11 +48,8 @@
 					<label class="title"></label>
 					<div class="item-cont">
 						<div class="large">
-							<span><select name="select">
-
-									<option value="option 1">Select Delivery Slot</option>
-									<option value="option 2">option 2</option>
-									<option value="option 3">option 3</option>
+							<span><select name="selectDeliverySlot" disabled="disabled">
+									<option value="option 1">Select Delivery Slot</option>									
 							</select><i></i><span class="icon-place"></span></span>
 						</div>
 					</div>

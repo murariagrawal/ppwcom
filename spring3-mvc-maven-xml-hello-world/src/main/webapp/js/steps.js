@@ -47,8 +47,10 @@ $(document).ready(function () {
     
     $("#continueToDelivery").on("click", function(e) {		
 		ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {			
-			ajax.loadFragment("html/deliverydetails.html").done(function(data) {
-				$("#deliveryDetailsDiv").append(data);
+			ajax.loadFragment("html/deliverydetails.html").done(function(out) {				
+				$("#deliveryDetailsDiv").empty();
+				$("#deliveryDetailsDiv").append(out);
+				$("input[id=deliveryOrderId]").val(data.orderId);
 				bindDeliveryEvents();
 			}).fail(function(data) {	        	
 	        	alert("failed");
@@ -129,24 +131,59 @@ $(document).ready(function () {
 			$("#addr1").val($(this).find("#addressLine1").html())
 			$("#addr2").val($(this).find("#addressLine2").html())
 			$("#zipcodeAddr").val($(this).find("#zipcode").html())
-			
+			$("#deliveryAddressId").val($(this).find("#addressId").html())
 			$('#myModal').modal('hide');
 			getDeliverySlots();
 		});
 		
     }
     
+    
     function getDeliverySlots() {	
     	alert();
 		ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {	
-			
+			alert(data);
+			$("#selectDeliverySlot").prop( "disabled", false );
+			$.each(data, function (i, item) {
+			    $('#selectDeliverySlot').append($('<option>', { 
+			        value: item.value,
+			        text : item.text 
+			    }));
+			});
 		}).fail(function(data) {
         	
         	alert("failed");
         });
     }
     
-    
+    $("#continueToVerify").on("click", function(e) {		
+		ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
+			ajax.loadFragment("html/orderverification.html").done(function(out) {
+				$("#verifyDetailsDiv").append(out);
+				bindVerifyEvents(data);
+			}).fail(function(data) {	        	
+	        	alert("failed");
+	        });						
+        }).fail(function(data) {        	
+        	alert("failed");
+        });
+    });
+    function bindVerifyEvents(data) {
+	    $('#phoneNumber').on("keyup",function() {
+	    	var length = $(this).val().length;
+	    	if(length && length == 10) {
+	    		getAddressDetails();
+	    	}
+	    });
+	    $("#zipcodeAddr").on('input', function(){
+			alert($(this).val());
+			var length = $(this).val().length;
+			alert(length);
+	    	if(length && length == 6) {
+	    		getDeliverySlots();
+	    	}
+		});
+    }
     $(".prev-step").click(function (e) {
 
         var $active = $('.wizard .nav-tabs li.active');

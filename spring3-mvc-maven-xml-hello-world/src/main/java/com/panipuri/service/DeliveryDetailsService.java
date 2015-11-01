@@ -1,17 +1,33 @@
 package com.panipuri.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.test.hibernate.DailyDeliverySlots;
+import com.panipuri.vo.DeliverySlotVo;
+import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.dao.DeliverySlotDaoImpl;
 
 @Component
 public class DeliveryDetailsService {
 	@Autowired DeliverySlotDaoImpl deliverySlotDaoImpl;
-	public DailyDeliverySlots fetchDeliverySlots(String zipcode) {
-		deliverySlotDaoImpl.getAvailableDeliverySlots(zipcode);
-		return null;
+	public List<DeliverySlotVo> fetchDeliverySlots(String zipcode) {
+		List<DeliverySlotVo> deliverySlotsList = new ArrayList<DeliverySlotVo>();
+		List<DeliverySlot> deliverySlots = deliverySlotDaoImpl.getAvailableDeliverySlots(zipcode);
+		if(null !=deliverySlots) {
+			DeliverySlotVo deliverySlotVo = null;
+			for(DeliverySlot deliverySlot : deliverySlots) {
+				deliverySlotVo = new DeliverySlotVo();
+				deliverySlotVo.setDeliverySlotId(deliverySlot.getDeliverySlotId());
+				deliverySlotVo.setEndTime(deliverySlot.getEndTime());
+				deliverySlotVo.setStartTime(deliverySlot.getStartTime());
+				deliverySlotVo.setSlotQuantity(deliverySlot.getSlotQuantity());
+				deliverySlotsList.add(deliverySlotVo);
+			}
+		}
+		return deliverySlotsList;
 	}
 	/**
 	 * @param deliverySlotDaoImpl the deliverySlotDaoImpl to set

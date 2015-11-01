@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ public class MasterDeliveryArea {
 	private String city;
 	@Column
 	private String state;
-	@OneToMany(targetEntity=DeliverySlot.class,cascade= CascadeType.ALL,mappedBy="deliveryArea")
+	@OneToMany(fetch = FetchType.EAGER,targetEntity=DeliverySlot.class,cascade= CascadeType.ALL,mappedBy="deliveryArea")
 	private List<DeliverySlot> deliverySlots;
 	@OneToMany(targetEntity=AvailableZipcodes.class,cascade= CascadeType.ALL,mappedBy="area")
 	private List<AvailableZipcodes> zipcodes;

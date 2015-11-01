@@ -17,6 +17,7 @@ import com.panipuri.service.CustomerInformationFetchService;
 import com.panipuri.service.DeliveryDetailsService;
 import com.panipuri.service.OrderCreationService;
 import com.panipuri.vo.AddressVo;
+import com.panipuri.vo.DeliverySlotVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
 
@@ -72,9 +73,9 @@ public class OrderInitiationController {
                 }
             }            
         }
-        orderCreationService.createOrder(selectedItems, selectedToppings);
+        Long orderIdLong = orderCreationService.createOrder(selectedItems, selectedToppings, orderId);
         mv = new ModelAndView("deliveryDetails");
-        mv.addObject("orderId", orderId);
+        mv.addObject("orderId", orderIdLong);
 		return mv;
 	}
 	
@@ -96,10 +97,10 @@ public class OrderInitiationController {
 		String zipcode = request.getParameter("zipcodeAddr");
 		ModelAndView mv = null;
 		List<AddressVo> addressList = getAddressList();
-		deliveryDetailsService.fetchDeliverySlots(zipcode);
+		List<DeliverySlotVo> deliverySlots = deliveryDetailsService.fetchDeliverySlots(zipcode);
 				//customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
 		mv = new ModelAndView("deliveryDetails");
-		mv.addObject("addressList",addressList);
+		mv.addObject("deliverySlots",deliverySlots);
 		return mv;
 	}
 
@@ -113,7 +114,7 @@ public class OrderInitiationController {
 		address1.setState("Maharashtra");
 		address1.setZipcode("411021");
 		AddressVo address2= new AddressVo();
-		address2.setAddressId(123);
+		address2.setAddressId(124);
 		address2.setAddressLine1("D 303, Kool homes, Behind Maratha mandir");
 		address2.setAddressline2("NDA road, Bavdhan");
 		address2.setCity("Pune");

@@ -1,11 +1,10 @@
 package com.test.hibernate.dao;
 
-import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 
 import com.test.hibernate.AvailableZipcodes;
 import com.test.hibernate.DeliverySlot;
@@ -29,14 +28,18 @@ public class DeliverySlotDaoImpl {
 		session.close();
 	}
 	
-	public List<AvailableZipcodes> getAvailableDeliverySlots(String zipcode) {
-		Session session = this.sessionFactory.getCurrentSession();		
-		@SuppressWarnings("unchecked")
+	public List<DeliverySlot> getAvailableDeliverySlots(String zipcode) {
+		Session session = this.sessionFactory.openSession();
 		
-		List<AvailableZipcodes> deliverySlots = (List<AvailableZipcodes>) session.createCriteria(AvailableZipcodes.class, "deliveryArea")
-													.createAlias("deliveryArea.area.deliverySlots","slot")
-													.add(Restrictions.eq("deliveryArea.zipcode", zipcode))
-													.add(Restrictions.eq("slot.slotdate", new Date()));
+		List<DeliverySlot> deliverySlots= null;
+		AvailableZipcodes zipcodes = (AvailableZipcodes) session.get(AvailableZipcodes.class, new Long(zipcode));
+		if(null != zipcodes) {
+			
+			Hibernate.initialize(zipcodes.getArea().getDeliverySlots());
+			deliverySlots = zipcodes.getArea().getDeliverySlots();
+		}
+		
+		session.close();
 		return deliverySlots;
 	}
 	public void updateDeliverySlot(String startTime, int slotQuantity, String endTime, long deliverySlotId) {

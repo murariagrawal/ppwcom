@@ -37,7 +37,7 @@ public class CustomerInformationFetchService {
 			addressListTemp.get(0).getCustomer().getCustomerLastName();
 		}
 		AddressVo deliveryAddress1 = new AddressVo();
-		deliveryAddress1.setAddressId(1121);
+		deliveryAddress1.setAddressId(new Long(1121));
 		deliveryAddress1.setAddressLine1("D 303, Kool homes");
 		deliveryAddress1.setAddressline2("Nda Road, bavdhan");
 		deliveryAddress1.setCity("Pune");
@@ -45,7 +45,7 @@ public class CustomerInformationFetchService {
 		deliveryAddress1.setState("Maharashtra");
 		deliveryAddress1.setZipcode("411021");
 		AddressVo deliveryAddress2 = new AddressVo();
-		deliveryAddress2.setAddressId(1121);
+		deliveryAddress2.setAddressId(new Long(1122));
 		deliveryAddress2.setAddressLine1("D 303, Kool homes");
 		deliveryAddress2.setAddressline2("Nda Road, bavdhan");
 		deliveryAddress2.setCity("Pune");

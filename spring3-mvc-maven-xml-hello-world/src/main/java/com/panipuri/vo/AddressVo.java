@@ -1,7 +1,7 @@
 package com.panipuri.vo;
 
 public class AddressVo {
-	private long addressId;
+	private Long addressId;
 	private String firstName;
 	private String lastName;
 	private String addressLine1;
@@ -11,17 +11,17 @@ public class AddressVo {
 	private String contactNumber;
 	private String city;
 	private String state;
-	private String deliverySlot;
+	private DeliverySlotVo deliverySlot;
 	/**
 	 * @return the addressId
 	 */
-	public long getAddressId() {
+	public Long getAddressId() {
 		return addressId;
 	}
 	/**
 	 * @param addressId the addressId to set
 	 */
-	public void setAddressId(long addressId) {
+	public void setAddressId(Long addressId) {
 		this.addressId = addressId;
 	}
 	/**
@@ -100,13 +100,13 @@ public class AddressVo {
 	/**
 	 * @return the deliverySlot
 	 */
-	public String getDeliverySlot() {
+	public DeliverySlotVo getDeliverySlot() {
 		return deliverySlot;
 	}
 	/**
 	 * @param deliverySlot the deliverySlot to set
 	 */
-	public void setDeliverySlot(String deliverySlot) {
+	public void setDeliverySlot(DeliverySlotVo deliverySlot) {
 		this.deliverySlot = deliverySlot;
 	}
 	/**

@@ -7,7 +7,7 @@ public class OrderVo {
 	private long orderId;
 	private List<ItemVo> itemList;
 	private List<ToppingVo> toppingList;
-	private BigDecimal totalPrice;
+	private Float totalPrice;
 	private AddressVo deliveryAddress;
 	private String deliverySlot;
 	/**
@@ -49,13 +49,13 @@ public class OrderVo {
 	/**
 	 * @return the totalPrice
 	 */
-	public BigDecimal getTotalPrice() {
+	public Float getTotalPrice() {
 		return totalPrice;
 	}
 	/**
 	 * @param totalPrice the totalPrice to set
 	 */
-	public void setTotalPrice(BigDecimal totalPrice) {
+	public void setTotalPrice(Float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 	/**

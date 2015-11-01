@@ -27,7 +27,7 @@ public class DeliveryDetailsService {
 				deliverySlotsList.add(deliverySlotVo);
 			}
 		}
-		return deliverySlotsList;
+ 		return deliverySlotsList;
 	}
 	/**
 	 * @param deliverySlotDaoImpl the deliverySlotDaoImpl to set

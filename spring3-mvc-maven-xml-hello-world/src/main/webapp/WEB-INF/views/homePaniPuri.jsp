@@ -135,7 +135,7 @@
 											</td>
 											<td data-th="Price" ><span id="itemPrice${item.itemId}"><c:out value="${item.itemPrice}"></c:out></span></td>
 											<td data-th="Quantity" data-itemId="${item.itemId}" colspan="1">
-												<input type="number" id="quantity${item.itemId}" class="form-control text-center" value="0">
+												<input type="number" id="quantity${item.itemId}" name="item~${item.itemId}" class="form-control text-center" value="0">
 												
 											</td>
 											

@@ -12,42 +12,38 @@ import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
-import com.test.hibernate.Order;
+import com.test.hibernate.Address;
+import com.test.hibernate.Customer;
 import com.test.hibernate.dao.OderDaoImpl;
 @Component
 @Lazy
 public class OrderFetchService {
 	@Autowired
 	private OderDaoImpl oderDaoImpl;
-	public Order getOrderDetails(String orderId) {
+	public OrderVo updateOrderAndgetOrderDetails(String orderId, Address address,  Customer customer) {
 		
-		Order orderDetails = oderDaoImpl.getOrderDetails(orderId);
-		OrderVo orderVo = new OrderVo();
-		List<ItemVo> itemList = getItemList();
-		List<ToppingVo> toppingList = getToppingList();
-		BigDecimal totalPrice = new BigDecimal(0);
-		for(ItemVo item :itemList) {
-			BigDecimal tempPrice = item.getItemPrice();			
-			tempPrice.multiply(new BigDecimal(item.getItemQuantity()));
-			totalPrice.add(tempPrice);
-		}
-		for(ToppingVo topping :toppingList) {
-			BigDecimal tempPrice = topping.getPrice();			
-			tempPrice.multiply(new BigDecimal(topping.getQuantity()));
-			totalPrice.add(tempPrice);
-		}
-		
-		AddressVo deliveryAddress = getDeliveryAddress();
-		orderVo.setOrderId(121);
-		orderVo.setDeliveryAddress(deliveryAddress);
-		orderVo.setDeliverySlot("4Pm-5Pm");
-		orderVo.setItemList(itemList);
-		orderVo.setToppingList(toppingList);
-		orderVo.setTotalPrice(totalPrice);
+		OrderVo orderDetails = oderDaoImpl.getOrderDetails(orderId, address, customer);
+		orderDetails.setToppingList(getToppingList());
+		calculateTotalOrderPrice(orderDetails);
 		return orderDetails;
 		
 	}
-
+	private void calculateTotalOrderPrice(OrderVo orderDetails) {
+		List<ItemVo> itemList = orderDetails.getItemList();
+		List<ToppingVo> toppingList = orderDetails.getToppingList();
+		Float totalPrice = new Float(0);
+		if(null!=itemList) {
+			for(ItemVo item: itemList) {
+				totalPrice = totalPrice+item.getItemPrice().floatValue();
+			}
+		}
+		if(null!=toppingList) {
+			for(ToppingVo topping: toppingList) {
+				totalPrice = totalPrice+topping.getPrice().floatValue();
+			}
+		}
+		orderDetails.setTotalPrice(totalPrice);
+	}
 	public void setOderDaoImpl(OderDaoImpl oderDaoImpl) {
 		this.oderDaoImpl = oderDaoImpl;
 	}
@@ -69,32 +65,5 @@ public class OrderFetchService {
 		return toppingList;
 	}
 
-	private AddressVo getDeliveryAddress() {
-		AddressVo deliveryAddress = new AddressVo();
-		deliveryAddress.setAddressId(1121);
-		deliveryAddress.setAddressLine1("D 303, Kool homes");
-		deliveryAddress.setAddressline2("Nda Road, bavdhan");
-		deliveryAddress.setCity("Pune");
-		deliveryAddress.setContactNumber("9673142211");
-		deliveryAddress.setState("Maharashtra");
-		deliveryAddress.setZipcode("411021");
-		return deliveryAddress;
-	}
-
-	private List<ItemVo> getItemList() {
-		List<ItemVo> itemList = new ArrayList<ItemVo>();
-		ItemVo item1 = new ItemVo();
-		item1.setItemId(1212);
-		item1.setItemName("Pack of 8");
-		item1.setItemPrice(new BigDecimal(45));
-		item1.setItemQuantity(2);
-		ItemVo item2 = new ItemVo();
-		item2.setItemId(1213);
-		item2.setItemName("Pack of 8");
-		item2.setItemPrice(new BigDecimal(45));
-		item2.setItemQuantity(2);
-		itemList.add(item1);
-		itemList.add(item2);
-		return itemList;
-	}
+	
 }

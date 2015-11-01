@@ -107,14 +107,14 @@ public class OrderInitiationController {
 	private List<AddressVo> getAddressList() {
 		List<AddressVo> addressList = new ArrayList<AddressVo>();
 		AddressVo address1= new AddressVo();
-		address1.setAddressId(123);
+		address1.setAddressId(new Long(123));
 		address1.setAddressLine1("D 303, Kool homes, Behind Maratha mandir");
 		address1.setAddressline2("NDA road, Bavdhan");
 		address1.setCity("Pune");
 		address1.setState("Maharashtra");
 		address1.setZipcode("411021");
 		AddressVo address2= new AddressVo();
-		address2.setAddressId(124);
+		address2.setAddressId(new Long(124));
 		address2.setAddressLine1("D 303, Kool homes, Behind Maratha mandir");
 		address2.setAddressline2("NDA road, Bavdhan");
 		address2.setCity("Pune");

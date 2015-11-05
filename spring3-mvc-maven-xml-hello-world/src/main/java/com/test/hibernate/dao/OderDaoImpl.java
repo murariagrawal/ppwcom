@@ -45,7 +45,9 @@ public class OderDaoImpl  {
 				itemInfo.setItemId(item.getItemId());
 				orderItem.setItem(itemInfo);
 				orderItem.setQuantity(item.getItemQuantity());
+				orderItem.setOrder(order);
 				orderItems.add(orderItem);
+				
 			}
 		}
 		if(null != toppingList) {
@@ -55,6 +57,7 @@ public class OderDaoImpl  {
 				availableTopping.setToppingId(topping.getToppingId());
 				ordertopping.setTopping(availableTopping);
 				ordertopping.setQuantity(topping.getQuantity());
+				ordertopping.setOrder(order);
 				orderToppings.add(ordertopping);
 			}
 		}
@@ -109,6 +112,7 @@ public class OderDaoImpl  {
 				itemVo.setItemId(item.getItemId());
 				itemVo.setItemName(item.getItemName());
 				itemVo.setItemPrice(item.getItemPrice());
+				itemVo.setItemQuantity(orderItem.getQuantity());
 				itemDetailList =  new ArrayList<String>();
 				itemDetailString = item.getItemDetails();
 				String[] itemDetailArray = itemDetailString.split(",");

@@ -23,7 +23,7 @@ public class OrderFetchService {
 	public OrderVo updateOrderAndgetOrderDetails(String orderId, Address address,  Customer customer) {
 		
 		OrderVo orderDetails = oderDaoImpl.getOrderDetails(orderId, address, customer);
-		orderDetails.setToppingList(getToppingList());
+		//orderDetails.setToppingList(getToppingList());
 		calculateTotalOrderPrice(orderDetails);
 		return orderDetails;
 		

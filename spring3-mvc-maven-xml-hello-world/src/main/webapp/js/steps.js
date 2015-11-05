@@ -169,20 +169,27 @@ $(document).ready(function () {
         });
     });
     function bindVerifyEvents(data) {
-	    $('#phoneNumber').on("keyup",function() {
-	    	var length = $(this).val().length;
-	    	if(length && length == 10) {
-	    		getAddressDetails();
-	    	}
-	    });
-	    $("#zipcodeAddr").on('input', function(){
-			alert($(this).val());
-			var length = $(this).val().length;
-			alert(length);
-	    	if(length && length == 6) {
-	    		getDeliverySlots();
-	    	}
-		});
+    	$.each(data.itemList, function(i, item) {
+    		var itemName= item.itemName;
+    		var itemQuantity= item.itemQuantity;
+    		var itemPrice= item.itemPrice;
+    		
+    		var itemId= item.itemId;
+    		var itemNameDiv = '<div class="row"><div class="col-sm-10"><h4 class="nomargin"><label>'+itemName+'</label></h4>'+
+    							'<p><a class="accordion-toggle" data-toggle="collapse"	href="#itemDetails'+itemId+'">'+
+    							'<span	class="label label-info">View Details</span></a></p></div></div>';
+    		var itemDetailsLabel = "";
+    		$.each(item.itemDetails, function(j, itemdetail ) {
+    			itemDetailsLabel = itemDetailsLabel+"<label>"+itemdetail+"</label><br>";
+    		});
+    		var itemDetailsDiv='<div id="itemDetails'+itemId+'"	class="accordion-body collapse"><div class="accordion-inner"><table class="table table-hover table-condensed">'+	
+    		'<tr><td>'+itemDetailsLabel+
+    		'</td></tr></table></div></div>';
+    		var itemTotalPrice = itemPrice*itemQuantity;
+    		var individualItemRow='<tr> <td>'+itemNameDiv+itemDetailsDiv+'</td><td>'+itemPrice+'</td><td>'+itemQuantity+'</td><td class="text-center">'+itemTotalPrice+'</td></tr>';
+    		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
+    	});
+	   
     }
     $(".prev-step").click(function (e) {
 

@@ -21,7 +21,9 @@ public class CustomerInformationFetchService {
 		
 		List<Address> addressListTemp = customerDaoImpl.fetchCustomerAddressFromContact(phoneNumber);
 		List<AddressVo> addressList = new ArrayList<AddressVo>();
-		if(null != addressListTemp) {
+		if(null != addressListTemp && !addressListTemp.isEmpty()) {
+			String firstName = addressListTemp.get(0).getCustomer().getCustomerFirstName();
+			String lastName = addressListTemp.get(0).getCustomer().getCustomerLastName();
 			for(Address address :addressListTemp) {
 				AddressVo deliveryAddress = new AddressVo();
 				deliveryAddress.setAddressId(address.getAddressId());
@@ -31,29 +33,12 @@ public class CustomerInformationFetchService {
 				deliveryAddress.setCity(address.getCity());
 				deliveryAddress.setState(address.getState());
 				deliveryAddress.setZipcode(""+address.getZipcode());
+				deliveryAddress.setFirstName(firstName);
+				deliveryAddress.setLastName(lastName);
 				addressList.add(deliveryAddress);
 			}
-			addressListTemp.get(0).getCustomer().getCustomerFirstName();
-			addressListTemp.get(0).getCustomer().getCustomerLastName();
-		}
-		AddressVo deliveryAddress1 = new AddressVo();
-		deliveryAddress1.setAddressId(new Long(1121));
-		deliveryAddress1.setAddressLine1("D 303, Kool homes");
-		deliveryAddress1.setAddressline2("Nda Road, bavdhan");
-		deliveryAddress1.setCity("Pune");
-		deliveryAddress1.setContactNumber("9673142211");
-		deliveryAddress1.setState("Maharashtra");
-		deliveryAddress1.setZipcode("411021");
-		AddressVo deliveryAddress2 = new AddressVo();
-		deliveryAddress2.setAddressId(new Long(1122));
-		deliveryAddress2.setAddressLine1("D 303, Kool homes");
-		deliveryAddress2.setAddressline2("Nda Road, bavdhan");
-		deliveryAddress2.setCity("Pune");
-		deliveryAddress2.setContactNumber("9673142211");
-		deliveryAddress2.setState("Maharashtra");
-		deliveryAddress2.setZipcode("411021");
-		//addressList.add(deliveryAddress1);
-		//addressList.add(deliveryAddress2);
+		
+		}	
 		return addressList;
 	}
 

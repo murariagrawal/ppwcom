@@ -14,15 +14,17 @@
 							id="phoneNumber" placeholder="Phone Number" value="" /><span class="icon-place"></span>
 					</div>
 				</div>
+				<fieldset id="addressFields" class="hide">
 				<div class="element-separator">
 					<hr>
-					<h3 class="section-break-title">Section Break</h3>
+					<h3 class="section-break-title">Address Details</h3>
 				</div>
+				
 				<div class="element-name">
 					<label class="title"></label><span class="nameFirst"><input
-						placeholder="Name First" type="text" size="8" name="name[first]" /><span
+						placeholder="Name First" type="text" size="8" name="name[first]" id="firstNameAddr"/><span
 						class="icon-place"></span></span><span class="nameLast"><input
-						placeholder="Name Last" type="text" size="14" name="name[last]" /><span
+						placeholder="Name Last" type="text" size="14" name="name[last]" id="lastNameAddr"/><span
 						class="icon-place"></span></span>
 				</div>
 				<div class="element-address">
@@ -53,7 +55,8 @@
 							</select><i></i><span class="icon-place"></span></span>
 						</div>
 					</div>
-				</div>				
+				</div>
+				 </fieldset>				
 			</form>
 
 		</div>
@@ -75,7 +78,7 @@
 			<div class="modal-body" style="padding: 10px 10px;">
 				<form role="form">
 					<div class="form-group" id="addressDiv"></div>
-					<button type="submit" class="btn btn-success btn-block">Enter
+					<button id="enterNewAddress" class="btn btn-success btn-block">Enter
 						a new address</button>
 				</form>
 			</div>

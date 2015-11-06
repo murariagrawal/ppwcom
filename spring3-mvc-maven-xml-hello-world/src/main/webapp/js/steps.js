@@ -80,69 +80,101 @@ $(document).ready(function () {
 			var ulFinal = "<ul style='list-style:none'>";
 			var liFinal = "";
 			var addressList= data.addressList;
-			$.each(addressList, function(i, d) {			
-				var divIndividual = "<div class='well well-sm' data-th='individualAddress'>";
-				var ulIndividual = "<ul style='list-style:none'>";
-				var liIndividual="";
-				var hiddenAddressId = "<input type='hidden' id='addressId' value='"+d.addressId+"' />"
-				if(d.addressLine1) {
-					liIndividual = "<li id='addressLine1'>"+d.addressLine1+"</li>";
-					ulIndividual = ulIndividual+liIndividual;
-				}
-				if(d.addressline2) {
-					liIndividual = "<li id='addressLine2'>" +d.addressline2+"</li>";
-					ulIndividual = ulIndividual+liIndividual;
-				}
-				
-				liIndividual = "<li>";					
+			if(addressList) {
+				$.each(addressList, function(i, d) {			
+					var divIndividual = "<div class='well well-sm' data-th='individualAddress'>";
+					var ulIndividual = "<ul style='list-style:none'>";
+					var liIndividual="";
+					var hiddenAddressId = "<input type='hidden' id='addressId' value='"+d.addressId+"' />"
+					if(d.firstName || d.lastName) {
+						var firstName= "";
+						var lastName= "";
+						if(d.firstName && d.firstName !== null){
+							firstName =d.firstName;
+						}
+						if(d.lastName && d.lastName !== null){
+							lastName =d.lastName;
+						}
+						if(firstName != "" || lastName !== ""){
+							liIndividual = "<li id='addressName'>"
+							if(firstName != "") {
+								liIndividual = liIndividual+"<span id='firstName'>"+firstName+"</span>";
+								if(lastName !== "") {
+									liIndividual = liIndividual+" ";
+								}
+							}
+							if(lastName !== "") {
+								liIndividual = liIndividual+"<span id='lastName'>"+lastName+"</span>";
+							}
+							liIndividual = liIndividual+"</li>";
+							ulIndividual = ulIndividual+liIndividual;
+						}
+						
+					}
+					if(d.addressLine1) {
+						liIndividual = "<li id='addressLine1'>"+d.addressLine1+"</li>";
+						ulIndividual = ulIndividual+liIndividual;
+					}
+					if(d.addressline2) {
+						liIndividual = "<li id='addressLine2'>" +d.addressline2+"</li>";
+						ulIndividual = ulIndividual+liIndividual;
+					}	
+					if(d.landmark) {
+						liIndividual = "<li id='landmark'>" +d.landmark+"</li>";
+						ulIndividual = ulIndividual+liIndividual;
+					}	
+					liIndividual = "<li>";					
 					if(d.zipcode) {						
 						liIndividual = liIndividual+"<span id='zipcode'>"+d.zipcode+"</span>";
+					}						
+					liIndividual = liIndividual+ "</li>";		
+					ulIndividual = ulIndividual+liIndividual;					
+					ulIndividual = ulIndividual+"</ul></a>";
+					if(d.addressLine1 || d.addressline1) {
+					 	divIndividual = divIndividual+ulIndividual+hiddenAddressId+"</div>";
+						liFinal = "<li>"+divIndividual+"</li>";
+						ulFinal = ulFinal+liFinal;
 					}
-					
-				liIndividual = liIndividual+ "</li>";		
-				ulIndividual = ulIndividual+liIndividual;
-				
-				ulIndividual = ulIndividual+"</ul></a>";
-				if(d.addressLine1 || d.addressline1) {
-				 	divIndividual = divIndividual+ulIndividual+hiddenAddressId+"</div>";
-					liFinal = "<li>"+divIndividual+"</li>";
-					ulFinal = ulFinal+liFinal;
-				}
-				
-				
-			});
+				});
+			}
 			ulFinal = ulFinal+"</ul>";
-			
-			$('#myModal').modal(); 
-			var addressDiv = $("#addressDiv");	
-			addressDiv.empty();
-			addressDiv.append(ulFinal);
-			bindAddressEvents();
-			
-			
+			if(addressList && addressList !== null && addressList.length>0) {
+				$('#myModal').modal();
+				var addressDiv = $("#addressDiv");	
+				addressDiv.empty();
+				addressDiv.append(ulFinal);
+				bindAddressModelEvents();
+			} else {
+				$('#addressFields').removeClass("hide").addClass("show");
+			}			
         }).fail(function(data) {
         	
         	alert("failed");
         });		
 	}
 	
-    function bindAddressEvents() {
+    function bindAddressModelEvents() {
     	$( ".well-sm" ).on('click', function(e) {
-			$("#addr1").val($(this).find("#addressLine1").html())
-			$("#addr2").val($(this).find("#addressLine2").html())
-			$("#zipcodeAddr").val($(this).find("#zipcode").html())
-			$("#deliveryAddressId").val($(this).find("#addressId").html())
+    		$("#firstNameAddr").val($(this).find("#firstName").html());
+			$("#lastNameAddr").val($(this).find("#lastName").html());
+			$("#addr1").val($(this).find("#addressLine1").html());
+			$("#addr2").val($(this).find("#addressLine2").html());
+			$("#landmarkAddr").val($(this).find("#landmark").html());
+			$("#zipcodeAddr").val($(this).find("#zipcode").html());
+			$("#deliveryAddressId").val($(this).find("#addressId").html());			
 			$('#myModal').modal('hide');
 			getDeliverySlots();
 		});
+    	$("#enterNewAddress").on('click', function(e) {
+    		$('#myModal').modal('hide');
+    		$('#addressFields').removeClass("hide").addClass("show");
+    	});
 		
     }
     
     
-    function getDeliverySlots() {	
-    	alert();
-		ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {	
-			alert(data);
+    function getDeliverySlots() {	    	
+		ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {		
 			$("#selectDeliverySlot").prop( "disabled", false );
 			$.each(data, function (i, item) {
 			    $('#selectDeliverySlot').append($('<option>', { 

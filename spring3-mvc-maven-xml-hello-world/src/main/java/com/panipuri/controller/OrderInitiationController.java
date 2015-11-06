@@ -84,8 +84,8 @@ public class OrderInitiationController {
 		System.out.println("in fetch deliverydetails controller");
 		String phoneNumber = request.getParameter("phoneNumber");
 		ModelAndView mv = null;
-		List<AddressVo> addressList = getAddressList();
-				//customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
+		//List<AddressVo> addressList = getAddressList();
+		List<AddressVo> addressList = customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
 		mv = new ModelAndView("deliveryDetails");
 		mv.addObject("addressList",addressList);
 		return mv;

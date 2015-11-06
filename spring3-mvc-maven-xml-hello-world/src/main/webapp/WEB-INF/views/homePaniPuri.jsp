@@ -96,11 +96,11 @@
 								<table id="cart" class="table table-hover table-condensed">
 									<thead>
 										<tr>
-											<th style="width:50%">Pani Puri Packs</th>
-											<th style="width:10%">Price</th>
-											<th style="width:8%">Quantity</th>											
+											<th style="width:55%">Pani Puri Packs</th>
+											<th style="width:13%">Price</th>
+											<th style="width:10%">Quantity</th>											
 											<th style="width:22%" class="text-center">Subtotal</th>
-											<th style="width:10%"></th>
+											
 										</tr>
 									</thead>
 									<tbody>
@@ -135,37 +135,16 @@
 											</td>
 											<td data-th="Price" ><span id="itemPrice${item.itemId}"><c:out value="${item.itemPrice}"></c:out></span></td>
 											<td data-th="Quantity" data-itemId="${item.itemId}" colspan="1">
-												<input type="number" id="quantity${item.itemId}" name="item~${item.itemId}" class="form-control text-center" value="0">
+												<input type="number" min="0" max="10" id="quantity${item.itemId}" name="item~${item.itemId}" class="form-control text-center" value="0">
 												
 											</td>
 											
 											<td data-th="Subtotal" id="subTotal${item.itemId}" class="text-center">0.00</td>
-											<td data-th="">
-												<button type="button" id="customize${item.itemId}" data-toggle="collapse" 
-													data-target="#collapseTwo${item.itemId}" class="btn btn-success disabled">Customize</button>
-												<div id="collapseTwo${item.itemId}"
-																class="accordion-body collapse">
-													<div class="accordion-inner">
-														<table class="table table-hover table-condensed">
-															<tr>
-																<td>
-																	<c:forEach items="${item.itemDetails}" var="itemDetail">
-																		<label><c:out value="${itemDetail}"></c:out></label>
-																		<br>
-																	</c:forEach>
-																</td>
-															</tr>
-														</table>
-													</div>
-												</div>	
-											</td>
+											
 										</tr>
 										
 										</c:forEach>
-										<tr>
-											<td><input type="hidden" id="orderId"
-												class="form-control" name="orderId" value="${orderId}" /></td>
-										</tr>
+										
 									</tbody>
 									<tfoot>
 										<tr class="visible-xs">
@@ -178,6 +157,8 @@
 										</tr>
 									</tfoot>
 								</table>
+								<input type="hidden" id="orderId"
+												class="form-control" name="orderId" value="${orderId}" />
 							</div>
 							
 						</form>

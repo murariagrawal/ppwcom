@@ -20,9 +20,9 @@ import com.test.hibernate.dao.OderDaoImpl;
 public class OrderFetchService {
 	@Autowired
 	private OderDaoImpl oderDaoImpl;
-	public OrderVo updateOrderAndgetOrderDetails(String orderId, Address address,  Customer customer) {
+	public OrderVo updateOrderAndgetOrderDetails(String orderId, Address address,  Customer customer, String slotId) {
 		
-		OrderVo orderDetails = oderDaoImpl.getOrderDetails(orderId, address, customer);
+		OrderVo orderDetails = oderDaoImpl.getOrderDetails(orderId, address, customer, slotId);
 		//orderDetails.setToppingList(getToppingList());
 		calculateTotalOrderPrice(orderDetails);
 		return orderDetails;

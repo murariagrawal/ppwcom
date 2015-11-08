@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import com.test.hibernate.OTPId;
 import com.test.hibernate.OneTimePassword;
 import com.test.hibernate.Order;
 
@@ -37,9 +38,11 @@ public class OTPDaoImpl {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		Order order = (Order) session.get(Order.class, orderId);
+		OTPId otpId = new OTPId();
+		otpId.setContactNumber(contactNumber);
+		otpId.setOtp(otp);
 		OneTimePassword oneTimePassword = new OneTimePassword();
-		oneTimePassword.setContactNumber(contactNumber);
-		oneTimePassword.setOtp(otp);
+		oneTimePassword.setOtp(otpId);		
 		oneTimePassword.setOrder(order);		
 		oneTimePassword.setGeneratedTime(new Date().getTime());
 		session.save(oneTimePassword);

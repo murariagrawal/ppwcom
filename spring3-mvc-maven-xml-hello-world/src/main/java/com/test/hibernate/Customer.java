@@ -1,5 +1,6 @@
 package com.test.hibernate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
@@ -43,7 +43,7 @@ public class Customer {
 	private boolean hasOrdered;
 	@OneToMany(cascade= CascadeType.ALL, mappedBy="customer")
 	
-	private List<Address> addresses;
+	private List<Address> addresses = new ArrayList<Address>();
 	/**
 	 * @return the customerId
 	 */

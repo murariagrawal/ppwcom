@@ -10,6 +10,7 @@ public class OrderVo {
 	private Float totalPrice;
 	private AddressVo deliveryAddress;
 	private String deliverySlot;
+	private String contactNo;
 	/**
 	 * @return the orderId
 	 */
@@ -81,5 +82,17 @@ public class OrderVo {
 	 */
 	public void setDeliverySlot(String deliverySlot) {
 		this.deliverySlot = deliverySlot;
+	}
+	/**
+	 * @return the contactNo
+	 */
+	public String getContactNo() {
+		return contactNo;
+	}
+	/**
+	 * @param contactNo the contactNo to set
+	 */
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
 	}
 }

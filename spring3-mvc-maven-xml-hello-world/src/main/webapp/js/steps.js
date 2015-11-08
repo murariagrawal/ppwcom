@@ -66,10 +66,8 @@ $(document).ready(function () {
 	    		getAddressDetails();
 	    	}
 	    });
-	    $("#zipcodeAddr").on('input', function(){
-			alert($(this).val());
-			var length = $(this).val().length;
-			alert(length);
+	    $("#zipcodeAddr").on('input', function(){			
+			var length = $(this).val().length;			
 	    	if(length && length == 6) {
 	    		getDeliverySlots();
 	    	}
@@ -163,10 +161,11 @@ $(document).ready(function () {
 			$("#zipcodeAddr").val($(this).find("#zipcode").html());
 			$("#deliveryAddressId").val($(this).find("#addressId").html());			
 			$('#myModal').modal('hide');
+			$('#addressFields').removeClass("hide").addClass("show");
 			getDeliverySlots();
 		});
     	$("#enterNewAddress").on('click', function(e) {
-    		$('#myModal').modal('hide');
+    		
     		$('#addressFields').removeClass("hide").addClass("show");
     	});
 		
@@ -176,12 +175,19 @@ $(document).ready(function () {
     function getDeliverySlots() {	    	
 		ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {		
 			$("#selectDeliverySlot").prop( "disabled", false );
-			$.each(data, function (i, item) {
-			    $('#selectDeliverySlot').append($('<option>', { 
-			        value: item.value,
-			        text : item.text 
-			    }));
-			});
+			if(data.deliverySlots) {
+				$.each(data.deliverySlots, function (i, deliverySlot) {
+					if(deliverySlot.slotQuantity >0) {
+						var slotText ="Slot Time :"+deliverySlot.startTime+"-"+deliverySlot.endTime+"    Available Slots :"+deliverySlot.slotQuantity;
+					    var slotValue = deliverySlot.deliverySlotId;
+					    var option = new Option(slotText, slotValue);
+						/// jquerify the DOM object 'o' so we can use the html method
+						$(option).html(slotText);
+						$("#selectDeliverySlot").append(option);
+					}
+					
+				});
+			}
 		}).fail(function(data) {
         	
         	alert("failed");
@@ -221,7 +227,12 @@ $(document).ready(function () {
     		var individualItemRow='<tr> <td>'+itemNameDiv+itemDetailsDiv+'</td><td>'+itemPrice+'</td><td>'+itemQuantity+'</td><td class="text-center">'+itemTotalPrice+'</td></tr>';
     		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
     	});
-	   
+    	
+    	var addressInfo = "<div class='row'><strong>Delivery Address :</strong><label>"+data.addressLine+"</label><br>"+data.landmarkReturn+" "+data.zipcodeReturn+"</div>";    	
+    	var slotInfo = "<div class='row'><strong>Delivery Slot Selected :</strong><label>"+data.deliverySlot+"</label></div>";
+    	$("#verifyDeliveryDetails").append(addressInfo);
+    	$("#verifyDeliveryDetails").append(slotInfo);
+    	
     }
     $(".prev-step").click(function (e) {
 

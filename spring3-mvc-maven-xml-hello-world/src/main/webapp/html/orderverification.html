@@ -1,76 +1,124 @@
 <script src="js/admin/panel.js"></script>
- <link rel="stylesheet" href="css/admin/panel.css">
+<link rel="stylesheet" href="css/admin/panel.css">
 
 <div class="row">
-        <div class="col-lg-10">
-            <div class="panel panel-primary">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Verify Order Details</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-plus"></i></span>
-                </div>
-                <div class="panel-body">
-	                 <div class="row">
-	                     <div class="col-lg-10">
-	                        <form role="form" id="verifyOrderDetailsForm">
-	                            <div id="verifyOrderDetails">
-	                            	<table id="verifyOrderDetailsTable" class="table table-hover table-condensed">
+	<div class="col-lg-10">
+		<div class="panel panel-primary">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Verify Order Details</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-plus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-10">
+						<form role="form" id="verifyOrderDetailsForm">
+							<div id="verifyOrderDetails">
+								<table id="verifyOrderDetailsTable"
+									class="table table-hover table-condensed">
 									<thead>
 										<tr>
-											<th style="width:53%">Item</th>
-											<th style="width:12%">Price</th>
-											<th style="width:8%">Quantity</th>											
-											<th style="width:27%" class="text-center">Total</th>											
+											<th style="width: 53%">Item</th>
+											<th style="width: 12%">Price</th>
+											<th style="width: 8%">Quantity</th>
+											<th style="width: 27%" class="text-center">Total</th>
 										</tr>
 									</thead>
 									<tbody>
 									</tbody>
-									</table>
-	                            </div>
-	                           <div id="totalPriceDetails"></div>
-	                           <div id="discountDetails">
-	                           		Coupon Code<input class="form-control text-center" type="text"><button type="button" id="applyCode"class="btn btn-default">Apply Code</button>
-	                           </div>
-                                  
-	                        </form>
-	                     </div>
-	                   </div>
-                   </div>
-            </div>
-        </div>        
-    </div>
-    <div class="row">
-        <div class="col-lg-10">
-            <div class="panel panel-info">
-                <div class="panel-heading clickable">
-                    <h3 class="panel-title">
-                       Verify Delivery Details</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                <div class="row">
-	                     <div class="col-lg-10">
-	                        <form role="form" id="verifyDeliveryDetailsForm">
-	                            <div id="verifyDeliveryDetails"></div>
-	                           
-                                  <button type="button" id="submitAddArea"class="btn btn-default">Add Area</button>
-	                        </form>
-	                     </div>
-	                   </div>
-                    </div>
-            </div>
-        </div>        
-    </div>
-    <div class="row">
-        <div class="col-lg-10">
-            <div class="panel panel-info">
-                <div class="panel-heading clickable">
-                    <h3 class="panel-title">
-                      Payment Information</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                    </div>
-            </div>
-        </div>        
-    </div>
+								</table>
+							</div>
+							<div id="totalPriceDetails"></div>
+							<div id="discountDetails">
+								Coupon Code<input class="form-control text-center" type="text">
+								<button type="button" id="applyCode" class="btn btn-default">Apply
+									Code</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-10">
+		<div class="panel panel-info">
+			<div class="panel-heading clickable">
+				<h3 class="panel-title">Verify Delivery Details</h3>
+				<span class="pull-right "><i
+					class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-10">
+						<form role="form" id="verifyDeliveryDetailsForm">
+
+							<div id="verifyDeliveryDetails"></div>
+
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-10">
+		<div class="panel panel-info">
+			<div class="panel-heading clickable">
+				<h3 class="panel-title">Payment Information</h3>
+				<span class="pull-right "><i
+					class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-10">
+						<form id='form-id'>
+							<input id='watch-me' name='test' type='radio' checked /> Cash On
+							Delivery <input id='see-me' name='test' type='radio' /> Other
+							Payment Options
+						</form>
+
+						<br>
+						<br>
+						<div id='show-me'>
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a href="#home"
+									aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+								<li role="presentation"><a href="#profile"
+									aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+								<li role="presentation"><a href="#messages"
+									aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+								<li role="presentation"><a href="#settings"
+									aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+							</ul>
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="home">Home
+									Tab Content</div>
+								<div role="tabpanel" class="tab-pane" id="profile">Profile
+									Tab Content</div>
+								<div role="tabpanel" class="tab-pane" id="messages">Messages
+									tab Content</div>
+								<div role="tabpanel" class="tab-pane" id="settings">Setting
+									tab Content</div>
+							</div>
+						</div>
+
+						<div id='show-me-two'
+							style='display: none; border: 2px solid #ccc'>
+							We would be Soon Coming up with Other Payment Options. <br>
+							Please continue with cash on delivery till then.
+						</div>
+
+					</div>
+					<div class="col-md-6"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

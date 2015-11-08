@@ -28,6 +28,7 @@
 <script
 	src="js/mwf-core-ajax.js"></script>
 <script src="js/steps.js"></script>
+<script src="js/inputnumber.js"></script>
 </head>
 <body>
 	<div class="navbar-header">
@@ -96,9 +97,9 @@
 								<table id="cart" class="table table-hover table-condensed">
 									<thead>
 										<tr>
-											<th style="width:55%">Pani Puri Packs</th>
+											<th style="width:50%">Pani Puri Packs</th>
 											<th style="width:13%">Price</th>
-											<th style="width:10%">Quantity</th>											
+											<th style="width:15%">Quantity</th>											
 											<th style="width:22%" class="text-center">Subtotal</th>
 											
 										</tr>
@@ -135,8 +136,20 @@
 											</td>
 											<td data-th="Price" ><span id="itemPrice${item.itemId}"><c:out value="${item.itemPrice}"></c:out></span></td>
 											<td data-th="Quantity" data-itemId="${item.itemId}" colspan="1">
-												<input type="number" min="0" max="10" id="quantity${item.itemId}" name="item~${item.itemId}" class="form-control text-center" value="0">
-												
+												<div class="input-group">
+										          <span class="input-group-btn">
+										              <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="item~${item.itemId}">
+										                <span class="glyphicon glyphicon-minus"></span>
+										              </button>
+										          </span>
+										          <input type="text" id="quantity${item.itemId}" name="item~${item.itemId}" class="form-control input-number" value="0" min="0" max="10">
+										          <span class="input-group-btn">
+										              <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="item~${item.itemId}">
+										                  <span class="glyphicon glyphicon-plus"></span>
+										              </button>
+										          </span>
+									     		</div>								
+											
 											</td>
 											
 											<td data-th="Subtotal" id="subTotal${item.itemId}" class="text-center">0.00</td>

@@ -11,7 +11,7 @@ public class AddressVo {
 	private String contactNumber;
 	private String city;
 	private String state;
-	private DeliverySlotVo deliverySlot;
+	
 	/**
 	 * @return the addressId
 	 */
@@ -97,18 +97,7 @@ public class AddressVo {
 	public void setState(String state) {
 		this.state = state;
 	}
-	/**
-	 * @return the deliverySlot
-	 */
-	public DeliverySlotVo getDeliverySlot() {
-		return deliverySlot;
-	}
-	/**
-	 * @param deliverySlot the deliverySlot to set
-	 */
-	public void setDeliverySlot(DeliverySlotVo deliverySlot) {
-		this.deliverySlot = deliverySlot;
-	}
+	
 	/**
 	 * @return the firstName
 	 */

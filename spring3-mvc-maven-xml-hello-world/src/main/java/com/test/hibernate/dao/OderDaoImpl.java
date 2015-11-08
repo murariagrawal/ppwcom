@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.ItemVo;
@@ -12,7 +13,6 @@ import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.Address;
 import com.test.hibernate.AvailableTopping;
-import com.test.hibernate.Crew;
 import com.test.hibernate.Customer;
 import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.Item;
@@ -70,15 +70,42 @@ public class OderDaoImpl  {
 		session.close();
 		return order.getOrderId();
 	}
-	public OrderVo getOrderDetails(String orderId, Address address, Customer customer) {
+	public OrderVo getOrderDetails(String orderId, Address address, Customer customer, String slotId) {
 		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		DeliverySlot slot = (DeliverySlot)session.get(DeliverySlot.class, new Long(slotId));
 		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
-		session.saveOrUpdate(address);
-		session.saveOrUpdate(customer);
+		List<Customer> sessionCustomerList=(List<Customer>)session.createCriteria(Customer.class).add(Restrictions.eq("contactNo1", customer.getContactNo1())).list();
+		if(null == sessionCustomerList || sessionCustomerList.isEmpty()) {
+			address.setCustomer(customer);
+			customer.getAddresses().add(address);
+			session.saveOrUpdate(customer);
+			
+		} else {
+			customer = sessionCustomerList.get(0);
+			List<Address> addressList = sessionCustomerList.get(0).getAddresses();
+			boolean addressExist= false;
+			if(null!= addressList) {
+				for(Address add: addressList) {
+					if(address.getAddressId() == add.getAddressId()) {
+						addressExist = true;
+						address = add;
+						break;
+					}
+				}
+			} else {
+				addressList = new ArrayList<Address>();
+			}
+			if(!addressExist) {
+				address.setCustomer(sessionCustomerList.get(0));
+				addressList.add(address);
+			}
+		}
 		orderDetails.setCustomer(customer);
 		orderDetails.setDeliveryAddress(address);
+		orderDetails.setDeliverySlotSelected(slot);
 		Customer custInfo = orderDetails.getCustomer();
-		DeliverySlot slot = orderDetails.getDeliverySlotSelected();		
+				
 		List<OrderItems> orderItems = orderDetails.getOrderItems();
 		List<OrderToppings> toppings = orderDetails.getOrderToppings();
 		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
@@ -96,6 +123,8 @@ public class OderDaoImpl  {
 			deliverySlot = slot.getStartTime()+"-"+slot.getEndTime();
 		}
 		orderVo.setDeliverySlot(deliverySlot);
+		orderVo.setContactNo(custInfo.getContactNo1());
+		session.getTransaction().commit();
 		session.close();
 		return orderVo;
 	}

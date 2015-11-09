@@ -228,11 +228,31 @@ $(document).ready(function () {
     		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
     	});
     	
-    	var addressInfo = "<div class='row'><strong>Delivery Address :</strong><label>"+data.addressLine+"</label><br>"+data.landmarkReturn+" "+data.zipcodeReturn+"</div>";    	
-    	var slotInfo = "<div class='row'><strong>Delivery Slot Selected :</strong><label>"+data.deliverySlot+"</label></div>";
+    	var addressInfo = "<div class='row'><strong>Delivery Address :</strong></div><div class='row'><label>"+data.addressLine+"</label></div><div class='row'>"+data.landmarkReturn+" "+data.zipcodeReturn+"</div>";    	
+    	var slotInfo = "<div class='row'><strong>Delivery Slot Selected :</strong><br><label>"+data.deliverySlot+"</label></div>";
     	$("#verifyDeliveryDetails").append(addressInfo);
     	$("#verifyDeliveryDetails").append(slotInfo);
     	
+    	$("#orderIdPayment").val(data.orderId);
+    	$("#contactNumber").html(data.contactNo);
+    
+    	$("#paymentOption, #otheroption").change(function () {
+	    	if($("#paymentOption").is(":checked")) {
+	    		$("#cashOnDeliveryDiv").show();
+	    		$("#otherPaymentOptionDiv").hide();
+	    	}
+	    	if($("#otheroption").is(":checked")) {
+	    		$("#cashOnDeliveryDiv").hide();
+	    		$("#otherPaymentOptionDiv").show();
+	    	}
+    	});
+    	$("#getCodeButton").on("click", function(e) {
+    		ajax.postForm("sendOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {			
+    								
+            }).fail(function(data) {        	
+            	alert("failed");
+            });
+    	});
     }
     $(".prev-step").click(function (e) {
 

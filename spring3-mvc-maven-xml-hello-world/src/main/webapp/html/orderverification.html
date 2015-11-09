@@ -76,41 +76,42 @@
 				<div class="row">
 					<div class="col-lg-10">
 						<form id='form-id'>
-							<input id='watch-me' name='test' type='radio' checked /> Cash On
-							Delivery <input id='see-me' name='test' type='radio' /> Other
+							<input id='cashoption' name='paymentOption' type='radio' checked /> Cash On
+							Delivery <input id='otheroption' name='paymentOption' type='radio' /> Other
 							Payment Options
 						</form>
 
 						<br>
 						<br>
-						<div id='show-me'>
-							<!-- Nav tabs -->
-							<ul class="nav nav-tabs" role="tablist">
-								<li role="presentation" class="active"><a href="#home"
-									aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-								<li role="presentation"><a href="#profile"
-									aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-								<li role="presentation"><a href="#messages"
-									aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-								<li role="presentation"><a href="#settings"
-									aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
-							</ul>
-
-							<!-- Tab panes -->
-							<div class="tab-content">
-								<div role="tabpanel" class="tab-pane active" id="home">Home
-									Tab Content</div>
-								<div role="tabpanel" class="tab-pane" id="profile">Profile
-									Tab Content</div>
-								<div role="tabpanel" class="tab-pane" id="messages">Messages
-									tab Content</div>
-								<div role="tabpanel" class="tab-pane" id="settings">Setting
-									tab Content</div>
-							</div>
+						<div id='cashOnDeliveryDiv'>
+							<label>For Confirming your Order please verify your number with OTP below</label>
+							<form id="oneTimePasswordForm" class="formoid-solid-blue">
+								<input type="hidden" id="orderIdPayment" name="orderIdPayment">
+								<div class="input-group" id="getCodeDiv">
+								 <span class="label label-default" id="contactNumber">  </span>
+									<span class="input-group-btn">
+							              <button type="button" id="getCodeButton" class="btn btn-success">
+							                <span class="label label-default"> Get Code</span>
+							              </button>
+							          </span>
+								</div>
+								<div class="input-group hide" id="submitCodeDiv">
+								
+									<span class="input-group">
+							             <input type="number" id="otpCode" name="otpCode" min="6" max="6" />
+							          </span>
+							          <span class="input-group-btn">
+							              <button type="button" id="resendCodeButton"  class="btn btn-success">
+							                <span class="label label-default">Resend Code</span>
+							              </button>
+							          </span>
+								</div>
+							</form>
+							
 						</div>
 
-						<div id='show-me-two'
-							style='display: none; border: 2px solid #ccc'>
+						<div id='otherPaymentOptionDiv'
+							class="hide">
 							We would be Soon Coming up with Other Payment Options. <br>
 							Please continue with cash on delivery till then.
 						</div>

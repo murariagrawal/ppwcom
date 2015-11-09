@@ -78,6 +78,7 @@ public class OderDaoImpl  {
 		List<Customer> sessionCustomerList=(List<Customer>)session.createCriteria(Customer.class).add(Restrictions.eq("contactNo1", customer.getContactNo1())).list();
 		if(null == sessionCustomerList || sessionCustomerList.isEmpty()) {
 			address.setCustomer(customer);
+			
 			customer.getAddresses().add(address);
 			session.saveOrUpdate(customer);
 			
@@ -128,7 +129,28 @@ public class OderDaoImpl  {
 		session.close();
 		return orderVo;
 	}
-	
+	public OrderVo getOrder(String orderId) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));		
+		Customer custInfo = orderDetails.getCustomer();				
+		List<OrderItems> orderItems = orderDetails.getOrderItems();
+		List<OrderToppings> toppings = orderDetails.getOrderToppings();
+		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
+		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
+		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
+		addressVo.setFirstName(custInfo.getCustomerFirstName());
+		addressVo.setLastName(custInfo.getCustomerLastName());
+		OrderVo orderVo= new OrderVo();
+		orderVo.setOrderId(orderDetails.getOrderId());
+		orderVo.setItemList(itemList);
+		orderVo.setToppingList(toppingsVo);
+		orderVo.setDeliveryAddress(addressVo);
+		orderVo.setContactNo(custInfo.getContactNo1());
+		session.getTransaction().commit();
+		session.close();
+		return orderVo;
+	}
 	private List<ItemVo> convertOrderItemToItemVo(List<OrderItems> orderItems) {
 		List<ItemVo> itemVoList = new ArrayList<ItemVo>();
 		if(null != orderItems) {

@@ -11,22 +11,48 @@ import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.StatusVo;
 import com.panipuri.vo.ToppingVo;
+import com.test.hibernate.OneTimePassword;
+import com.test.hibernate.dao.OTPDaoImpl;
 import com.test.hibernate.dao.OderDaoImpl;
 @Component
 @Lazy
 public class OrderCreationService {
 	@Autowired
-	OderDaoImpl oderDaoImpl;
+	OderDaoImpl orderDaoImpl;
+	@Autowired
+	OTPDaoImpl otpDaoImpl;
 	public Long createOrder(List<ItemVo> selectedItems, List<ToppingVo> selectedToppings, String orderId) {
-		Long orderIdLong = oderDaoImpl.addOrder(selectedItems, selectedToppings, orderId);
+		Long orderIdLong = orderDaoImpl.addOrder(selectedItems, selectedToppings, orderId);
 		
 		return orderIdLong;
 	}
 	public StatusVo sendOTP(String orderId) {
-		OrderVo orderDetails = oderDaoImpl.getOrder(orderId);
-		orderDetails.getContactNo();
-		String otp = SimpleOTPGenerator.random(6);
-		String message = "Dear Customer, You have initiated an order with us. Your One time Password for verification is "+otp;
-		return null;
+		StatusVo statusVo =null;
+		try {
+		
+			String otp = SimpleOTPGenerator.random(6);
+			otpDaoImpl.addOTP(orderId,otp);
+			String message = "Dear Customer, You have initiated an order with us. Your One time Password for verification is "+otp;
+			statusVo.setStatus(true);
+		} catch (Exception e) {
+			statusVo.setStatus(false);
+		}
+		
+		return statusVo;
 	}
+	
+	public OrderVo validateOTP(String otp, String orderId) {
+		
+		OrderVo orderDetails = null;
+		
+		OneTimePassword oneTimePassword = otpDaoImpl.getOTPDetails(orderId,otp);
+		if(null != oneTimePassword) {
+			orderDetails = orderDaoImpl.confirmOrder(orderId);
+		} else {
+			
+		}
+		
+		return orderDetails;
+	}
+	
 }

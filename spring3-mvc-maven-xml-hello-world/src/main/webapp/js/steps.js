@@ -248,7 +248,8 @@ $(document).ready(function () {
     	});
     	$("#getCodeButton").on("click", function(e) {
     		ajax.postForm("sendOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {			
-    								
+    			$("#submitCodeDiv").show();	
+    			$("#getCodeDiv").hide();
             }).fail(function(data) {        	
             	alert("failed");
             });

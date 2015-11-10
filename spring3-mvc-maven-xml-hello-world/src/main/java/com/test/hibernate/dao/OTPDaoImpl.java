@@ -29,17 +29,17 @@ public class OTPDaoImpl {
 		session.close();
 		
 	}
-	public OneTimePassword getOTPDetails(String otp, String contactNumber, long OrderId) {
+	public OneTimePassword getOTPDetails(String otp, String OrderId) {
 		Session session = this.sessionFactory.getCurrentSession();
 		OneTimePassword oneTimePassword =  (OneTimePassword)session.get(OneTimePassword.class, otp);
 		return oneTimePassword;
 	}
-	public void addOTP(String otp, long orderId, String contactNumber) {
+	public void addOTP( String orderId,String otp) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		Order order = (Order) session.get(Order.class, orderId);
+		Order order = (Order) session.get(Order.class, new Long(orderId));
 		OTPId otpId = new OTPId();
-		otpId.setContactNumber(contactNumber);
+		otpId.setContactNumber(order.getCustomer().getContactNo1());
 		otpId.setOtp(otp);
 		OneTimePassword oneTimePassword = new OneTimePassword();
 		oneTimePassword.setOtp(otpId);		

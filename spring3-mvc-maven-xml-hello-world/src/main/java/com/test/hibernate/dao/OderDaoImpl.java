@@ -1,6 +1,7 @@
 package com.test.hibernate.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -13,12 +14,16 @@ import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.Address;
 import com.test.hibernate.AvailableTopping;
+import com.test.hibernate.CashInvoice;
 import com.test.hibernate.Customer;
 import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.Item;
+import com.test.hibernate.OTPId;
+import com.test.hibernate.OneTimePassword;
 import com.test.hibernate.Order;
 import com.test.hibernate.OrderItems;
 import com.test.hibernate.OrderToppings;
+import com.test.hibernate.PaymentMode;
 import com.test.hibernate.Status;
 
 public class OderDaoImpl  {
@@ -133,6 +138,57 @@ public class OderDaoImpl  {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));		
+		Customer custInfo = orderDetails.getCustomer();				
+		List<OrderItems> orderItems = orderDetails.getOrderItems();
+		List<OrderToppings> toppings = orderDetails.getOrderToppings();
+		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
+		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
+		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
+		addressVo.setFirstName(custInfo.getCustomerFirstName());
+		addressVo.setLastName(custInfo.getCustomerLastName());
+		OrderVo orderVo= new OrderVo();
+		orderVo.setOrderId(orderDetails.getOrderId());
+		orderVo.setItemList(itemList);
+		orderVo.setToppingList(toppingsVo);
+		orderVo.setDeliveryAddress(addressVo);
+		orderVo.setContactNo(custInfo.getContactNo1());
+		session.getTransaction().commit();
+		session.close();
+		return orderVo;
+	}
+	
+	public OrderVo confirmOrder(String orderId) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
+		orderDetails.setPaymentMode(PaymentMode.COD);
+		orderDetails.setStatus(Status.ACCEPTED);
+		Customer custInfo = orderDetails.getCustomer();				
+		List<OrderItems> orderItems = orderDetails.getOrderItems();
+		List<OrderToppings> toppings = orderDetails.getOrderToppings();
+		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
+		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
+		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
+		addressVo.setFirstName(custInfo.getCustomerFirstName());
+		addressVo.setLastName(custInfo.getCustomerLastName());
+		OrderVo orderVo= new OrderVo();
+		orderVo.setOrderId(orderDetails.getOrderId());
+		orderVo.setItemList(itemList);
+		orderVo.setToppingList(toppingsVo);
+		orderVo.setDeliveryAddress(addressVo);
+		orderVo.setContactNo(custInfo.getContactNo1());
+		session.getTransaction().commit();
+		session.close();
+		return orderVo;
+	}
+	public OrderVo updateDeliveryStatus(String orderId) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
+		
+		orderDetails.setStatus(Status.DELIVERED);
+		CashInvoice invoice = new CashInvoice();
+		invoice.setOrder(orderDetails);
 		Customer custInfo = orderDetails.getCustomer();				
 		List<OrderItems> orderItems = orderDetails.getOrderItems();
 		List<OrderToppings> toppings = orderDetails.getOrderToppings();

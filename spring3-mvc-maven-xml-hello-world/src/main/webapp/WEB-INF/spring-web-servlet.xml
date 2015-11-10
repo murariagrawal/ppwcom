@@ -36,7 +36,7 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
 				<prop key="hibernate.current_session_context_class">thread</prop>
 				<prop key="hibernate.show_sql">true</prop>
 <!-- 				<prop key="hibernate.hbm2ddl.auto">create</prop> -->
@@ -46,10 +46,10 @@
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://piyush.panipuri.jvmhost.net/piyushpa_panipuri" />
-		<property name="username" value="piyushpa_piyush" />
-		<property name="password" value="piyush123" />
+		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+		<property name="url" value="jdbc:derby://localhost:1527/Piyush" />
+		<property name="username" value="piyush" />
+		<property name="password" value="piyush" />
 	</bean>
 	<bean id="crewDaoImpl" class="com.test.hibernate.dao.CrewDaoImpl">
 		<property name="sessionFactory">

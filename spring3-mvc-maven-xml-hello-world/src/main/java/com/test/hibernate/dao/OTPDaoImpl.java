@@ -18,7 +18,7 @@ public class OTPDaoImpl {
         this.sessionFactory = sf;
     }
 	public void deleteOldOTPs() {
-		Session session = this.sessionFactory.getCurrentSession();
+		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		long oldTime = new Date().getTime();
 		oldTime = oldTime - (15*60*100);
@@ -29,13 +29,18 @@ public class OTPDaoImpl {
 		session.close();
 		
 	}
-	public OneTimePassword getOTPDetails(String otp, String OrderId) {
-		Session session = this.sessionFactory.getCurrentSession();
-		OneTimePassword oneTimePassword =  (OneTimePassword)session.get(OneTimePassword.class, otp);
+	public OneTimePassword getOTPDetails(String orderId, String otp) {
+		Session session = this.sessionFactory.openSession();
+		Order order = (Order) session.get(Order.class, new Long(orderId));
+		OTPId otpId = new OTPId();
+		otpId.setContactNumber(order.getCustomer().getContactNo1());
+		otpId.setOtp(otp);
+		OneTimePassword oneTimePassword =  (OneTimePassword)session.get(OneTimePassword.class, otpId);
+		session.close();
 		return oneTimePassword;
 	}
 	public void addOTP( String orderId,String otp) {
-		Session session = this.sessionFactory.getCurrentSession();
+		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		Order order = (Order) session.get(Order.class, new Long(orderId));
 		OTPId otpId = new OTPId();

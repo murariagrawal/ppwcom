@@ -34,7 +34,9 @@ public class OrderPaymentController {
 		StatusVo status = orderCreationService.sendOTP(orderId);
 		status.setMessage("SMS has been sent. Please verify the 6 digit code.");
 		mv = new ModelAndView("");
-		mv.addObject("status",status);
+		mv.addObject("message",status.getMessage());
+		mv.addObject("success",status.isStatus());
+		
 		return mv;
 	}
 	

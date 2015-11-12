@@ -27,12 +27,13 @@ public class OrderCreationService {
 		return orderIdLong;
 	}
 	public StatusVo sendOTP(String orderId) {
-		StatusVo statusVo =null;
+		StatusVo statusVo =new StatusVo();
 		try {
 		
 			String otp = SimpleOTPGenerator.random(6);
 			otpDaoImpl.addOTP(orderId,otp);
 			String message = "Dear Customer, You have initiated an order with us. Your One time Password for verification is "+otp;
+			
 			statusVo.setStatus(true);
 		} catch (Exception e) {
 			statusVo.setStatus(false);

@@ -59,6 +59,62 @@ $(document).ready(function () {
         	alert("failed");
         });
     });
+    function createIndividualItemRow(item) {
+    	var itemName= item.itemName;
+		var itemQuantity= item.itemQuantity;
+		var itemPrice= item.itemPrice;
+		
+		var itemId= item.itemId;
+		var itemNameDiv = '<div class="row"><div class="col-sm-10"><h4 class="nomargin"><label>'+itemName+'</label></h4>'+
+							'<p><a class="accordion-toggle" data-toggle="collapse"	href="#itemDetails'+itemId+'">'+
+							'<span	class="label label-info">View Details</span></a></p></div></div>';
+		var itemDetailsLabel = "";
+		$.each(item.itemDetails, function(j, itemdetail ) {
+			itemDetailsLabel = itemDetailsLabel+"<label>"+itemdetail+"</label><br>";
+		});
+		var itemDetailsDiv='<div id="itemDetails'+itemId+'"	class="accordion-body collapse"><div class="accordion-inner">'+
+							'<table class="table table-hover table-condensed">'+	
+							'<tr><td>'+itemDetailsLabel+
+							'</td></tr></table></div></div>';
+		var itemTotalPrice = itemPrice*itemQuantity;
+		var individualItemRow='<tr> <td>'+itemNameDiv+itemDetailsDiv+'</td><td>'+
+								itemPrice+'</td><td>'+
+								itemQuantity+'</td><td class="text-center">'+
+								itemTotalPrice+'</td></tr>';
+		return individualItemRow;
+		
+    }
+   function createDeliveryDetailsInfo(data) {
+    	
+    	var addressInfo = "<div class='row'>Delivery Address :</div><div class='row'><label>"+
+							data.addressLine+"</label></div><div class='row'>"+
+							data.landmarkReturn+" "+
+							data.zipcodeReturn+"</div>";    	
+    	var slotInfo = "<div class='row'>Delivery Slot Selected :<br><label>"+data.deliverySlot+"</label></div>";
+    	var deliveryDetailsInfo = addressInfo+slotInfo;
+    	return deliveryDetailsInfo;
+    }
+    $("#continueToVerify").on("click", function(e) {		
+		ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
+			ajax.loadFragment("html/orderverification.html").done(function(out) {
+				$("#verifyDetailsDiv").empty();
+				$("#verifyDetailsDiv").append(out);
+				$.each(data.itemList, function(i, item) {
+		    		var individualItemRow =  createIndividualItemRow(item);
+		    		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
+		    	});
+		    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
+		    	$("#verifyDeliveryDetails").append(deliveryDetailsInfo);    	
+		    	$("#orderIdPayment").val(data.orderId);
+		    	$("#contactNumber").html(data.contactNo);
+				bindVerifyEvents(data);
+			}).fail(function(data) {	        	
+	        	alert("failed");
+	        });						
+        }).fail(function(data) {        	
+        	alert("failed");
+        });
+    });
     function bindDeliveryEvents() {
 	    $('#phoneNumber').on("keyup",function() {
 	    	var length = $(this).val().length;
@@ -72,6 +128,7 @@ $(document).ready(function () {
 	    		getDeliverySlots();
 	    	}
 		});
+	    
     }
     function getAddressDetails() {		
 		ajax.postForm("fetchDeliveryDetails?F=J", $("#deliveryForm")).done(function(data) {		
@@ -159,7 +216,7 @@ $(document).ready(function () {
 			$("#addr2").val($(this).find("#addressLine2").html());
 			$("#landmarkAddr").val($(this).find("#landmark").html());
 			$("#zipcodeAddr").val($(this).find("#zipcode").html());
-			$("#deliveryAddressId").val($(this).find("#addressId").html());			
+			$("#deliveryAddressId").val($(this).find("#addressId").val());			
 			$('#myModal').modal('hide');
 			$('#addressFields').removeClass("hide").addClass("show");
 			getDeliverySlots();
@@ -194,47 +251,8 @@ $(document).ready(function () {
         });
     }
     
-    $("#continueToVerify").on("click", function(e) {		
-		ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
-			ajax.loadFragment("html/orderverification.html").done(function(out) {
-				$("#verifyDetailsDiv").append(out);
-				bindVerifyEvents(data);
-			}).fail(function(data) {	        	
-	        	alert("failed");
-	        });						
-        }).fail(function(data) {        	
-        	alert("failed");
-        });
-    });
-    function bindVerifyEvents(data) {
-    	$.each(data.itemList, function(i, item) {
-    		var itemName= item.itemName;
-    		var itemQuantity= item.itemQuantity;
-    		var itemPrice= item.itemPrice;
-    		
-    		var itemId= item.itemId;
-    		var itemNameDiv = '<div class="row"><div class="col-sm-10"><h4 class="nomargin"><label>'+itemName+'</label></h4>'+
-    							'<p><a class="accordion-toggle" data-toggle="collapse"	href="#itemDetails'+itemId+'">'+
-    							'<span	class="label label-info">View Details</span></a></p></div></div>';
-    		var itemDetailsLabel = "";
-    		$.each(item.itemDetails, function(j, itemdetail ) {
-    			itemDetailsLabel = itemDetailsLabel+"<label>"+itemdetail+"</label><br>";
-    		});
-    		var itemDetailsDiv='<div id="itemDetails'+itemId+'"	class="accordion-body collapse"><div class="accordion-inner"><table class="table table-hover table-condensed">'+	
-    		'<tr><td>'+itemDetailsLabel+
-    		'</td></tr></table></div></div>';
-    		var itemTotalPrice = itemPrice*itemQuantity;
-    		var individualItemRow='<tr> <td>'+itemNameDiv+itemDetailsDiv+'</td><td>'+itemPrice+'</td><td>'+itemQuantity+'</td><td class="text-center">'+itemTotalPrice+'</td></tr>';
-    		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
-    	});
-    	
-    	var addressInfo = "<div class='row'><strong>Delivery Address :</strong></div><div class='row'><label>"+data.addressLine+"</label></div><div class='row'>"+data.landmarkReturn+" "+data.zipcodeReturn+"</div>";    	
-    	var slotInfo = "<div class='row'><strong>Delivery Slot Selected :</strong><br><label>"+data.deliverySlot+"</label></div>";
-    	$("#verifyDeliveryDetails").append(addressInfo);
-    	$("#verifyDeliveryDetails").append(slotInfo);
-    	
-    	$("#orderIdPayment").val(data.orderId);
-    	$("#contactNumber").html(data.contactNo);
+   
+    function bindVerifyEvents(data) {    	
     
     	$("#paymentOption, #otheroption").change(function () {
 	    	if($("#paymentOption").is(":checked")) {
@@ -247,14 +265,36 @@ $(document).ready(function () {
 	    	}
     	});
     	$("#getCodeButton").on("click", function(e) {
-    		ajax.postForm("sendOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {			
-    			$("#submitCodeDiv").show();	
-    			$("#getCodeDiv").hide();
+    		ajax.postForm("sendOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {
+    			if(data.success === true) {
+    				$("#submitCodeDiv").removeClass("hide");	
+    				$("#getCodeDiv").hide();
+    				$("#otpConfirmationMessage").empty();
+    				$("#otpConfirmationMessage").html(data.message);
+    			} else {
+    				
+    			}
             }).fail(function(data) {        	
             	alert("failed");
             });
     	});
-    }
+    	$("#confirmOrderButton").on("click", function(e) {
+    		ajax.postForm("validateOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {
+    			$("#confirmDetailsDiv").empty();
+				$("#confirmDetailsDiv").append(out);
+				$.each(data.itemList, function(i, item) {
+		    		var individualItemRow =  createIndividualItemRow(item);
+		    		$("#confirmOrderDetailsTable > tbody").append(individualItemRow);
+		    	});
+		    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
+		    	$("#confirmDeliveryDetails").append(deliveryDetailsInfo);    	
+		    	$("#orderIdConfirmPayment").val(data.orderId);		    	
+            }).fail(function(data) {        	
+            	alert("failed");
+            });
+    	});
+    };
+    
     $(".prev-step").click(function (e) {
 
         var $active = $('.wizard .nav-tabs li.active');

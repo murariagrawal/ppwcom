@@ -191,8 +191,7 @@
 					<div class="tab-pane" role="tabpanel" id="step3">
 						<div id="verifyDetailsDiv"></div>
 						<ul class="list-inline pull-right">
-							<li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-							<li><button type="button" class="btn btn-default next-step">Skip</button></li>
+							<li><button type="button" class="btn btn-default prev-step">Previous</button></li>							
 							<li><button type="button"
 									class="btn btn-primary btn-info-full next-step">Save
 									and continue</button></li>

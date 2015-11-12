@@ -84,26 +84,23 @@
 						<br>
 						<br>
 						<div id='cashOnDeliveryDiv'>
-							<label>For Confirming your Order please verify your number with OTP below</label>
+							
 							<form id="oneTimePasswordForm" class="formoid-solid-blue">
 								<input type="hidden" id="orderIdPayment" name="orderIdPayment">
 								<div class="input-group" id="getCodeDiv">
+								<label>For Confirming your Order please verify your number with OTP below</label>
 								 <span class="label label-default" id="contactNumber">  </span>
-									<span class="input-group-btn">
-							              <button type="button" id="getCodeButton" class="btn btn-success">
-							                <span class="label label-default"> Get Code</span>
-							              </button>
+									<span>
+							              <button type="button" id="getCodeButton" class="btn-success">Get Code</button>
 							          </span>
 								</div>
 								<div class="input-group hide" id="submitCodeDiv">
-								
-									<span class="input-group">
+									<label id="otpConfirmationMessage"></label><br>
+									<span>
 							             <input type="number" id="otpCode" name="otpCode" min="0" max="6" />
 							          </span>
-							          <span class="input-group-btn">
-							              <button type="button" id="resendCodeButton"  class="btn btn-success">
-							                <span class="label label-default">Resend Code</span>
-							              </button>
+							          <span>
+							              <button type="button" id="confirmOrderButton" >Confirm Order</button>
 							          </span>
 								</div>
 							</form>

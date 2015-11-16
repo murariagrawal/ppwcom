@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.StatusVo;
+import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.MasterDeliveryArea;
 import com.test.hibernate.dao.AvailableDeliveryAreaDaoImpl;
@@ -22,7 +23,10 @@ public class AdminService {
 		itemDaoImpl.addItem(item);
 		return new StatusVo();
 	}
-
+	public StatusVo addStuffing(ToppingVo topping) {
+		itemDaoImpl.addStuffing(topping);
+		return new StatusVo();
+	}
 	public StatusVo addArea(String areaName, String areaCity, String areaState,  List<Long> zipcodes, List<DeliverySlot> deliverySlots) {
 		availableDeliveryAreaDaoImpl.addMasterDeliveryArea(areaName, areaCity , areaState, zipcodes, deliverySlots);
 		return new StatusVo();

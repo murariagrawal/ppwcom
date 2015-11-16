@@ -12,28 +12,41 @@ $(document).ready(function () {
         }
     });
 
-    $(".next-step").click(function (e) {
+   function goToNextStep() {
 
         var $active = $('.wizard .nav-tabs li.active');
         $active.next().removeClass('disabled');
         nextTab($active);
 
-    });
+    };
     $('[data-th="Quantity"]').on('change',function (e) {
     	
     	var itemId = $(this).attr("data-itemId");
-    	var subtotalId = "subTotal"+ itemId;
+    	var subtotalId = "subTotalItem"+ itemId;
     	var itemPriceId = "itemPrice" +itemId;
     	var quantityId = "quantity" +itemId;    	
     	var itemPrice = $("#"+itemPriceId).html();    	
     	var itemQuantity = $("#"+quantityId).val();
     	var subtotal = itemQuantity *itemPrice;
-    	var customizeId = "customize"+itemId
-    	$("#"+customizeId).removeClass("disabled");
+    	
        $("#"+subtotalId).html(subtotal.toFixed(2));
        calculateTotal();
 
     });
+	$('[data-th="QuantityStuffing"]').on('change',function (e) {
+	    	
+	    	var stuffingId = $(this).attr("data-stuffingId");
+	    	var subtotalId = "subTotalStuffing"+ stuffingId;
+	    	var itemPriceId = "stuffingPrice" +stuffingId;
+	    	var quantityId = "stuffingquantity" +stuffingId;    	
+	    	var itemPrice = $("#"+itemPriceId).html();    	
+	    	var itemQuantity = $("#"+quantityId).val();
+	    	var subtotal = itemQuantity *itemPrice;
+	    	
+	       $("#"+subtotalId).html(subtotal.toFixed(2));
+	       calculateTotal();
+	
+	    });
     function calculateTotal() {
     	var totalPrice = 0.00;
     	 $('[data-th="Subtotal"]').each(function() {
@@ -45,19 +58,40 @@ $(document).ready(function () {
     	 $("#totalAmount2").html(totalPrice.toFixed(2));
     }
     
-    $("#continueToDelivery").on("click", function(e) {		
-		ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {			
-			ajax.loadFragment("html/deliverydetails.html").done(function(out) {				
-				$("#deliveryDetailsDiv").empty();
-				$("#deliveryDetailsDiv").append(out);
-				$("input[id=deliveryOrderId]").val(data.orderId);
-				bindDeliveryEvents();
-			}).fail(function(data) {	        	
-	        	alert("failed");
-	        });						
-        }).fail(function(data) {        	
-        	alert("failed");
-        });
+    $("#continueToDelivery").on("click", function(e) {
+    	var noIfItemsSelected = 0;
+    	 $('[data-th="Quantity"]').each(function() {
+    		 var itemId = $(this).attr("data-itemId");
+    		 var quantityId = "quantity" +itemId;  
+    		 var itemQuantity = $("#"+quantityId).val();
+    		 if(itemQuantity>0) {
+    			 noIfItemsSelected = noIfItemsSelected+1;
+    		 }
+    	 });
+    	 if(noIfItemsSelected>0) {
+    		 ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {			
+    				ajax.loadFragment("html/deliverydetails.html").done(function(out) {				
+    					$("#deliveryDetailsDiv").empty();
+    					$("#deliveryDetailsDiv").append(out);
+    					$("input[id=deliveryOrderId]").val(data.orderId);
+    					bindDeliveryEvents();
+    					$("#errorDiv").empty();
+    					$("#errorDiv").hide();
+    					goToNextStep();
+    				}).fail(function(data) {	        	
+    		        	alert("failed");
+    		        });						
+    	        }).fail(function(data) {        	
+    	        	alert("failed");
+    	        });  		 
+    		 
+    	 } else {
+    		 $("#errorDiv").empty();
+			 $("#errorDiv").removeClass("hide");
+			 $("#errorDiv").append("<Strong>Please add atleast one Box of Pani puri to continue")
+    	 }
+		
+    
     });
     function createIndividualItemRow(item) {
     	var itemName= item.itemName;
@@ -108,6 +142,7 @@ $(document).ready(function () {
 		    	$("#orderIdPayment").val(data.orderId);
 		    	$("#contactNumber").html(data.contactNo);
 				bindVerifyEvents(data);
+				goToNextStep();
 			}).fail(function(data) {	        	
 	        	alert("failed");
 	        });						
@@ -288,7 +323,8 @@ $(document).ready(function () {
 		    	});
 		    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
 		    	$("#confirmDeliveryDetails").append(deliveryDetailsInfo);    	
-		    	$("#orderIdConfirmPayment").val(data.orderId);		    	
+		    	$("#orderIdConfirmPayment").val(data.orderId);	
+		    	goToNextStep();
             }).fail(function(data) {        	
             	alert("failed");
             });

@@ -59,7 +59,7 @@ public class OrderInitiationController {
                         	selectedItems.add(selectedItem);
                         }                       
                     }
-                    if ("TOPPING".equalsIgnoreCase(paramValues[0])) {
+                    if ("stuffing".equalsIgnoreCase(paramValues[0])) {
                     	ToppingVo selectedTopping = new ToppingVo();
                     	toppingId = paramValues[1];
                     	toppingQuantity = request.getParameter(paramName);

@@ -23,6 +23,7 @@ public class DeliverySlotDaoImpl {
 		deliverySlot.setEndTime(endTime);
 		deliverySlot.setStartTime(startTime);
 		deliverySlot.setSlotQuantity(slotQuantity);
+		deliverySlot.setTodaySlotQuantity(slotQuantity);
 		session.save(deliverySlot);
 		session.getTransaction().commit();
 		session.close();

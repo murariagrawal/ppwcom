@@ -163,6 +163,11 @@ public class OderDaoImpl  {
 		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
 		orderDetails.setPaymentMode(PaymentMode.COD);
 		orderDetails.setStatus(Status.ACCEPTED);
+		int todaySlotQuantity = orderDetails.getDeliverySlotSelected().getTodaySlotQuantity();
+		if(todaySlotQuantity > 0) {
+			todaySlotQuantity = todaySlotQuantity-1;
+		}
+		orderDetails.getDeliverySlotSelected().setTodaySlotQuantity(todaySlotQuantity);
 		Customer custInfo = orderDetails.getCustomer();				
 		List<OrderItems> orderItems = orderDetails.getOrderItems();
 		List<OrderToppings> toppings = orderDetails.getOrderToppings();

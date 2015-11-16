@@ -44,6 +44,7 @@ public class AreaController {
 			deliverySlot.setStartTime(slotTimes[0]+"PM");
 			deliverySlot.setEndTime(slotTimes[1]+"PM");
 			deliverySlot.setSlotQuantity(Integer.parseInt(quantity[j]));
+			deliverySlot.setTodaySlotQuantity(Integer.parseInt(quantity[j]));
 			deliverySlots.add(deliverySlot);
 		}
 		adminService.addArea(areaName, areaCity, areaState, zipcodes, deliverySlots);

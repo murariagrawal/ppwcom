@@ -34,6 +34,9 @@ $(document).ready(function () {
 	    $('#items, #itemsMenu').on("click",function() {
 	    	loadFragment("html/admin/ItemManagement.html");
 	    });
+	    $('#stuffing, #stuffingMenu').on("click",function() {
+	    	loadFragment("html/admin/StuffingManagement.html");
+	    });
 	    $('#stuffing').on("click",function() {
 	    	loadFragment("html/admin/ItemManagement.html");
 	    });

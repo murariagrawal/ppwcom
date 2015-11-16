@@ -91,6 +91,7 @@
 
 
 				<div class="tab-content">
+					<div id="errorDiv" class="alert alert-danger hide"></div>
 					<div class="tab-pane active" role="tabpanel" id="step1">
 						<form role="form" id="homeForm" action="deliveryDetails" method="post">
 							<div class="form-group">
@@ -105,7 +106,7 @@
 										</tr>
 									</thead>
 									<tbody>
-
+										
 										<c:forEach items="${itemList}" var="item">
 										<tr>
 											<td data-th="Product">
@@ -152,12 +153,44 @@
 											
 											</td>
 											
-											<td data-th="Subtotal" id="subTotal${item.itemId}" class="text-center">0.00</td>
+											<td data-th="Subtotal" id="subTotalItem${item.itemId}" class="text-center">0.00</td>
 											
 										</tr>
 										
 										</c:forEach>
+										<c:forEach items="${stuffingList}" var="stuffing">
+										<tr>
+											<td data-th="Product">
+												<div class="row">
+													<div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+													<div class="col-sm-10">
+													<h4 class="nomargin"><c:out value="${stuffing.toppingName}"></c:out></h4>													
+													</div>
+												</div>													
+											</td>
+											<td data-th="Price" ><span id="stuffingPrice${stuffing.toppingId}"><c:out value="${stuffing.price}"></c:out></span></td>
+											<td data-th="QuantityStuffing" data-stuffingId="${stuffing.toppingId}" colspan="1">
+												<div class="input-group">
+										          <span class="input-group-btn">
+										              <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="stuffing~${stuffing.toppingId}">
+										                <span class="glyphicon glyphicon-minus"></span>
+										              </button>
+										          </span>
+										          <input type="text" id="stuffingquantity${stuffing.toppingId}" name="stuffing~${stuffing.toppingId}" class="form-control input-number" value="0" min="0" max="10">
+										          <span class="input-group-btn">
+										              <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="stuffing~${stuffing.toppingId}">
+										                  <span class="glyphicon glyphicon-plus"></span>
+										              </button>
+										          </span>
+									     		</div>								
+											
+											</td>
+											
+											<td data-th="Subtotal" id="subTotalStuffing${stuffing.toppingId}" class="text-center">0.00</td>
+											
+										</tr>
 										
+										</c:forEach>
 									</tbody>
 									<tfoot>
 										<tr class="visible-xs">

@@ -22,6 +22,8 @@ public class DeliverySlot {
 	private String endTime;
 	@Column(nullable=false)
 	private int slotQuantity;
+	@Column(nullable=false)
+	private int todaySlotQuantity;
 	@ManyToOne
 	@JoinColumn(name="delivery_area_id")
 	private MasterDeliveryArea deliveryArea; 
@@ -84,6 +86,18 @@ public class DeliverySlot {
 	 */
 	public void setDeliveryArea(MasterDeliveryArea deliveryArea) {
 		this.deliveryArea = deliveryArea;
+	}
+	/**
+	 * @return the todaySlotQuantity
+	 */
+	public int getTodaySlotQuantity() {
+		return todaySlotQuantity;
+	}
+	/**
+	 * @param todaySlotQuantity the todaySlotQuantity to set
+	 */
+	public void setTodaySlotQuantity(int todaySlotQuantity) {
+		this.todaySlotQuantity = todaySlotQuantity;
 	}
 	
 

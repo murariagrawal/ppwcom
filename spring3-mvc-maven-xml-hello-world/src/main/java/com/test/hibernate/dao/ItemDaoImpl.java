@@ -7,6 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.panipuri.vo.ItemVo;
+import com.panipuri.vo.ToppingVo;
+import com.test.hibernate.AvailableTopping;
 import com.test.hibernate.Item;
 
 public class ItemDaoImpl {
@@ -59,10 +61,60 @@ public class ItemDaoImpl {
 	}
 	
 	public void deleteItem(long itemId) {
-		Session session = this.sessionFactory.getCurrentSession();
+		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		Item selectedItem = (Item)session.get(Item.class, itemId);
 		session.delete(selectedItem);
+		session.getTransaction().commit();
+		session.close();
+		
+	}
+	
+	public void addStuffing(ToppingVo toppingVo) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		AvailableTopping topping = new AvailableTopping();
+		topping.setToppingPrice(toppingVo.getPrice());
+		topping.setToppingName(toppingVo.getToppingName());
+		
+		session.save(topping);
+		session.getTransaction().commit();
+		session.close();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<AvailableTopping> getAllAvailableStuffing() {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		List<AvailableTopping> allAvailableStuffing = (List<AvailableTopping>)session.createCriteria(AvailableTopping.class).list();
+		session.getTransaction().commit();
+		session.close();
+		return allAvailableStuffing;
+	}
+	
+	public void updateStuffingDetails(String stuffingName, BigDecimal stuffingPrice, long stuffingId) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		AvailableTopping selectedStuffing = (AvailableTopping)session.get(AvailableTopping.class, stuffingId);
+		if(null != selectedStuffing) {
+			if(null != stuffingName && !stuffingName.trim().equals("")) {
+				selectedStuffing.setToppingName(stuffingName);
+			} 
+			if(null != stuffingPrice) {
+				selectedStuffing.setToppingPrice(stuffingPrice);
+			}			
+			session.update(selectedStuffing);
+		}
+		session.getTransaction().commit();
+		session.close();
+		
+	}
+	
+	public void deleteStuffing(long stuffingId) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		AvailableTopping selectedStuffing = (AvailableTopping)session.get(AvailableTopping.class, stuffingId);
+		session.delete(selectedStuffing);
 		session.getTransaction().commit();
 		session.close();
 		

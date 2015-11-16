@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.panipuri.service.MasterDataFetchService;
 import com.panipuri.vo.ItemVo;
+import com.panipuri.vo.ToppingVo;
 
 @Controller
 public class LoginController {
@@ -48,9 +49,11 @@ public class LoginController {
 	@RequestMapping(method = RequestMethod.GET, value="/home")
 	public ModelAndView homePaniPuri() {
 		List<ItemVo> itemList = masterDataFetchService.fetchAllAvailableItem();
+		List<ToppingVo> stuffingList = masterDataFetchService.fetchAllAvailableStuffing();
 		ModelAndView mv = null;		
 		mv = new ModelAndView("homePaniPuri");	
 		mv.addObject("itemList", itemList);
+		mv.addObject("stuffingList", stuffingList);
 		mv.addObject("orderId", "");
 		return mv;
 	}

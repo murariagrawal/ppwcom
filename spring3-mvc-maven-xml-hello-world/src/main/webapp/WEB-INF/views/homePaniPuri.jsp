@@ -232,7 +232,12 @@
 					</div>
 					<div class="tab-pane" role="tabpanel" id="complete">
 						<h3>Complete</h3>
-						<p>You have successfully completed all steps.</p>
+						<p>You have successfully ordered Your Pani Puri.</p>
+						<div id="confirmDetailsDiv"></div>
+						<ul class="list-inline pull-right">
+							<li><button type="button"
+									class="btn btn-primary btn-info-full next-step">Place a new Order</button></li>
+						</ul>
 					</div>
 					<div class="clearfix"></div>
 				</div>

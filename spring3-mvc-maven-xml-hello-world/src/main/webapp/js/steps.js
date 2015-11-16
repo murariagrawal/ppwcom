@@ -78,6 +78,7 @@ $(document).ready(function () {
     					$("#errorDiv").empty();
     					$("#errorDiv").hide();
     					goToNextStep();
+    					disableAllOtherWizard();
     				}).fail(function(data) {	        	
     		        	alert("failed");
     		        });						
@@ -143,6 +144,7 @@ $(document).ready(function () {
 		    	$("#contactNumber").html(data.contactNo);
 				bindVerifyEvents(data);
 				goToNextStep();
+				disableAllOtherWizard();
 			}).fail(function(data) {	        	
 	        	alert("failed");
 	        });						
@@ -315,16 +317,21 @@ $(document).ready(function () {
     	});
     	$("#confirmOrderButton").on("click", function(e) {
     		ajax.postForm("validateOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {
-    			$("#confirmDetailsDiv").empty();
-				$("#confirmDetailsDiv").append(out);
-				$.each(data.itemList, function(i, item) {
-		    		var individualItemRow =  createIndividualItemRow(item);
-		    		$("#confirmOrderDetailsTable > tbody").append(individualItemRow);
-		    	});
-		    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
-		    	$("#confirmDeliveryDetails").append(deliveryDetailsInfo);    	
-		    	$("#orderIdConfirmPayment").val(data.orderId);	
-		    	goToNextStep();
+    			ajax.loadFragment("html/orderconfirmation.html").done(function(out) {	
+	    			$("#confirmDetailsDiv").empty();
+					$("#confirmDetailsDiv").append(out);
+					$.each(data.itemList, function(i, item) {
+			    		var individualItemRow =  createIndividualItemRow(item);
+			    		$("#confirmOrderDetailsTable > tbody").append(individualItemRow);
+			    	});
+			    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
+			    	$("#confirmDeliveryDetails").append(deliveryDetailsInfo);    	
+			    	//$("#orderIdConfirmPayment").val(data.orderId);	
+			    	goToNextStep();
+			    	disableAllOtherWizard();
+    			}).fail(function(data) {        	
+                	alert("failed");
+                });
             }).fail(function(data) {        	
             	alert("failed");
             });
@@ -334,9 +341,21 @@ $(document).ready(function () {
     $(".prev-step").click(function (e) {
 
         var $active = $('.wizard .nav-tabs li.active');
+        $active.prev().removeClass('disabled');
+        $active.addClass('disabled');
         prevTab($active);
 
     });
+    function disableAllOtherWizard() {
+    	$('.wizard .nav-tabs li').each(function() {
+    		if($(this).hasClass("active")) {
+    			//skip
+    			
+    		} else {
+    			$(this).addClass("disabled");
+    		}
+    	});
+    }
 });
 
 function nextTab(elem) {

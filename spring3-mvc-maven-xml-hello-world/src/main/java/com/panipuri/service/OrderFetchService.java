@@ -1,14 +1,11 @@
 package com.panipuri.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
@@ -23,7 +20,7 @@ public class OrderFetchService {
 	public OrderVo updateOrderAndgetOrderDetails(String orderId, Address address,  Customer customer, String slotId) {
 		
 		OrderVo orderDetails = oderDaoImpl.getOrderDetails(orderId, address, customer, slotId);
-		//orderDetails.setToppingList(getToppingList());
+		
 		calculateTotalOrderPrice(orderDetails);
 		return orderDetails;
 		
@@ -48,22 +45,7 @@ public class OrderFetchService {
 		this.oderDaoImpl = oderDaoImpl;
 	}
 
-	private List<ToppingVo> getToppingList() {
-		List<ToppingVo> toppingList = new ArrayList<ToppingVo>();
-		ToppingVo topping1 =  new ToppingVo();
-		topping1.setToppingId(1);
-		topping1.setToppingName("Mung");
-		topping1.setQuantity(2);
-		topping1.setPrice(new BigDecimal(5));
-		ToppingVo topping2 =  new ToppingVo();
-		topping2.setToppingId(2);
-		topping2.setToppingName("onion");
-		topping2.setQuantity(2);
-		topping2.setPrice(new BigDecimal(5));
-		toppingList.add(topping1);
-		toppingList.add(topping2);
-		return toppingList;
-	}
+	
 
 	
 }

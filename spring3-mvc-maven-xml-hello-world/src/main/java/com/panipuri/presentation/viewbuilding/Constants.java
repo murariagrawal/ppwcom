@@ -6,11 +6,6 @@ public class Constants {
 	/** Constant for data type application/json */
 	public static final String APPLICATION_JSON = "application/json";
 
-	/** Constant for WELLSFARGOPROPRIETARY START FLAG */
-	public static final String WELLSFARGOPROPRIETARY_START = "/*WellFargoProprietary%";
-
-	/** Constant for WELLSFARGOPROPRIETARY END FLAG */
-	public static final String WELLSFARGOPROPRIETARY_END = "%WellFargoProprietary*/";
 	
 	public static final String ACCOUNTS_AGENT = "accountsAgent";
 	

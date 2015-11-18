@@ -98,9 +98,9 @@
 								<table id="cart" class="table table-hover table-condensed">
 									<thead>
 										<tr>
-											<th style="width:50%">Pani Puri Packs</th>
+											<th style="width:45%">Pani Puri Packs</th>
 											<th style="width:13%">Price</th>
-											<th style="width:15%">Quantity</th>											
+											<th style="width:20%">Quantity</th>											
 											<th style="width:22%" class="text-center">Subtotal</th>
 											
 										</tr>
@@ -135,16 +135,16 @@
 													</div>
 												</div>	
 											</td>
-											<td data-th="Price" ><span id="itemPrice${item.itemId}"><c:out value="${item.itemPrice}"></c:out></span></td>
+											<td da ta-th="Price" ><span id="itemPrice${item.itemId}"><c:out value="${item.itemPrice}"></c:out></span></td>
 											<td data-th="Quantity" data-itemId="${item.itemId}" colspan="1">
 												<div class="input-group">
-										          <span class="input-group-btn">
+										          <span class="input-group-btn quantity-counter">
 										              <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="item~${item.itemId}">
 										                <span class="glyphicon glyphicon-minus"></span>
 										              </button>
 										          </span>
-										          <input type="text" id="quantity${item.itemId}" name="item~${item.itemId}" class="form-control input-number" value="0" min="0" max="10">
-										          <span class="input-group-btn">
+										          <input type="text" id="quantity${item.itemId}" name="item~${item.itemId}" class="form-control input-number quantity-counter-input" value="0" min="0" max="10">
+										          <span class="input-group-btn quantity-counter">
 										              <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="item~${item.itemId}">
 										                  <span class="glyphicon glyphicon-plus"></span>
 										              </button>
@@ -171,13 +171,13 @@
 											<td data-th="Price" ><span id="stuffingPrice${stuffing.toppingId}"><c:out value="${stuffing.price}"></c:out></span></td>
 											<td data-th="QuantityStuffing" data-stuffingId="${stuffing.toppingId}" colspan="1">
 												<div class="input-group">
-										          <span class="input-group-btn">
+										          <span class="input-group-btn quantity-counter">
 										              <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="stuffing~${stuffing.toppingId}">
 										                <span class="glyphicon glyphicon-minus"></span>
 										              </button>
 										          </span>
-										          <input type="text" id="stuffingquantity${stuffing.toppingId}" name="stuffing~${stuffing.toppingId}" class="form-control input-number" value="0" min="0" max="10">
-										          <span class="input-group-btn">
+										          <input type="text" id="stuffingquantity${stuffing.toppingId}" name="stuffing~${stuffing.toppingId}" class="form-control input-number quantity-counter-input" value="0" min="0" max="10">
+										          <span class="input-group-btn quantity-counter">
 										              <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="stuffing~${stuffing.toppingId}">
 										                  <span class="glyphicon glyphicon-plus"></span>
 										              </button>

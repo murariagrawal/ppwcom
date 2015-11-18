@@ -76,8 +76,8 @@ public class HTMLWrappedInJSONView extends JstlView {
        StringBuffer buffer = new StringBuffer();
 		jsonSerializer.deepSerialize(hybridContentTo, buffer);
        StringBuilder jsonResponse=new StringBuilder();
-       jsonResponse.append(Constants.ESCAPED_DOUBLE_QUOTE).append(Constants.WELLSFARGOPROPRIETARY_START).append(buffer)
-		.append(Constants.WELLSFARGOPROPRIETARY_END).append(Constants.ESCAPED_DOUBLE_QUOTE);
+       jsonResponse.append(Constants.ESCAPED_DOUBLE_QUOTE).append(buffer)
+		.append(Constants.ESCAPED_DOUBLE_QUOTE);
        try {
            response.getOutputStream().print(jsonResponse.toString());
        } catch (IllegalStateException ise) {

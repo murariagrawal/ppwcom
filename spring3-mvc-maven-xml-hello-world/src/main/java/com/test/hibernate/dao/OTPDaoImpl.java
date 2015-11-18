@@ -39,7 +39,7 @@ public class OTPDaoImpl {
 		session.close();
 		return oneTimePassword;
 	}
-	public void addOTP( String orderId,String otp) {
+	public String addOTP( String orderId,String otp) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		Order order = (Order) session.get(Order.class, new Long(orderId));
@@ -53,5 +53,6 @@ public class OTPDaoImpl {
 		session.save(oneTimePassword);
 		session.getTransaction().commit();
 		session.close();
+		return order.getCustomer().getContactNo1();
 	}
 }

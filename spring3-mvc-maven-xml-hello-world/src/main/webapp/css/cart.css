@@ -1,6 +1,16 @@
 .table>tbody>tr>td, .table>tfoot>tr>td{
     vertical-align: middle;
 }
+
+.input-group .input-group-btn.quantity-counter{
+	width:39px; 
+	float:left
+}
+.input-group .input-number.quantity-counter-input{
+	width:60px; 
+	float:left; 
+	height:28px
+}
 @media screen and (max-width: 600px) {
     table#cart tbody td .form-control{
 		width:20%;

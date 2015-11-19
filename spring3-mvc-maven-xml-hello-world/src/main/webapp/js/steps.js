@@ -75,8 +75,7 @@ $(document).ready(function () {
     					$("#deliveryDetailsDiv").append(out);
     					$("input[id=deliveryOrderId]").val(data.orderId);
     					bindDeliveryEvents();
-    					$("#errorDiv").empty();
-    					$("#errorDiv").hide();
+    					hideErrorMessage();
     					goToNextStep();
     					disableAllOtherWizard();
     				}).fail(function(data) {	        	
@@ -87,9 +86,7 @@ $(document).ready(function () {
     	        });  		 
     		 
     	 } else {
-    		 $("#errorDiv").empty();
-			 $("#errorDiv").removeClass("hide");
-			 $("#errorDiv").append("<Strong>Please add atleast one Box of Pani puri to continue")
+    		 showErrorMessage('Please add atleast one Box of Pani puri to continue');    		
     	 }
 		
     
@@ -129,28 +126,98 @@ $(document).ready(function () {
     	var deliveryDetailsInfo = addressInfo+slotInfo;
     	return deliveryDetailsInfo;
     }
-    $("#continueToVerify").on("click", function(e) {		
-		ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
-			ajax.loadFragment("html/orderverification.html").done(function(out) {
-				$("#verifyDetailsDiv").empty();
-				$("#verifyDetailsDiv").append(out);
-				$.each(data.itemList, function(i, item) {
-		    		var individualItemRow =  createIndividualItemRow(item);
-		    		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
-		    	});
-		    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
-		    	$("#verifyDeliveryDetails").append(deliveryDetailsInfo);    	
-		    	$("#orderIdPayment").val(data.orderId);
-		    	$("#contactNumber").html(data.contactNo);
-				bindVerifyEvents(data);
-				goToNextStep();
-				disableAllOtherWizard();
-			}).fail(function(data) {	        	
+   function validateDeliveryForm(){
+	  var phoneNumberVal =  $("#phoneNumber").val(),
+	  firstNameVal1 = $("#firstNameAddr").val(),
+	  lastNameVal1 = $("#lastNameAddr").val(),
+	  addressVal1 = $("#addr1").val(),
+	  addressVal2 = $("#addr2").val(),
+	  landMarkVal = $("#landmarkAddr").val(),
+	  zipcodeVal = $("#zipcodeAddr").val(),
+	  deliverySlotVal = $("#selectDeliverySlot").val(),
+	  noOfFieldsInError = 0,
+	  errorMessage = "";
+	  
+	  if(phoneNumberVal === null || phoneNumberVal == "" || phoneNumberVal.length <10) {
+		  $("#phoneNumber").parent().addClass('error-field');
+		  noOfFieldsInError = noOfFieldsInError+1;
+		  errorMessage = "Phone Number is a required field.";
+	  }
+	  if(firstNameVal1 === null || firstNameVal1 == "") {
+		  $("#firstNameAddr").parent().addClass('error-field');
+		  noOfFieldsInError = noOfFieldsInError+1;
+		  errorMessage = "First Name is a required field.";
+	  }
+	  if(lastNameVal1 === null || lastNameVal1 == "") {
+		  $("#lastNameAddr").parent().addClass('error-field');
+		  noOfFieldsInError = noOfFieldsInError+1;
+		  errorMessage = "Last Name is a required field.";
+	  }
+	  if(addressVal1 === null || addressVal1 == "") {
+		  $("#addr1").parent().addClass('error-field');
+		  noOfFieldsInError = noOfFieldsInError+1;
+		  errorMessage = "Address Line 1 is a required field.";
+	  }
+	  if(zipcodeVal === null || zipcodeVal == "") {
+		  $("#zipcodeAddr").parent().addClass('error-field');
+		  noOfFieldsInError = noOfFieldsInError+1;
+		  errorMessage = "Zipcode is a required field.";
+	  } else if(zipcodeVal.length <6) {
+		  $("#zipcodeAddr").parent().addClass('error-field');
+		  noOfFieldsInError = noOfFieldsInError+1;
+		  errorMessage = "Please enter a valid zipcode of 6 digits.";
+	  }
+	  if(deliverySlotVal === null || deliverySlotVal == "") {
+		  $("#selectDeliverySlot").parent().addClass('error-field');
+		  noOfFieldsInError = noOfFieldsInError+1;
+		  errorMessage = "Please select a delivery slot to continue.";
+	  }
+	  if(noOfFieldsInError >1) {
+		  errorMessage = "There are two or more firelds in error";
+	  }
+	  if(errorMessage !== "") {
+		  showErrorMessage(errorMessage);
+	  } else {
+		  hideErrorMessage();
+	  }
+	  return false;
+   }
+   function hideErrorMessage() {
+	   $("#errorDiv").empty();
+		  $("#errorDiv").addClass("hide");
+   }
+   function showErrorMessage(errorMessage) {
+	   	$("#errorDiv").empty();
+		  $("#errorDiv").removeClass("hide");
+		  $("#errorDiv").append("<Strong>"+errorMessage+"");
+   }
+    $("#continueToVerify").on("click", function(e) {	
+    	$('.error-field').removeClass('error-field');
+    	hideErrorMessage();
+    	if(validateDeliveryForm()) {
+			ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
+				ajax.loadFragment("html/orderverification.html").done(function(out) {
+					hideErrorMessage();
+					$("#verifyDetailsDiv").empty();
+					$("#verifyDetailsDiv").append(out);
+					$.each(data.itemList, function(i, item) {
+			    		var individualItemRow =  createIndividualItemRow(item);
+			    		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
+			    	});
+			    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
+			    	$("#verifyDeliveryDetails").append(deliveryDetailsInfo);    	
+			    	$("#orderIdPayment").val(data.orderId);
+			    	$("#contactNumber").html(data.contactNo);
+					bindVerifyEvents(data);
+					goToNextStep();
+					disableAllOtherWizard();
+				}).fail(function(data) {	        	
+		        	alert("failed");
+		        });						
+	        }).fail(function(data) {        	
 	        	alert("failed");
-	        });						
-        }).fail(function(data) {        	
-        	alert("failed");
-        });
+	        });
+    	}
     });
     function bindDeliveryEvents() {
 	    $('#phoneNumber').on("keyup",function() {
@@ -161,8 +228,16 @@ $(document).ready(function () {
 	    });
 	    $("#zipcodeAddr").on('input', function(){			
 			var length = $(this).val().length;			
-	    	if(length && length == 6) {
+	    	if(length && length == 6) {	    		
 	    		getDeliverySlots();
+	    	}
+		});
+	    $("#zipcodeAddr").on('blur', function(){			
+			var length = $(this).val().length;			
+	    	if(length && length < 6) {
+	    		 $("#zipcodeAddr").parent().addClass('error-field');
+	    		 errorMessage = "Please enter a valid zipcode of 6 digits.";
+	    		 showErrorMessage(errorMessage);
 	    	}
 		});
 	    
@@ -237,16 +312,29 @@ $(document).ready(function () {
 				addressDiv.append(ulFinal);
 				bindAddressModelEvents();
 			} else {
-				$('#addressFields').removeClass("hide").addClass("show");
+				clearDeliveryForm();
+				
 			}			
         }).fail(function(data) {
         	
         	alert("failed");
         });		
 	}
-	
+	function clearDeliveryForm() {
+		$("#addressFields input[type=text]").val("");
+		$('.error-field').removeClass('error-field');
+		$('#selectDeliverySlot')
+	    .find('option')
+	    .remove()
+	    .end()
+	    .append('<option value="">Select Delivery Slot</option>')
+	    .val('');
+		$('#addressFields').removeClass("hide").addClass("show");
+		hideErrorMessage();
+	}
     function bindAddressModelEvents() {
     	$( ".well-sm" ).on('click', function(e) {
+    		clearDeliveryForm();
     		$("#firstNameAddr").val($(this).find("#firstName").html());
 			$("#lastNameAddr").val($(this).find("#lastName").html());
 			$("#addr1").val($(this).find("#addressLine1").html());
@@ -258,9 +346,8 @@ $(document).ready(function () {
 			$('#addressFields').removeClass("hide").addClass("show");
 			getDeliverySlots();
 		});
-    	$("#enterNewAddress").on('click', function(e) {
-    		
-    		$('#addressFields').removeClass("hide").addClass("show");
+    	$("#enterNewAddress").on('click', function(e) {    		
+    		clearDeliveryForm();
     	});
 		
     }

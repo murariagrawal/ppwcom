@@ -1,7 +1,6 @@
 package com.test.hibernate.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -9,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.panipuri.vo.AddressVo;
+import com.panipuri.vo.AreaVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
@@ -16,10 +16,9 @@ import com.test.hibernate.Address;
 import com.test.hibernate.AvailableTopping;
 import com.test.hibernate.CashInvoice;
 import com.test.hibernate.Customer;
+import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.Item;
-import com.test.hibernate.OTPId;
-import com.test.hibernate.OneTimePassword;
 import com.test.hibernate.Order;
 import com.test.hibernate.OrderItems;
 import com.test.hibernate.OrderToppings;
@@ -78,12 +77,14 @@ public class OderDaoImpl  {
 	public OrderVo getOrderDetails(String orderId, Address address, Customer customer, String slotId) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
+		Long areaId = address.getArea().getDeliveryAreaId();
+		DeliveryArea area = (DeliveryArea)session.get(DeliveryArea.class, areaId);
 		DeliverySlot slot = (DeliverySlot)session.get(DeliverySlot.class, new Long(slotId));
 		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
 		List<Customer> sessionCustomerList=(List<Customer>)session.createCriteria(Customer.class).add(Restrictions.eq("contactNo1", customer.getContactNo1())).list();
 		if(null == sessionCustomerList || sessionCustomerList.isEmpty()) {
 			address.setCustomer(customer);
-			
+			address.setArea(area);
 			customer.getAddresses().add(address);
 			session.saveOrUpdate(customer);
 			
@@ -103,6 +104,7 @@ public class OderDaoImpl  {
 				addressList = new ArrayList<Address>();
 			}
 			if(!addressExist) {
+				address.setArea(area);
 				address.setCustomer(sessionCustomerList.get(0));
 				addressList.add(address);
 			}
@@ -110,26 +112,7 @@ public class OderDaoImpl  {
 		orderDetails.setCustomer(customer);
 		orderDetails.setDeliveryAddress(address);
 		orderDetails.setDeliverySlotSelected(slot);
-		Customer custInfo = orderDetails.getCustomer();
-				
-		List<OrderItems> orderItems = orderDetails.getOrderItems();
-		List<OrderToppings> toppings = orderDetails.getOrderToppings();
-		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
-		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
-		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
-		addressVo.setFirstName(custInfo.getCustomerFirstName());
-		addressVo.setLastName(custInfo.getCustomerLastName());
-		OrderVo orderVo= new OrderVo();
-		orderVo.setOrderId(orderDetails.getOrderId());
-		orderVo.setItemList(itemList);
-		orderVo.setToppingList(toppingsVo);
-		orderVo.setDeliveryAddress(addressVo);
-		String deliverySlot = "";
-		if(null !=slot) {
-			deliverySlot = slot.getStartTime()+"-"+slot.getEndTime();
-		}
-		orderVo.setDeliverySlot(deliverySlot);
-		orderVo.setContactNo(custInfo.getContactNo1());
+		OrderVo orderVo = createOrderVO(orderDetails);
 		session.getTransaction().commit();
 		session.close();
 		return orderVo;
@@ -138,20 +121,7 @@ public class OderDaoImpl  {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));		
-		Customer custInfo = orderDetails.getCustomer();				
-		List<OrderItems> orderItems = orderDetails.getOrderItems();
-		List<OrderToppings> toppings = orderDetails.getOrderToppings();
-		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
-		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
-		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
-		addressVo.setFirstName(custInfo.getCustomerFirstName());
-		addressVo.setLastName(custInfo.getCustomerLastName());
-		OrderVo orderVo= new OrderVo();
-		orderVo.setOrderId(orderDetails.getOrderId());
-		orderVo.setItemList(itemList);
-		orderVo.setToppingList(toppingsVo);
-		orderVo.setDeliveryAddress(addressVo);
-		orderVo.setContactNo(custInfo.getContactNo1());
+		OrderVo orderVo = createOrderVO(orderDetails);
 		session.getTransaction().commit();
 		session.close();
 		return orderVo;
@@ -168,22 +138,32 @@ public class OderDaoImpl  {
 			todaySlotQuantity = todaySlotQuantity-1;
 		}
 		orderDetails.getDeliverySlotSelected().setTodaySlotQuantity(todaySlotQuantity);
+		OrderVo orderVo = createOrderVO(orderDetails);
+		session.getTransaction().commit();
+		session.close();
+		return orderVo;
+	}
+	private OrderVo createOrderVO(Order orderDetails) {
 		Customer custInfo = orderDetails.getCustomer();				
 		List<OrderItems> orderItems = orderDetails.getOrderItems();
 		List<OrderToppings> toppings = orderDetails.getOrderToppings();
 		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
 		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
+		DeliverySlot slot = orderDetails.getDeliverySlotSelected();
 		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
 		addressVo.setFirstName(custInfo.getCustomerFirstName());
 		addressVo.setLastName(custInfo.getCustomerLastName());
 		OrderVo orderVo= new OrderVo();
+		String deliverySlot = "";
+		if(null !=slot) {
+			deliverySlot = slot.getStartTime()+"-"+slot.getEndTime();
+		}
+		orderVo.setDeliverySlot(deliverySlot);
 		orderVo.setOrderId(orderDetails.getOrderId());
 		orderVo.setItemList(itemList);
 		orderVo.setToppingList(toppingsVo);
 		orderVo.setDeliveryAddress(addressVo);
 		orderVo.setContactNo(custInfo.getContactNo1());
-		session.getTransaction().commit();
-		session.close();
 		return orderVo;
 	}
 	public OrderVo updateDeliveryStatus(String orderId) {
@@ -194,20 +174,7 @@ public class OderDaoImpl  {
 		orderDetails.setStatus(Status.DELIVERED);
 		CashInvoice invoice = new CashInvoice();
 		invoice.setOrder(orderDetails);
-		Customer custInfo = orderDetails.getCustomer();				
-		List<OrderItems> orderItems = orderDetails.getOrderItems();
-		List<OrderToppings> toppings = orderDetails.getOrderToppings();
-		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
-		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
-		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
-		addressVo.setFirstName(custInfo.getCustomerFirstName());
-		addressVo.setLastName(custInfo.getCustomerLastName());
-		OrderVo orderVo= new OrderVo();
-		orderVo.setOrderId(orderDetails.getOrderId());
-		orderVo.setItemList(itemList);
-		orderVo.setToppingList(toppingsVo);
-		orderVo.setDeliveryAddress(addressVo);
-		orderVo.setContactNo(custInfo.getContactNo1());
+		OrderVo orderVo = createOrderVO(orderDetails);
 		session.getTransaction().commit();
 		session.close();
 		return orderVo;
@@ -257,16 +224,22 @@ public class OderDaoImpl  {
 	}
 	private AddressVo convertAddressToAddressVo(Address address) {
 		AddressVo addressVo = null;
+		AreaVo areaVo = null;
 		if(null != address) {
-			
+			DeliveryArea area = address.getArea();
 			addressVo = new AddressVo();
 			addressVo.setAddressId(address.getAddressId());
 			addressVo.setAddressLine1(address.getAddressLine1());
 			addressVo.setAddressline2(address.getAddressLine2());
 			addressVo.setLandmark(address.getLandmark());
-			addressVo.setCity(address.getCity());
-			addressVo.setState(address.getState());
-			addressVo.setZipcode(""+address.getZipcode());
+			if(area != null) {
+				areaVo =  new AreaVo();
+				areaVo.setAreaName(area.getAreaName());
+				areaVo.setZipcode(String.valueOf(area.getZipcodes().getZipcode()));
+				areaVo.setSubAreaName(area.getSubAreaName());
+				areaVo.setDeliveryAreaId(area.getDeliveryAreaId());
+			}
+			addressVo.setArea(areaVo);
 			
 		}
 		return addressVo;

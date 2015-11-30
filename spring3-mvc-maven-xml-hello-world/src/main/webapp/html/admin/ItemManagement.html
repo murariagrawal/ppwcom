@@ -1,27 +1,102 @@
-<div id="addItem">
-	<form method="post" action="addItem">
-		<table>
-			<tbody>
-				<tr>
-					<td><label>Item Name:</label></td>
-					<td><input id="itemName" name="itemName" type="text">
-					</td>
-				</tr>
-				<tr>
-					<td><label>Item Price:</label></td>
-					<td><input id="itemPrice" name="itemPrice" type="text">
-					</td>
-				</tr>
-				<tr>
-					<td><label>Item Details</label></td>
-					<td><input id="itemDetails" name="itemDetails" type="text">
-					</td>
-				</tr>
-				<tr>
-					<td><input type="submit" value="submit"></td>
-				</tr>
+<script src="js/admin/panel.js"></script>
+ <link rel="stylesheet" href="css/admin/panel.css">
 
-			</tbody>
-		</table>
-	</form>
-</div>
+<div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading clickable panel-collapsed">
+                    <h3 class="panel-title">
+                        Add Item</h3>
+                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+                </div>
+                <div class="panel-body">
+	                 <div class="row">
+	                     <div class="col-lg-6">
+	                        <form role="form" id="addItemForm">
+	                            <div class="form-group">
+	                                <label>Item Name:</label>
+	                                <input id="itemName" name="itemName" type="text" class="form-control">
+	                            </div>
+	                            <div class="form-group">
+	                                <label>Item Price:</label>
+	                                <input id="itemPrice" name="itemPrice" type="text" class="form-control">
+	                            </div>    
+	                            <div class="form-group">
+	                                <label>Item Details:</label>
+	                                <input id="itemDetails" name="itemDetails" type="text" class="form-control">
+	                            </div>                            
+	                            
+                                  <button type="button" id="submitAddItem" class="btn btn-default">Add Item</button>
+	                        </form>
+	                     </div>
+	                   </div>
+                   </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading clickable panel-collapsed">
+                    <h3 class="panel-title">
+                        Update Item</h3>
+                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+                </div>
+                <div class="panel-body">
+                 <div class="row">
+	                     <div class="col-lg-6">
+	                        <form role="form" id="updateItemForm">
+	                            <div class="form-group">
+	                                <label>Item Name:</label>
+	                                <select id="selectUpdateItem" class = "form-control"name="selectUpdateItem">
+										<option value="">Select Item</option>									
+									</select>
+	                               
+	                            </div>
+	                            <div class="form-group">
+	                                <label>Item Price:</label>
+	                                <input id="itemUpdatePrice" name="itemUpdatePrice" type="text" class="form-control">
+	                            </div>                            
+	                            <div class="form-group">
+	                                <label>Item Details:</label>
+	                                <input id="itemUpdateDetails" name="itemUpdateDetails" type="text" class="form-control">
+	                            </div> 
+                                  <button type="button" id="submitUpdateItem" class="btn btn-default">Update Item</button>
+	                        </form>
+	                     </div>
+	                   </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading clickable panel-collapsed">
+                    <h3 class="panel-title">
+                       Delete Item</h3>
+                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+                </div>
+                <div class="panel-body">
+                	<form role="form" id="deleteItemForm">
+                         <div class="form-group">
+                         <label>Item Name:</label>
+                         <select id="selectDeleteItem" class = "form-control"name="selectDeleteItem">
+									<option value="">Select Item</option>									
+							</select>
+                             
+                            
+                         </div>
+                         <div class="form-group">
+                             <label>Item Price:</label>
+                             <input id="itemDeletePrice" name="itemDeletePrice" type="text" class="form-control">
+                         </div>                            
+                         
+                              <button type="button" id="submitDeleteItem" class="btn btn-default">Delete Item</button>
+                     </form>
+               </div>
+            </div>
+        </div>        
+    </div>
+
+
+
+

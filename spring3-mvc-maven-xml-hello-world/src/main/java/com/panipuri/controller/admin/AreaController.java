@@ -12,30 +12,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.panipuri.service.AdminService;
+import com.panipuri.service.admin.AdminService;
+import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
-import com.test.hibernate.MasterDeliveryArea;
 @Controller
 public class AreaController {
 	@Autowired
 	private AdminService adminService;
-	@RequestMapping(method = RequestMethod.POST, value="/addArea")
-	public ModelAndView addArea(@RequestParam(value = "areaName") String areaName, 
+	@RequestMapping(method = RequestMethod.POST, value="/addMasterArea")
+	public ModelAndView addMasterArea(@RequestParam(value = "areaName") String areaName, 
 			@RequestParam(value = "areaCity") String areaCity,
-			@RequestParam(value = "areaState") String areaState,
-			@RequestParam(value = "areaZipcode") String areazipcodes, HttpServletRequest request) {
+			@RequestParam(value = "areaState") String areaState, HttpServletRequest request) {
 		ModelAndView mv = null;
-		List<Long> zipcodes= new ArrayList<Long>();
-		if(null!=areazipcodes) {
-			String[] tokens = areazipcodes.split(",");
-			for(int i=0;i<tokens.length;i++) {
-				zipcodes.add(Long.parseLong(tokens[i]));
-			}
-		}
+		
 		String[] slots;
 		slots = request.getParameterValues("deliverySlots");
 		String[] quantity;
 		quantity = request.getParameterValues("dliveryQuantity");
+		
 		List<DeliverySlot> deliverySlots = new ArrayList<DeliverySlot>();
 		DeliverySlot deliverySlot = null;
 		for(int j = 0; j < slots.length; j++) {
@@ -47,7 +41,28 @@ public class AreaController {
 			deliverySlot.setTodaySlotQuantity(Integer.parseInt(quantity[j]));
 			deliverySlots.add(deliverySlot);
 		}
-		adminService.addArea(areaName, areaCity, areaState, zipcodes, deliverySlots);
+		adminService.addMasterArea(areaName, areaCity, areaState, deliverySlots);
+		mv = new ModelAndView("adminHome");
+		return mv;
+	}
+	@RequestMapping(method = RequestMethod.POST, value="/addArea")
+	public ModelAndView addArea(@RequestParam(value = "deliveryAreaName") String areaName, 
+			 HttpServletRequest request) {
+		ModelAndView mv = null;
+		
+		String subAreaName = request.getParameter("deliverySubAreaName");
+		String zipcode = request.getParameter("areaZipcode");
+		String masterAreaId = request.getParameter("masterArea");
+		String servingStr = request.getParameter("serving");
+		Long zipcodeLong = null;
+		if(null != zipcode && !zipcode.equals("")) {
+			zipcodeLong = new Long(zipcode);
+		}
+		boolean serving = false;
+		if(null != servingStr && servingStr.equals("true")) {
+			serving = true;
+		}
+		adminService.addArea(areaName, subAreaName, zipcodeLong, masterAreaId, serving);
 		mv = new ModelAndView("adminHome");
 		return mv;
 	}
@@ -56,7 +71,7 @@ public class AreaController {
 	public ModelAndView fetchAllArea() {
 		ModelAndView mv = null;
 		
-		List<MasterDeliveryArea> allDeliveryAreas = adminService.fetchAllArea();
+		List<DeliveryArea> allDeliveryAreas = adminService.fetchAllArea();
 		mv = new ModelAndView("adminHome");
 		mv.addObject("masterDeliveryArea", allDeliveryAreas);
 		return mv;

@@ -94,35 +94,31 @@ public class OrderInitiationController {
 	@RequestMapping(method = RequestMethod.POST, value="/fetchDeliverySlots")
 	public ModelAndView fetchDeliverySlots(HttpServletRequest request) {
 		System.out.println("in fetch deliverydetails controller");
-		String zipcode = request.getParameter("zipcodeAddr");
+		String areaId = request.getParameter("areaId");
 		ModelAndView mv = null;
-		List<AddressVo> addressList = getAddressList();
-		List<DeliverySlotVo> deliverySlots = deliveryDetailsService.fetchDeliverySlots(zipcode);
+		List<DeliverySlotVo> deliverySlots = null;
+		String errorMessage = "";
+		try {
+			deliverySlots = deliveryDetailsService.fetchDeliverySlots(areaId);
 				//customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
+		} catch (Exception e) {
+			String message = e.getMessage();
+			
+			if(null != message && message.equals("ERR_NO_AREA")) {
+				errorMessage = "Sorry! We currently are not serving your area. We will inform you once we start serving your area.";
+			} else if(null != message && message.equals("ERR_NO_SLOT")) {
+				errorMessage = "Sorry all the slots for today are full in your area. Please try again tommorow.";
+			} else {
+				errorMessage = "Something went wrong. Please try again.";
+			}
+		}
 		mv = new ModelAndView("deliveryDetails");
-		mv.addObject("deliverySlots",deliverySlots);
+		if(errorMessage.equals("")) {
+			mv.addObject("deliverySlots",deliverySlots);
+		} else {
+			mv.addObject("errormessage",errorMessage);
+		}
 		return mv;
-	}
-
-	private List<AddressVo> getAddressList() {
-		List<AddressVo> addressList = new ArrayList<AddressVo>();
-		AddressVo address1= new AddressVo();
-		address1.setAddressId(new Long(123));
-		address1.setAddressLine1("D 303, Kool homes, Behind Maratha mandir");
-		address1.setAddressline2("NDA road, Bavdhan");
-		address1.setCity("Pune");
-		address1.setState("Maharashtra");
-		address1.setZipcode("411021");
-		AddressVo address2= new AddressVo();
-		address2.setAddressId(new Long(124));
-		address2.setAddressLine1("D 303, Kool homes, Behind Maratha mandir");
-		address2.setAddressline2("NDA road, Bavdhan");
-		address2.setCity("Pune");
-		address2.setState("Maharashtra");
-		address2.setZipcode("411021");
-		addressList.add(address1);
-		addressList.add(address2);
-		return addressList;
 	}
 
 	/**

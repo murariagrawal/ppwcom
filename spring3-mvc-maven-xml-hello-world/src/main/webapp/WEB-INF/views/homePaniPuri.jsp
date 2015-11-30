@@ -29,29 +29,31 @@
 	src="js/mwf-core-ajax.js"></script>
 <script src="js/steps.js"></script>
 <script src="js/inputnumber.js"></script>
+
 </head>
 <body>
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle collapsed"
-			data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-			aria-expanded="false">
-			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
-			<span class="icon-bar"></span> <span class="icon-bar"></span>
-		</button>
-		<a class="navbar-brand" href="#">PaniPuri Bites</a>
-	</div>
-	<!-- Collect the nav links, forms, and other content for toggling -->
-	<div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1"
-		aria-expanded="false" style="height: 1px;">
-		<ul class="nav navbar-nav">
-			<li><a href="#">About</a></li>
-			<li><a href="#">Feedback</a></li>
-			<li><a href="#">Contact</a></li>
-		</ul>
-	</div>
-	<!-- /.navbar-collapse -->
-	</div>
-
+	<div class="navbar navbar-inverse cutomColorBg navbar-fixed-top" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">PaniPuri Bites</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="index.html">Home</a></li>
+                        <li><a href="#">About me</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Resume</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>	
 	<div class="container">
 		<div class="row">
 			<section>
@@ -135,7 +137,7 @@
 													</div>
 												</div>	
 											</td>
-											<td da ta-th="Price" ><span id="itemPrice${item.itemId}"><c:out value="${item.itemPrice}"></c:out></span></td>
+											<td data-th="Price" ><span id="itemPrice${item.itemId}"><c:out value="${item.itemPrice}"></c:out></span></td>
 											<td data-th="Quantity" data-itemId="${item.itemId}" colspan="1">
 												<div class="input-group">
 										          <span class="input-group-btn quantity-counter">
@@ -235,8 +237,8 @@
 						<p>You have successfully ordered Your Pani Puri.</p>
 						<div id="confirmDetailsDiv"></div>
 						<ul class="list-inline pull-right">
-							<li><button type="button"
-									class="btn btn-primary btn-info-full next-step">Place a new Order</button></li>
+							<li><button type="button" id="placeNewOrder"
+									class="btn btn-primary btn-info-full">Place a new Order</button></li>
 						</ul>
 					</div>
 					<div class="clearfix"></div>
@@ -244,5 +246,7 @@
 			</div>
 			</section>
 		</div>
+	</div>
+		
 </body>
 </html>

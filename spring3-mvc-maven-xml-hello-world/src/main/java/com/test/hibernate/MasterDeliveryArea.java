@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,16 +21,22 @@ public class MasterDeliveryArea {
 	@Column(name="delivery_area_id")
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long deliveryAreaId;
-	@Column(name="areaName", unique=true)
+	@Column(name="areaName")
 	private String areaName;
+	@Column(name="subAreaName", unique=true)
+	private String subAreaName;
 	@Column
 	private String city;
 	@Column
 	private String state;
 	@OneToMany(fetch = FetchType.EAGER,targetEntity=DeliverySlot.class,cascade= CascadeType.ALL,mappedBy="deliveryArea")
 	private List<DeliverySlot> deliverySlots;
-	@OneToMany(targetEntity=AvailableZipcodes.class,cascade= CascadeType.ALL,mappedBy="area")
-	private List<AvailableZipcodes> zipcodes;
+	@OneToMany(fetch = FetchType.EAGER,targetEntity=DeliveryArea.class,cascade= CascadeType.ALL,mappedBy="masterArea")
+	private List<DeliveryArea> deliveryAreas;
+	
+	@ManyToOne
+	@JoinColumn(name="crew_id")
+	private Crew crew;
 	/**
 	 * @return the deliveryAreaId
 	 */
@@ -65,18 +73,7 @@ public class MasterDeliveryArea {
 	public void setDeliverySlots(List<DeliverySlot> deliverySlots) {
 		this.deliverySlots = deliverySlots;
 	}
-	/**
-	 * @return the zipcodes
-	 */
-	public List<AvailableZipcodes> getZipcodes() {
-		return zipcodes;
-	}
-	/**
-	 * @param zipcodes the zipcodes to set
-	 */
-	public void setZipcodes(List<AvailableZipcodes> zipcodes) {
-		this.zipcodes = zipcodes;
-	}
+	
 	/**
 	 * @return the city
 	 */
@@ -101,4 +98,18 @@ public class MasterDeliveryArea {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	/**
+	 * @return the subAreaName
+	 */
+	public String getSubAreaName() {
+		return subAreaName;
+	}
+	/**
+	 * @param subAreaName the subAreaName to set
+	 */
+	public void setSubAreaName(String subAreaName) {
+		this.subAreaName = subAreaName;
+	}
+	
 }

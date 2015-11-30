@@ -46,8 +46,17 @@ public class LoginController {
 		mv = new ModelAndView("index");			
 		return mv;
 	}
-	@RequestMapping(method = RequestMethod.GET, value="/home")
+	/*@RequestMapping(method = RequestMethod.GET, value="/home")
 	public ModelAndView homePaniPuri() {
+		
+		ModelAndView mv = null;		
+		mv = new ModelAndView("home");	
+		
+		mv.addObject("orderId", "");
+		return mv;
+	}*/
+	@RequestMapping(method = RequestMethod.GET, value="/home")
+	public ModelAndView orderOnline() {
 		List<ItemVo> itemList = masterDataFetchService.fetchAllAvailableItem();
 		List<ToppingVo> stuffingList = masterDataFetchService.fetchAllAvailableStuffing();
 		ModelAndView mv = null;		

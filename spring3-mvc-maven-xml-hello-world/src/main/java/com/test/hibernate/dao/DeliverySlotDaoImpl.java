@@ -6,7 +6,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.test.hibernate.AvailableZipcodes;
+import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
 
 public class DeliverySlotDaoImpl {
@@ -29,15 +29,18 @@ public class DeliverySlotDaoImpl {
 		session.close();
 	}
 	
-	public List<DeliverySlot> getAvailableDeliverySlots(String zipcode) {
+	public List<DeliverySlot> getAvailableDeliverySlots(String areaId) throws Exception {
 		Session session = this.sessionFactory.openSession();
 		
 		List<DeliverySlot> deliverySlots= null;
-		AvailableZipcodes zipcodes = (AvailableZipcodes) session.get(AvailableZipcodes.class, new Long(zipcode));
-		if(null != zipcodes) {
+		DeliveryArea area = (DeliveryArea) session.get(DeliveryArea.class, new Long(areaId));
+		if(null != area) {
 			
-			Hibernate.initialize(zipcodes.getArea().getDeliverySlots());
-			deliverySlots = zipcodes.getArea().getDeliverySlots();
+			Hibernate.initialize(area.getMasterArea().getDeliverySlots());
+			deliverySlots = area.getMasterArea().getDeliverySlots();
+		} else {
+			Exception e = new Exception("ERR_NO_AREA");
+			throw e;
 		}
 		
 		session.close();

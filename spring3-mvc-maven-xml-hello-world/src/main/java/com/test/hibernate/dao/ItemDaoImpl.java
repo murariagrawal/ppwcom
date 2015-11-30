@@ -39,14 +39,11 @@ public class ItemDaoImpl {
 		return allAvailableItems;
 	}
 	
-	public void updateItemDetails(String itemName, BigDecimal itemPrice, String itemDetails, long itemId) {
+	public void updateItemDetails(BigDecimal itemPrice, String itemDetails, long itemId) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		Item selectedItem = (Item)session.get(Item.class, itemId);
-		if(null != selectedItem) {
-			if(null != itemName && !itemName.trim().equals("")) {
-				selectedItem.setItemName(itemName);
-			} 
+		if(null != selectedItem) {			 
 			if(null != itemPrice) {
 				selectedItem.setItemPrice(itemPrice);
 			}
@@ -92,14 +89,11 @@ public class ItemDaoImpl {
 		return allAvailableStuffing;
 	}
 	
-	public void updateStuffingDetails(String stuffingName, BigDecimal stuffingPrice, long stuffingId) {
+	public void updateStuffingDetails(BigDecimal stuffingPrice, long stuffingId) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		AvailableTopping selectedStuffing = (AvailableTopping)session.get(AvailableTopping.class, stuffingId);
-		if(null != selectedStuffing) {
-			if(null != stuffingName && !stuffingName.trim().equals("")) {
-				selectedStuffing.setToppingName(stuffingName);
-			} 
+		if(null != selectedStuffing) {			
 			if(null != stuffingPrice) {
 				selectedStuffing.setToppingPrice(stuffingPrice);
 			}			

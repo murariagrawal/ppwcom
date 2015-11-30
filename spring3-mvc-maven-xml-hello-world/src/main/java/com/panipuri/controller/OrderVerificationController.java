@@ -10,9 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.panipuri.service.OrderFetchService;
 import com.panipuri.vo.AddressVo;
+import com.panipuri.vo.AreaVo;
 import com.panipuri.vo.OrderVo;
 import com.test.hibernate.Address;
 import com.test.hibernate.Customer;
+import com.test.hibernate.DeliveryArea;
 
 @Controller
 public class OrderVerificationController {
@@ -28,7 +30,7 @@ public class OrderVerificationController {
 		String address1 = request.getParameter("addr1");
 		String address2 = request.getParameter("addr2");
 		String landmark = request.getParameter("landmarkAddr");
-		String zipcode = request.getParameter("zipcodeAddr");
+		String areaId = request.getParameter("areaId");
 		String phoneNumber = request.getParameter("phoneNumber");
 		String orderId = request.getParameter("deliveryOrderId");
 		String customerId = request.getParameter("customerId");
@@ -49,7 +51,9 @@ public class OrderVerificationController {
 		address.setAddressLine1(address1);
 		address.setAddressLine2(address2);
 		address.setLandmark(landmark);
-		address.setZipcode(new Integer(zipcode));
+		DeliveryArea area = new DeliveryArea();
+		area.setDeliveryAreaId(new Long(areaId));
+		address.setArea(area);
 		OrderVo orderDetails = orderFetchService.updateOrderAndgetOrderDetails(orderId, address, customer, slotId);
 		AddressVo addressVo = orderDetails.getDeliveryAddress();
 		
@@ -67,7 +71,8 @@ public class OrderVerificationController {
 		if(null!=addressVo.getLandmark()){
 			landmarkReturn =landmarkReturn+addressVo.getLandmark();
 		}		
-		String zipcodeReturn = addressVo.getZipcode();
+		AreaVo areaDetails = addressVo.getArea();
+		String zipcodeReturn = areaDetails.getAreaName() + " " + areaDetails.getZipcode();
 			mv = new ModelAndView("");
 			mv.addObject("orderId", orderDetails.getOrderId());
 			mv.addObject("contactNo", orderDetails.getContactNo());

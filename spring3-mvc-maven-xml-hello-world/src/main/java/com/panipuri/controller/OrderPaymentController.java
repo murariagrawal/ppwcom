@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.panipuri.service.OrderCreationService;
 import com.panipuri.vo.AddressVo;
+import com.panipuri.vo.AreaVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.StatusVo;
 
@@ -45,32 +46,54 @@ public class OrderPaymentController {
 		ModelAndView mv = null;
 		String orderId = request.getParameter("orderIdPayment");
 		String otp = request.getParameter("otpCode");
-		OrderVo orderDetails = orderCreationService.validateOTP(otp, orderId);
-		AddressVo addressVo = orderDetails.getDeliveryAddress();		
+		AddressVo addressVo = null;
+		OrderVo orderDetails = null;
 		String addressLine = "";
-		if(null != addressVo.getAddressLine1()) {
-			addressLine= addressLine+addressVo.getAddressLine1();
+		String landmarkReturn = ""; 
+		String errorMessageString ="";
+		String zipcodeReturn = "";
+		try {
+			orderDetails = orderCreationService.validateOTP(otp, orderId);
+			addressVo = orderDetails.getDeliveryAddress();			
+			if(null != addressVo.getAddressLine1()) {
+				addressLine= addressLine+addressVo.getAddressLine1();
+				if(null!=addressVo.getAddressline2()){
+					addressLine =addressLine+" ";
+				}
+			}
 			if(null!=addressVo.getAddressline2()){
-				addressLine =addressLine+" ";
+				addressLine =addressLine+addressVo.getAddressline2();
+			}			
+			if(null!=addressVo.getLandmark()){
+				landmarkReturn =landmarkReturn+addressVo.getLandmark();
+			}
+			AreaVo areaDetails = addressVo.getArea();
+			zipcodeReturn = areaDetails.getAreaName() + " " + areaDetails.getZipcode();
+			
+		} catch (Exception e) {
+			String message = e.getMessage();
+			if(null != message && !message.equals("")) {
+				if(message.equals("ERR_INVALID_OTP")) {
+					errorMessageString = "Invalid OTP enter. Please enter the valid otp sent via SMS.";
+				} else {
+					errorMessageString = "Something went wrong. Please try again.";
+				}
 			}
 		}
-		if(null!=addressVo.getAddressline2()){
-			addressLine =addressLine+addressVo.getAddressline2();
-		}
-		String landmarkReturn = ""; 
-		if(null!=addressVo.getLandmark()){
-			landmarkReturn =landmarkReturn+addressVo.getLandmark();
-		}		
-		String zipcodeReturn = addressVo.getZipcode();
+
 		mv = new ModelAndView("");
-		mv.addObject("orderId", orderDetails.getOrderId());
-		mv.addObject("contactNo", orderDetails.getContactNo());
-		mv.addObject("deliverySlot", orderDetails.getDeliverySlot());
-		mv.addObject("addressLine", addressLine);
-		mv.addObject("landmarkReturn", landmarkReturn);
-		mv.addObject("zipcodeReturn", zipcodeReturn);
-		mv.addObject("itemList", orderDetails.getItemList());
-		mv.addObject("toppingList", orderDetails.getToppingList());
+		if(errorMessageString== null || errorMessageString.equals("")) {
+			mv.addObject("orderId", orderDetails.getOrderId());
+			mv.addObject("contactNo", orderDetails.getContactNo());
+			mv.addObject("deliverySlot", orderDetails.getDeliverySlot());
+			mv.addObject("addressLine", addressLine);
+			mv.addObject("landmarkReturn", landmarkReturn);
+			mv.addObject("zipcodeReturn", zipcodeReturn);
+			mv.addObject("itemList", orderDetails.getItemList());
+			mv.addObject("toppingList", orderDetails.getToppingList());																																	
+		} else {
+			mv.addObject("errormessage", errorMessageString);
+		}
 		return mv;
 	}
 }

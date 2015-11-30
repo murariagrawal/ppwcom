@@ -11,6 +11,21 @@
 	float:left; 
 	height:28px
 }
+.cutomColorBg {
+	background-image: linear-gradient(to bottom,#286090 0,#286090 100%);
+}
+.overlay
+ {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: rgba(0, 0, 0, 0.85);
+     z-index: 9999;
+     color: white;
+     display: inline-block;
+ }
 @media screen and (max-width: 600px) {
     table#cart tbody td .form-control{
 		width:20%;
@@ -30,7 +45,7 @@
 	
 	table#cart thead { display: none; }
 	table#cart tbody td { display: block; padding: .6rem; min-width:320px;}
-	table#cart tbody tr td:first-child { background: #0080c0; color: #fff; }
+	table#cart tbody tr td:first-child { background: #286090; color: #fff; }
 	table#cart tbody td:before {
 		content: attr(data-th); font-weight: bold;
 		display: inline-block; width: 8rem;

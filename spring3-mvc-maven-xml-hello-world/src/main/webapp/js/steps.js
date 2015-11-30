@@ -57,8 +57,16 @@ $(document).ready(function () {
     	 $("#totalAmount1").html(totalPrice.toFixed(2));
     	 $("#totalAmount2").html(totalPrice.toFixed(2));
     }
-    
+    function hideOverlay() {
+    	$('body').removeClass("overlay");
+		$('container').removeClass("overlay");
+    }
+    function showOverlay() {
+    	$('body').addClass("overlay");
+    	$('container').addClass("overlay");
+    }
     $("#continueToDelivery").on("click", function(e) {
+    	showOverlay();
     	var noIfItemsSelected = 0;
     	 $('[data-th="Quantity"]').each(function() {
     		 var itemId = $(this).attr("data-itemId");
@@ -69,7 +77,13 @@ $(document).ready(function () {
     		 }
     	 });
     	 if(noIfItemsSelected>0) {
-    		 ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {			
+    		 var deliveryAddressId = $("#deliveryAddressId").val();
+    		 if(deliveryAddressId && deliveryAddressId!== ""){    			 
+    			 goToNextStep();
+    			 hideOverlay();
+    			 
+    		 } else {
+    		 	ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {			
     				ajax.loadFragment("html/deliverydetails.html").done(function(out) {				
     					$("#deliveryDetailsDiv").empty();
     					$("#deliveryDetailsDiv").append(out);
@@ -78,12 +92,14 @@ $(document).ready(function () {
     					hideErrorMessage();
     					goToNextStep();
     					disableAllOtherWizard();
+    					 hideOverlay();
     				}).fail(function(data) {	        	
     		        	alert("failed");
     		        });						
     	        }).fail(function(data) {        	
     	        	alert("failed");
-    	        });  		 
+    	        }); 
+    		 }
     		 
     	 } else {
     		 showErrorMessage('Please add atleast one Box of Pani puri to continue');    		
@@ -91,6 +107,30 @@ $(document).ready(function () {
 		
     
     });
+    
+    function bindDeliveryEvents() {
+	    $('#phoneNumber').on("keyup",function() {
+	    	var length = $(this).val().length;
+	    	if(length && length == 10) {
+	    		getAddressDetails();
+	    	}
+	    });
+	    $("#zipcodeAddr").on('input', function(){			
+			var length = $(this).val().length;			
+	    	if(length && length == 6) {	    		
+	    		getDeliverySlots();
+	    	}
+		});
+	    $("#zipcodeAddr").on('blur', function(){			
+			var length = $(this).val().length;			
+	    	if(length && length < 6) {
+	    		 $("#zipcodeAddr").parent().addClass('error-field');
+	    		 errorMessage = "Please enter a valid zipcode of 6 digits.";
+	    		 showErrorMessage(errorMessage);
+	    	}
+		});
+	    
+    }
     function createIndividualItemRow(item) {
     	var itemName= item.itemName;
 		var itemQuantity= item.itemQuantity;
@@ -111,18 +151,34 @@ $(document).ready(function () {
 		var itemTotalPrice = itemPrice*itemQuantity;
 		var individualItemRow='<tr> <td>'+itemNameDiv+itemDetailsDiv+'</td><td>'+
 								itemPrice+'</td><td>'+
-								itemQuantity+'</td><td class="text-center">'+
+								itemQuantity+'</td><td class="text-center subtotal">'+
 								itemTotalPrice+'</td></tr>';
 		return individualItemRow;
 		
     }
+    function createIndividualToppingRow(topping) {
+    	var toppingName= topping.toppingName;
+		var toppingQuantity= topping.quantity;
+		var toppingPrice= topping.price;
+		
+		var toppingId= topping.toppingId;
+		var toppingNameDiv = '<div class="row"><div class="col-sm-10"><h4 class="nomargin"><label>'+toppingName+'</label></h4></div></div>';
+				
+		var toppingTotalPrice = toppingPrice*toppingQuantity;
+		var individualToppingRow='<tr> <td>'+toppingNameDiv+'</td><td>'+
+								toppingPrice+'</td><td>'+
+								toppingQuantity+'</td><td class="text-center subtotal" >'+
+								toppingTotalPrice+'</td></tr>';
+		return individualToppingRow;
+		
+    }
    function createDeliveryDetailsInfo(data) {
     	
-    	var addressInfo = "<div class='row'>Delivery Address :</div><div class='row'><label>"+
-							data.addressLine+"</label></div><div class='row'>"+
+    	var addressInfo = "<div class='row'><div class='col-lg-12'>Delivery Address :</div></div><div class='row'><div class='col-lg-12'><label>"+
+							data.addressLine+"</label></div></div><div class='row'><div class='col-lg-12'>"+
 							data.landmarkReturn+" "+
-							data.zipcodeReturn+"</div>";    	
-    	var slotInfo = "<div class='row'>Delivery Slot Selected :<br><label>"+data.deliverySlot+"</label></div>";
+							data.zipcodeReturn+"</div></div>";    	
+    	var slotInfo = "<div class='row'><div class='col-lg-12'>Delivery Slot Selected :<br><label>"+data.deliverySlot+"</label></div></div>";
     	var deliveryDetailsInfo = addressInfo+slotInfo;
     	return deliveryDetailsInfo;
     }
@@ -173,14 +229,16 @@ $(document).ready(function () {
 		  errorMessage = "Please select a delivery slot to continue.";
 	  }
 	  if(noOfFieldsInError >1) {
-		  errorMessage = "There are two or more firelds in error";
+		  errorMessage = "There are two or more fields in error";
 	  }
 	  if(errorMessage !== "") {
 		  showErrorMessage(errorMessage);
+		  return false;
 	  } else {
 		  hideErrorMessage();
+		  return true;
 	  }
-	  return false;
+	  
    }
    function hideErrorMessage() {
 	   $("#errorDiv").empty();
@@ -191,57 +249,41 @@ $(document).ready(function () {
 		  $("#errorDiv").removeClass("hide");
 		  $("#errorDiv").append("<Strong>"+errorMessage+"");
    }
-    $("#continueToVerify").on("click", function(e) {	
+    $("#continueToVerify").on("click", function(e) {
+    	showOverlay();
     	$('.error-field').removeClass('error-field');
     	hideErrorMessage();
     	if(validateDeliveryForm()) {
 			ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
 				ajax.loadFragment("html/orderverification.html").done(function(out) {
-					hideErrorMessage();
-					$("#verifyDetailsDiv").empty();
-					$("#verifyDetailsDiv").append(out);
-					$.each(data.itemList, function(i, item) {
-			    		var individualItemRow =  createIndividualItemRow(item);
-			    		$("#verifyOrderDetailsTable > tbody").append(individualItemRow);
-			    	});
-			    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
-			    	$("#verifyDeliveryDetails").append(deliveryDetailsInfo);    	
-			    	$("#orderIdPayment").val(data.orderId);
-			    	$("#contactNumber").html(data.contactNo);
-					bindVerifyEvents(data);
-					goToNextStep();
-					disableAllOtherWizard();
+					if(data.errormessage && errormessage !== "") {
+						showErrorMessage(errormessage);
+						hideOverlay();
+					} else {
+						hideErrorMessage();
+						$("#verifyDetailsDiv").empty();
+						$("#verifyDetailsDiv").append(out);
+						addItemToppingAndPrice("verifyOrderDetailsTable", data);						
+				    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
+				    	$("#verifyDeliveryDetails").append(deliveryDetailsInfo);    	
+				    	$("#orderIdPayment").val(data.orderId);
+				    	$("#contactNumber").html(data.contactNo);
+						bindVerifyEvents(data);
+						goToNextStep();
+						disableAllOtherWizard();
+						hideOverlay();
+					}
 				}).fail(function(data) {	        	
-		        	alert("failed");
+					showErrorMessage("Something went wrong. Please try again later.");
+					hideOverlay();
 		        });						
 	        }).fail(function(data) {        	
-	        	alert("failed");
+	        	showErrorMessage("Something went wrong. Please try again later.");
+	        	hideOverlay();
 	        });
     	}
     });
-    function bindDeliveryEvents() {
-	    $('#phoneNumber').on("keyup",function() {
-	    	var length = $(this).val().length;
-	    	if(length && length == 10) {
-	    		getAddressDetails();
-	    	}
-	    });
-	    $("#zipcodeAddr").on('input', function(){			
-			var length = $(this).val().length;			
-	    	if(length && length == 6) {	    		
-	    		getDeliverySlots();
-	    	}
-		});
-	    $("#zipcodeAddr").on('blur', function(){			
-			var length = $(this).val().length;			
-	    	if(length && length < 6) {
-	    		 $("#zipcodeAddr").parent().addClass('error-field');
-	    		 errorMessage = "Please enter a valid zipcode of 6 digits.";
-	    		 showErrorMessage(errorMessage);
-	    	}
-		});
-	    
-    }
+    
     function getAddressDetails() {		
 		ajax.postForm("fetchDeliveryDetails?F=J", $("#deliveryForm")).done(function(data) {		
 			var ulFinal = "<ul style='list-style:none'>";
@@ -346,17 +388,33 @@ $(document).ready(function () {
 			$('#addressFields').removeClass("hide").addClass("show");
 			getDeliverySlots();
 		});
-    	$("#enterNewAddress").on('click', function(e) {    		
+    	$("#enterNewAddress").on('click', function(e) {  
+    		$('#myModal').modal('hide');
     		clearDeliveryForm();
     	});
 		
     }
-    
+    $('input').focus(function() {
+
+        var padding = 100; // Desired page "padding"
+
+        var lbound = $(this).offset().top - $(window).height() + padding;
+        var ubound = $(this).offset().top - padding;
+
+        if ($(window).scrollTop() < lbound)
+            $(window).scrollTop(lbound);
+        else if ($(window).scrollTop() > ubound)
+            $(window).scrollTop(ubound);
+
+    });
     
     function getDeliverySlots() {	    	
 		ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {		
 			$("#selectDeliverySlot").prop( "disabled", false );
-			if(data.deliverySlots) {
+			if(data.errormessage && data.errormessage !== "") {
+				showErrorMessage(data.errormessage);
+			} else if(data.deliverySlots) {
+				hideErrorMessage();
 				$.each(data.deliverySlots, function (i, deliverySlot) {
 					if(deliverySlot.slotQuantity >0) {
 						var slotText ="Slot Time :"+deliverySlot.startTime+"-"+deliverySlot.endTime+"    Available Slots :"+deliverySlot.slotQuantity;
@@ -401,32 +459,64 @@ $(document).ready(function () {
             }).fail(function(data) {        	
             	alert("failed");
             });
+    	});   
+	
+		$("#confirmOrderButton").on("click", function(e) {
+			showOverlay();
+			ajax.postForm("validateOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {
+				if(data.errormessage && data.errormessage!== "") {
+					showErrorMessage(data.errormessage);
+					hideOverlay();
+				} else {
+					hideErrorMessage();
+	    			ajax.loadFragment("html/orderconfirmation.html").done(function(out) {	
+		    			$("#confirmDetailsDiv").empty();
+						$("#confirmDetailsDiv").append(out);
+						addItemToppingAndPrice("confirmOrderDetailsTable", data);						
+				    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
+				    	$("#confirmDeliveryDetails").append(deliveryDetailsInfo);    	
+				    	//$("#orderIdConfirmPayment").val(data.orderId);	
+				    	goToNextStep();
+				    	disableAllOtherWizard();
+				    	$("#placeNewOrder").on("click", function() {
+				    		location.reload(true);
+				    	});
+				    	hideOverlay();
+	    			}).fail(function(data) {        	
+	    				showErrorMessage("Something went wrong. Please try again later.");
+	    				hideOverlay();
+	                });
+				}
+	        }).fail(function(data) {        	
+	        	showErrorMessage("Something went wrong. Please try again later.");
+	        	hideOverlay();
+	        });
+		});
+    }
+	function addItemToppingAndPrice(tableId, data) {
+		$.each(data.itemList, function(i, item) {
+    		var individualItemRow =  createIndividualItemRow(item);
+    		$("#"+tableId+" > tbody").append(individualItemRow);
     	});
-    	$("#confirmOrderButton").on("click", function(e) {
-    		ajax.postForm("validateOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {
-    			ajax.loadFragment("html/orderconfirmation.html").done(function(out) {	
-	    			$("#confirmDetailsDiv").empty();
-					$("#confirmDetailsDiv").append(out);
-					$.each(data.itemList, function(i, item) {
-			    		var individualItemRow =  createIndividualItemRow(item);
-			    		$("#confirmOrderDetailsTable > tbody").append(individualItemRow);
-			    	});
-			    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
-			    	$("#confirmDeliveryDetails").append(deliveryDetailsInfo);    	
-			    	//$("#orderIdConfirmPayment").val(data.orderId);	
-			    	goToNextStep();
-			    	disableAllOtherWizard();
-    			}).fail(function(data) {        	
-                	alert("failed");
-                });
-            }).fail(function(data) {        	
-            	alert("failed");
-            });
+		$.each(data.toppingList, function(i, topping) {
+			var individualToppingRow =  createIndividualToppingRow(topping);
+    		
+    		$("#"+tableId+" > tbody").append(individualToppingRow);
     	});
-    };
-    
+		var totalPrice = 0.00;
+		$(".subtotal").each(function() {
+			if ($(this).html() && !isNaN($(this).html())) {
+				totalPrice += parseFloat($(this).html());
+			}
+		})	
+		var totalPriceHtml = '<tfoot><tr class="visible-xs"><td class="text-center">'+
+							 '<strong>Total <label id="totalAmount1">'+totalPrice.toFixed(2)+'</label></strong></td>'+
+							 '</tr><tr><td colspan="3" class="hidden-xs"></td><td class="hidden-xs text-center">'+
+							 '<strong>Total <label id="totalAmount2">'+totalPrice.toFixed(2)+'</label></strong></td><td></td></tr></tfoot>';
+		$("#"+tableId).append(totalPriceHtml);
+	}
     $(".prev-step").click(function (e) {
-
+    	hideErrorMessage();
         var $active = $('.wizard .nav-tabs li.active');
         $active.prev().removeClass('disabled');
         $active.addClass('disabled');

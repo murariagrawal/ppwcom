@@ -45,7 +45,7 @@ public class OrderCreationService {
 		return statusVo;
 	}
 	
-	public OrderVo validateOTP(String otp, String orderId) {
+	public OrderVo validateOTP(String otp, String orderId) throws Exception {
 		
 		OrderVo orderDetails = null;
 		
@@ -96,7 +96,8 @@ public class OrderCreationService {
 			smsSender.sendCustomerSMS(orderDetails.getContactNo(), message);
 			
 		} else {
-			
+			Exception e = new Exception("ERR_INVALID_OTP");
+			throw e;
 		}
 		
 		return orderDetails;

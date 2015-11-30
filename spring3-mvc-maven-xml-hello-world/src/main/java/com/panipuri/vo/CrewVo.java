@@ -1,41 +1,15 @@
-package com.test.hibernate;
+package com.panipuri.vo;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-@Entity
-@Table(name="crew")
-public class Crew {
-	@Id
-	@Column(name="crew_id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+public class CrewVo {
 	private long crewId;
-	@Column
 	private String name;
-	@Column
 	private String address;
-	@Column(unique=true, nullable=false, length=10)
 	private String contactnumber;
-	@Column
 	private long salary;
-	@Column(name="is_available")
 	private boolean isAvailable;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy="crew")
-	private List<MasterDeliveryArea> area;
-	@Column
-	private BigDecimal currentLatitude;
-	@Column
-	private BigDecimal currentLongitude;
-	
+	private List<AreaVo> area;
 	/**
 	 * @return the crewId
 	 */
@@ -111,38 +85,14 @@ public class Crew {
 	/**
 	 * @return the area
 	 */
-	public List<MasterDeliveryArea> getArea() {
+	public List<AreaVo> getArea() {
 		return area;
 	}
 	/**
 	 * @param area the area to set
 	 */
-	public void setArea(List<MasterDeliveryArea> area) {
+	public void setArea(List<AreaVo> area) {
 		this.area = area;
-	}
-	/**
-	 * @return the currentLatitude
-	 */
-	public BigDecimal getCurrentLatitude() {
-		return currentLatitude;
-	}
-	/**
-	 * @param currentLatitude the currentLatitude to set
-	 */
-	public void setCurrentLatitude(BigDecimal currentLatitude) {
-		this.currentLatitude = currentLatitude;
-	}
-	/**
-	 * @return the currentLongitude
-	 */
-	public BigDecimal getCurrentLongitude() {
-		return currentLongitude;
-	}
-	/**
-	 * @param currentLongitude the currentLongitude to set
-	 */
-	public void setCurrentLongitude(BigDecimal currentLongitude) {
-		this.currentLongitude = currentLongitude;
 	}
 	
 }

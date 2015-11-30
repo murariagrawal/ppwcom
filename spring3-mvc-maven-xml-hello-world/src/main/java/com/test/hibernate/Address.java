@@ -30,20 +30,14 @@ public class Address {
 	@Column(name="address_line_2")
 	private String addressLine2;
 	@Column(name="landmark")
-	private String landmark;
-	@Column(name="zipcode")
-	private int zipcode;
-	@Column(name="city")
-	private String city;
-	@Column(name="state")
-	private String state;
-	@Column(name="country")
-	private String country;
-	
+	private String landmark;	
 	@Column(name="latitude")
 	private BigDecimal latitude;
 	@Column(name="longitude")
 	private BigDecimal longitude;
+	@ManyToOne
+	@JoinColumn(name = "delivery_area_id")
+	private DeliveryArea area;
 	/**
 	 * @return the addressId
 	 */
@@ -94,54 +88,7 @@ public class Address {
 		this.addressLine2 = addressLine2;
 	}
 	
-	/**
-	 * @return the zipcode
-	 */
-	public int getZipcode() {
-		return zipcode;
-	}
-	/**
-	 * @param zipcode the zipcode to set
-	 */
-	public void setZipcode(int zipcode) {
-		this.zipcode = zipcode;
-	}
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		return city;
-	}
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(String city) {
-		this.city = city;
-	}
-	/**
-	 * @return the state
-	 */
-	public String getState() {
-		return state;
-	}
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(String state) {
-		this.state = state;
-	}
-	/**
-	 * @return the country
-	 */
-	public String getCountry() {
-		return country;
-	}
-	/**
-	 * @param country the country to set
-	 */
-	public void setCountry(String country) {
-		this.country = country;
-	}
+	
 	/**
 	 * @return the customer
 	 */
@@ -189,6 +136,18 @@ public class Address {
 	 */
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+	/**
+	 * @return the area
+	 */
+	public DeliveryArea getArea() {
+		return area;
+	}
+	/**
+	 * @param area the area to set
+	 */
+	public void setArea(DeliveryArea area) {
+		this.area = area;
 	}
 	
 }

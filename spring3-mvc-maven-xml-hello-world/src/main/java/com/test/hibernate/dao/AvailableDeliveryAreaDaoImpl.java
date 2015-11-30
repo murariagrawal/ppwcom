@@ -1,6 +1,5 @@
 package com.test.hibernate.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -9,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.test.hibernate.AvailableZipcodes;
 import com.test.hibernate.Crew;
+import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.MasterDeliveryArea;
 
@@ -19,7 +19,7 @@ public class AvailableDeliveryAreaDaoImpl {
 		this.sessionFactory = sf;
 	}
 
-	public void addZipcodeToDeliveryArea(List<Long> zipcodes, String areaName) {
+	/*public void addZipcodeToDeliveryArea(List<Long> zipcodes, String areaName) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		MasterDeliveryArea masterDeliveryArea = null;
@@ -46,35 +46,43 @@ public class AvailableDeliveryAreaDaoImpl {
 		session.update(masterDeliveryArea);
 		session.getTransaction().commit();
 		session.close();
-	}
+	}*/
 
-	public void addMasterDeliveryArea(String areaName,String city, String state, List<Long> zipcodes,  List<DeliverySlot> deliverySlots) {
+	public void addMasterDeliveryArea(String areaName,String city, String state,  List<DeliverySlot> deliverySlots) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		MasterDeliveryArea masterDeliveryArea = new MasterDeliveryArea();
 		masterDeliveryArea.setAreaName(areaName);
-		List<AvailableZipcodes> areaZipcodes = new ArrayList<AvailableZipcodes>();
-		if(null != zipcodes) {
-			for(Long zipcode:zipcodes) {
-				AvailableZipcodes deliveryArea = new AvailableZipcodes();
-				deliveryArea.setZipcode(zipcode);
-				deliveryArea.setArea(masterDeliveryArea);
-				areaZipcodes.add(deliveryArea);
-				
-			}
-		}
+		
 		if(null != deliverySlots) {
-			for(DeliverySlot deliverySlot:deliverySlots) {
-				
-				deliverySlot.setDeliveryArea(masterDeliveryArea);
-				
+			for(DeliverySlot deliverySlot:deliverySlots) {				
+				deliverySlot.setDeliveryArea(masterDeliveryArea);				
 			}
 		}
 		masterDeliveryArea.setCity(city);
 		masterDeliveryArea.setState(state);
-		masterDeliveryArea.setDeliverySlots(deliverySlots);
-		masterDeliveryArea.setZipcodes(areaZipcodes);
+		masterDeliveryArea.setDeliverySlots(deliverySlots);		
 		session.save(masterDeliveryArea);
+		session.getTransaction().commit();
+		session.close();
+	}
+	public void addDeliveryArea(String areaName,String subAreaName, Long zipcodes,String masterAreaId, boolean serving) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		DeliveryArea deliveryArea = new DeliveryArea();
+		deliveryArea.setAreaName(areaName);
+		deliveryArea.setSubAreaName(subAreaName);
+		AvailableZipcodes areaZipcodes =  (AvailableZipcodes) session.get(AvailableZipcodes.class, zipcodes);
+		if(null == zipcodes) {			
+				areaZipcodes = new AvailableZipcodes();
+				areaZipcodes.setZipcode(zipcodes);
+				areaZipcodes.setArea(deliveryArea);			
+		}
+		
+		deliveryArea.setZipcodes(areaZipcodes);
+			
+		deliveryArea.setServing(serving);
+		session.save(deliveryArea);
 		session.getTransaction().commit();
 		session.close();
 	}
@@ -91,12 +99,29 @@ public class AvailableDeliveryAreaDaoImpl {
 		}
 		return null;
 	}
+	@SuppressWarnings("unchecked")
+	public DeliveryArea getDeliveryArea(Long areaId) {
+		Session session = this.sessionFactory.openSession();
+
+		DeliveryArea deliveryArea = (DeliveryArea) session
+				.get(DeliveryArea.class, areaId);
+		
+		return deliveryArea;
+	}
 
 	@SuppressWarnings("unchecked")
-	public List<MasterDeliveryArea> getAllAvailableDeliveryArea() {
+	public List<MasterDeliveryArea> getAllMasterAvailableDeliveryArea() {
 		Session session = this.sessionFactory.openSession();
 
 		List<MasterDeliveryArea> allAvailableDeliveryArea = (List<MasterDeliveryArea>) session
+				.createCriteria(MasterDeliveryArea.class);
+		return allAvailableDeliveryArea;
+	}
+	@SuppressWarnings("unchecked")
+	public List<DeliveryArea> getAllAvailableDeliveryArea() {
+		Session session = this.sessionFactory.openSession();
+
+		List<DeliveryArea> allAvailableDeliveryArea = (List<DeliveryArea>) session
 				.createCriteria(MasterDeliveryArea.class);
 		return allAvailableDeliveryArea;
 	}

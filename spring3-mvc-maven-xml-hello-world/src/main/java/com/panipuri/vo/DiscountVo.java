@@ -1,35 +1,19 @@
-package com.test.hibernate;
+package com.panipuri.vo;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-@Entity
-@Table(name="discount")
-public class DiscountInformation {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+import com.test.hibernate.DiscountOn;
+
+public class DiscountVo {
 	private long discountId;
-	@Column(unique=true)
 	private String couponCode;
-	@Column
 	private Date startDate;
-	@Column
 	private Date endDate;
-	@Column
 	private DiscountOn discountCategory;
-	@Column
-	private String discountCondition;
-	@Column
-	private String discountConditionValue;
-	@Column
 	private float discountPercentage;
-	@Column
 	private boolean oncePerUser;
+	private String discountCondition;
+	private String discountConditionValue;
 	/**
 	 * @return the discountId
 	 */
@@ -78,19 +62,6 @@ public class DiscountInformation {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
-	/**
-	 * @return the discountPercentage
-	 */
-	public float getDiscountPercentage() {
-		return discountPercentage;
-	}
-	/**
-	 * @param discountPercentage the discountPercentage to set
-	 */
-	public void setDiscountPercentage(float discountPercentage) {
-		this.discountPercentage = discountPercentage;
-	}
 	/**
 	 * @return the discountCategory
 	 */
@@ -102,6 +73,18 @@ public class DiscountInformation {
 	 */
 	public void setDiscountCategory(DiscountOn discountCategory) {
 		this.discountCategory = discountCategory;
+	}
+	/**
+	 * @return the discountPercentage
+	 */
+	public float getDiscountPercentage() {
+		return discountPercentage;
+	}
+	/**
+	 * @param discountPercentage the discountPercentage to set
+	 */
+	public void setDiscountPercentage(float discountPercentage) {
+		this.discountPercentage = discountPercentage;
 	}
 	/**
 	 * @return the oncePerUser

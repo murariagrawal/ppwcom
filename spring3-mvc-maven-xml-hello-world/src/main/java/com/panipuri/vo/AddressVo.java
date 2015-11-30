@@ -7,10 +7,8 @@ public class AddressVo {
 	private String addressLine1;
 	private String addressline2;
 	private String landmark;
-	private String zipcode;
+	private AreaVo area;
 	private String contactNumber;
-	private String city;
-	private String state;
 	
 	/**
 	 * @return the addressId
@@ -49,18 +47,7 @@ public class AddressVo {
 		this.addressline2 = addressline2;
 	}
 	
-	/**
-	 * @return the zipcode
-	 */
-	public String getZipcode() {
-		return zipcode;
-	}
-	/**
-	 * @param zipcode the zipcode to set
-	 */
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
-	}
+	
 	/**
 	 * @return the contactNumber
 	 */
@@ -73,30 +60,7 @@ public class AddressVo {
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
 	}
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		return city;
-	}
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(String city) {
-		this.city = city;
-	}
-	/**
-	 * @return the state
-	 */
-	public String getState() {
-		return state;
-	}
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(String state) {
-		this.state = state;
-	}
+	
 	
 	/**
 	 * @return the firstName
@@ -133,5 +97,17 @@ public class AddressVo {
 	 */
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+	/**
+	 * @return the area
+	 */
+	public AreaVo getArea() {
+		return area;
+	}
+	/**
+	 * @param area the area to set
+	 */
+	public void setArea(AreaVo area) {
+		this.area = area;
 	}
 }

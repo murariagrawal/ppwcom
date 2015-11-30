@@ -5,7 +5,7 @@
 			<form role="form" id="deliveryForm" class="formoid-solid-blue"  action="verifyOrder"
 				method="post">
 				<input type="hidden" name="deliveryOrderId" id="deliveryOrderId">
-				<input type="hidden" name="deliveryAddressId" id="deliveryAddressId">
+				
 				<div class="element-phone">
 					<label class="title"></label>
 					<div class="item-cont">
@@ -15,6 +15,7 @@
 					</div>
 				</div>
 				<fieldset id="addressFields" class="hide">
+				<input type="hidden" name="deliveryAddressId" id="deliveryAddressId">
 				<div class="element-separator">
 					<hr>
 					<h3 class="section-break-title">Address Details</h3>
@@ -77,7 +78,7 @@
 			<div class="modal-body" style="padding: 10px 10px;">
 				<form role="form">
 					<div class="form-group" id="addressDiv"></div>
-					<button id="enterNewAddress" class="btn btn-success btn-block">Enter
+					<button id="enterNewAddress" class="btn btn-success">Enter
 						a new address</button>
 				</form>
 			</div>

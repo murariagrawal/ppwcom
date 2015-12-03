@@ -20,11 +20,9 @@
 <script
 	src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-formhelpers.js"></script>
-<script src="js/formoid-solid-blue.js"></script>
 <link rel="stylesheet" href="css/bootstrap-formhelpers.min.css">
 <link rel="stylesheet" href="css/state.css">
 <link rel="stylesheet" href="css/cart.css">
-<link rel="stylesheet" href="css/formoid-solid-blue.css">
 <script
 	src="js/mwf-core-ajax.js"></script>
 <script src="js/steps.js"></script>
@@ -57,7 +55,7 @@
 	<div class="container">
 		<div class="row">
 			<section>
-			<div class="wizard">
+			<div class="wizard carousel slide" data-interval=false data-ride="carousel">
 				<div class="wizard-inner">
 					<div class="connecting-line"></div>
 					<ul class="nav nav-tabs" role="tablist">
@@ -92,9 +90,9 @@
 				</div>
 
 
-				<div class="tab-content">
+				<div class="tab-content carousel-inner">
 					<div id="errorDiv" class="alert alert-danger hide"></div>
-					<div class="tab-pane active" role="tabpanel" id="step1">
+					<div class="tab-pane item active" role="tabpanel" id="step1">
 						<form role="form" id="homeForm" action="deliveryDetails" method="post">
 							<div class="form-group">
 								<table id="cart" class="table table-hover table-condensed">
@@ -212,27 +210,27 @@
 						</form>
 						<ul class="list-inline pull-right">
 
-							<li><button type="button" id="continueToDelivery" class="btn btn-success next-step">Continue to DeliveryDetails</button></li>
+							<li><button type="button" id="continueToDelivery" class="btn btn-success next-slide next-step">Continue to DeliveryDetails</button></li>
 						</ul>
 
 					</div>
-					<div class="tab-pane" role="tabpanel" id="step2">
+					<div class="tab-pane item" role="tabpanel" id="step2">
 						<div id="deliveryDetailsDiv"></div>
 						<ul class="list-inline pull-right">
-							<li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-							<li><button type="button" id="continueToVerify" class="btn btn-primary next-step">Continue to Verify</button></li>
+							<li><button type="button" class="btn btn-default prev-slide prev-step">Previous</button></li>
+							<li><button type="button" id="continueToVerify" class="btn btn-primary next-slide next-step">Continue to Verify</button></li>
 						</ul>
 					</div>
-					<div class="tab-pane" role="tabpanel" id="step3">
+					<div class="tab-pane item" role="tabpanel" id="step3">
 						<div id="verifyDetailsDiv"></div>
 						<ul class="list-inline pull-right">
-							<li><button type="button" class="btn btn-default prev-step">Previous</button></li>							
+							<li><button type="button" class="btn btn-default prev-slide prev-step">Previous</button></li>							
 							<li><button type="button"
-									class="btn btn-primary btn-info-full next-step">Save
+									class="btn btn-primary btn-info-full next-slide next-step">Save
 									and continue</button></li>
 						</ul>
 					</div>
-					<div class="tab-pane" role="tabpanel" id="complete">
+					<div class="tab-pane item" role="tabpanel" id="complete">
 						<h3>Complete</h3>
 						<p>You have successfully ordered Your Pani Puri.</p>
 						<div id="confirmDetailsDiv"></div>
@@ -247,6 +245,30 @@
 			</section>
 		</div>
 	</div>
-		
+		<div class="modal fade" tabindex="-1" id="myModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header" style="padding: 10px 10px;">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4>
+					<span class="glyphicon glyphicon-lock"></span> Select Delivery
+					Address
+				</h4>
+			</div>
+			<div class="modal-body" style="padding: 10px 10px;">
+				<form role="form">
+					<div class="form-group" id="addressDiv"></div>
+					
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="enterNewAddress"  class="btn btn-success">Enter
+						a new address</button>
+						</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>

@@ -30,7 +30,7 @@ public class OrderVerificationController {
 		String address1 = request.getParameter("addr1");
 		String address2 = request.getParameter("addr2");
 		String landmark = request.getParameter("landmarkAddr");
-		String areaId = request.getParameter("areaId");
+		String areaId = request.getParameter("searchId");
 		String phoneNumber = request.getParameter("phoneNumber");
 		String orderId = request.getParameter("deliveryOrderId");
 		String customerId = request.getParameter("customerId");

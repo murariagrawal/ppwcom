@@ -20,7 +20,7 @@ public class Address {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name="address_id")
 	private long addressId;
-	@ManyToOne(fetch= FetchType.LAZY)
+	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name="customer_id")
 	private Customer customer;
 	@Column(name="name")
@@ -35,7 +35,7 @@ public class Address {
 	private BigDecimal latitude;
 	@Column(name="longitude")
 	private BigDecimal longitude;
-	@ManyToOne
+	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name = "delivery_area_id")
 	private DeliveryArea area;
 	/**

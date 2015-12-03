@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.panipuri.service.admin.AdminService;
-import com.test.hibernate.DeliveryArea;
+import com.panipuri.vo.AreaSubAreaVo;
 import com.test.hibernate.DeliverySlot;
+import com.test.hibernate.MasterDeliveryArea;
 @Controller
 public class AreaController {
 	@Autowired
@@ -55,23 +56,36 @@ public class AreaController {
 		String masterAreaId = request.getParameter("masterArea");
 		String servingStr = request.getParameter("serving");
 		Long zipcodeLong = null;
+		Long masterAreaIdLong = null;
 		if(null != zipcode && !zipcode.equals("")) {
 			zipcodeLong = new Long(zipcode);
 		}
+		if(null != masterAreaId && !masterAreaId.equals("")) {
+			masterAreaIdLong = new Long(masterAreaId);
+		}
 		boolean serving = false;
-		if(null != servingStr && servingStr.equals("true")) {
+		if(null != servingStr && servingStr.equals("on")) {
 			serving = true;
 		}
-		adminService.addArea(areaName, subAreaName, zipcodeLong, masterAreaId, serving);
+		adminService.addArea(areaName, subAreaName, zipcodeLong, masterAreaIdLong, serving);
 		mv = new ModelAndView("adminHome");
 		return mv;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/fetchAllArea")
+	@RequestMapping(method = RequestMethod.GET, value="/fetchAllArea")
 	public ModelAndView fetchAllArea() {
 		ModelAndView mv = null;
 		
-		List<DeliveryArea> allDeliveryAreas = adminService.fetchAllArea();
+		List<AreaSubAreaVo> allDeliveryAreas = adminService.fetchAllArea();
+		mv = new ModelAndView("adminHome");
+		mv.addObject("deliveryArea", allDeliveryAreas);
+		return mv;
+	}
+	@RequestMapping(method = RequestMethod.GET, value="/fetchAllMasterArea")
+	public ModelAndView fetchAllMasterArea() {
+		ModelAndView mv = null;
+		
+		List<MasterDeliveryArea> allDeliveryAreas = adminService.fetchAllMasterArea();
 		mv = new ModelAndView("adminHome");
 		mv.addObject("masterDeliveryArea", allDeliveryAreas);
 		return mv;

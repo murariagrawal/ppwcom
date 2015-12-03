@@ -2,87 +2,102 @@
 	<div class="panel panel-primary">
 		<div class="panel-heading">Delivery Details</div>
 		<div class="panel-body">
-			<form role="form" id="deliveryForm" class="formoid-solid-blue"  action="verifyOrder"
+			<form role="form" class = "form-horizontal" id="deliveryForm" action="verifyOrder"
 				method="post">
 				<input type="hidden" name="deliveryOrderId" id="deliveryOrderId">
-				
-				<div class="element-phone">
-					<label class="title"></label>
-					<div class="item-cont">
-						<input class="large" type="tel"
-							pattern="[+]?[\.\s\-\(\)\*\#0-9]{3,}" maxlength="10" name="phoneNumber"
-							id="phoneNumber" placeholder="Phone Number" value="" /><span class="icon-place"></span>
-					</div>
-				</div>
-				<fieldset id="addressFields" class="hide">
-				<input type="hidden" name="deliveryAddressId" id="deliveryAddressId">
-				<div class="element-separator">
-					<hr>
-					<h3 class="section-break-title">Address Details</h3>
-				</div>
-				
-				<div class="element-name">
-					<span class="nameFirst"><input
-						placeholder="Name First" type="text" size="8" name="name[first]" id="firstNameAddr"/><span
-						class="icon-place"></span></span><span class="nameLast"><input
-						placeholder="Name Last" type="text" size="14" name="name[last]" id="lastNameAddr"/><span
-						class="icon-place"></span></span>
-				</div>
-				<div class="element-address">
-					
-					<span class="addr1">
-						<input placeholder="Address Line 1" type="text" name="addr1"  id="addr1"/>
-						<span class="icon-place"></span>
-					</span>
-					<span class="addr2">
-						<input placeholder="Address Line 2" type="text" name="addr2"  id="addr2" />
-						<span class="icon-place"></span>
-					</span>
-					<span class="addr2">
-						<input placeholder="LandMark" type="text" name="landmarkAddr"  id="landmarkAddr" />
-						<span class="icon-place"></span>
-					</span>					
-					<span class="zip">
-						<input placeholder="Zip Code" type="text" maxlength="15" name="zipcodeAddr" id="zipcodeAddr" />
-						<span class="icon-place"></span>
-					</span>					
-				</div>
-				<div class="element-select">					
-					<div class="item-cont">
-						<div class="large">
-							<span><select id="selectDeliverySlot" name="selectDeliverySlot">
-									<option value="">Select Delivery Slot</option>									
-							</select><i></i><span class="icon-place"></span></span>
+					<div class="form-group">				
+						<div class="row customrow">
+						 	<div class="col-xs-12 col-md-8">	
+								<input class="form-control" type="number" maxlength="10" name="phoneNumber"
+										id="phoneNumber" placeholder="Phone Number" value="" /><span class="icon-place"></span>							
+							</div>
 						</div>
 					</div>
-				</div>
-				 </fieldset>				
+					<div id="addressDivElements" class="hide">
+						<input type="hidden" name="deliveryAddressId" id="deliveryAddressId">
+						<input type="hidden" name="searchId" id="searchId">
+						<div class="row customrow">						 
+							<div class="col-xs-12" >
+								<div class="list-inline">									
+									<h3>Address Details</h3>
+								</div>
+							</div>
+						</div>						
+						<fieldset id="addressFields">
+							<div class="form-group">
+								<div class="row customrow">						 
+									<div class="col-xs-12 col-md-6" >
+										<div class="row customrow">
+									        <input type="text" class="form-control" id="areaAddr" name="areaAddr" placeholder="Search Area/Zipcode" />										    
+										</div>
+										<div class="row customrow">										    
+										    <div id="areaMenu" class = "list-group"></div>								  			
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-6" >
+										<div class="row customrow">
+									        <input type="text" class="form-control" id="subAreaAddr" name="subAreaAddr" placeholder="Search Sub Area" />										  				    
+										</div>	 
+								
+										<div class="row customrow">
+											<div id="subAreaMenu" class="list-group"></div>								  			
+								 		</div>
+								 	</div>
+							 	</div>
+							 </div>
+							 <div class="form-group">
+							 	<div class="row customrow">						 
+									<div class="col-xs-12 col-md-6" >
+										<input placeholder="Name First" class="form-control" type="text" size="8" name="name[first]" id="firstNameAddr"/>
+										<span class="icon-place"></span>
+									</div>
+									<div class="col-xs-12 col-md-6" >
+										<input placeholder="Name Last" type="text" class="form-control" size="14" name="name[last]" id="lastNameAddr"/>
+										<span class="icon-place"></span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row customrow">
+									<div class="col-xs-12 col-md-6" >										
+										<input placeholder="Address Line 1" class="form-control" type="text" name="addr1"  id="addr1"/>
+										<span class="icon-place"></span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row customrow">
+									<div class="col-xs-12 col-md-6" >								
+										<input placeholder="Address Line 2" class="form-control" type="text" name="addr2"  id="addr2" />
+										<span class="icon-place"></span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row customrow">
+									<div class="col-xs-12 col-md-6" >									
+										<input placeholder="LandMark" type="text" class="form-control" name="landmarkAddr"  id="landmarkAddr" />
+										<span class="icon-place"></span>
+									</div>	
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row customrow">					
+									<div class="col-xs-12 col-md-6">								
+										<span>
+											<select id="selectDeliverySlot" class="form-control" name="selectDeliverySlot">
+												<option value="">Select Delivery Slot</option>									
+											</select>
+											<span class="icon-place"></span>
+										</span>
+									</div>
+								</div>
+							</div>						
+					 	</fieldset>	
+					 	<fieldset id="addressFieldsExisting" >
+						</fieldset>	
+				 	</div>	
 			</form>
-
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="myModal" role="dialog">
-	<div class="modal-dialog">
-
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header" style="padding: 10px 10px;">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>
-					<span class="glyphicon glyphicon-lock"></span> Select Delivery
-					Address
-				</h4>
-			</div>
-			<div class="modal-body" style="padding: 10px 10px;">
-				<form role="form">
-					<div class="form-group" id="addressDiv"></div>
-					<button id="enterNewAddress" class="btn btn-success">Enter
-						a new address</button>
-				</form>
-			</div>
-			<div class="modal-footer"></div>
 		</div>
 	</div>
 </div>

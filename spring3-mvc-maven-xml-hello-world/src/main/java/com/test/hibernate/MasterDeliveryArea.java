@@ -5,12 +5,9 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,20 +20,13 @@ public class MasterDeliveryArea {
 	private long deliveryAreaId;
 	@Column(name="areaName")
 	private String areaName;
-	@Column(name="subAreaName", unique=true)
-	private String subAreaName;
 	@Column
 	private String city;
 	@Column
 	private String state;
-	@OneToMany(fetch = FetchType.EAGER,targetEntity=DeliverySlot.class,cascade= CascadeType.ALL,mappedBy="deliveryArea")
+	@OneToMany(targetEntity=DeliverySlot.class,cascade= CascadeType.ALL,mappedBy="deliveryArea")
 	private List<DeliverySlot> deliverySlots;
-	@OneToMany(fetch = FetchType.EAGER,targetEntity=DeliveryArea.class,cascade= CascadeType.ALL,mappedBy="masterArea")
-	private List<DeliveryArea> deliveryAreas;
 	
-	@ManyToOne
-	@JoinColumn(name="crew_id")
-	private Crew crew;
 	/**
 	 * @return the deliveryAreaId
 	 */
@@ -99,17 +89,6 @@ public class MasterDeliveryArea {
 		this.state = state;
 	}
 	
-	/**
-	 * @return the subAreaName
-	 */
-	public String getSubAreaName() {
-		return subAreaName;
-	}
-	/**
-	 * @param subAreaName the subAreaName to set
-	 */
-	public void setSubAreaName(String subAreaName) {
-		this.subAreaName = subAreaName;
-	}
+	
 	
 }

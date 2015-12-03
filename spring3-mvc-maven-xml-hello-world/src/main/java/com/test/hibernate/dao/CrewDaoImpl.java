@@ -20,7 +20,7 @@ public class CrewDaoImpl {
         this.sessionFactory = sf;
     }
 	
-	public void addCrew(String crewName, String contactNumber, String address, long salary, List<AreaVo> areaVoList) {
+	public void addCrew(String crewName, String contactNumber, String address, long salary, AreaVo areaVo) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		Crew crew = new Crew();
@@ -28,15 +28,12 @@ public class CrewDaoImpl {
 		crew.setAddress(crewName);
 		crew.setName(crewName);
 		crew.setSalary(salary);
-		List<Long> areaIds = new ArrayList<Long>();
-		if(null != areaVoList) {
-			for(AreaVo areaVo:areaVoList) {
-				areaIds.add(areaVo.getDeliveryAreaId());
-			}
+		if(areaVo != null) {
+			MasterDeliveryArea masterDeliveryArea = (MasterDeliveryArea)session.get(MasterDeliveryArea.class, areaVo.getDeliveryAreaId());
+			crew.setArea(masterDeliveryArea);
 		}
-		List<MasterDeliveryArea> masterDeliveryArea = (List<MasterDeliveryArea>)session.
-				createCriteria(MasterDeliveryArea.class).add(Restrictions.in("deliveryAreaId", areaIds)).list();
-		crew.setArea(masterDeliveryArea);
+		
+		
 		session.save(crew);
 		session.getTransaction().commit();
 		session.close();
@@ -65,16 +62,14 @@ public class CrewDaoImpl {
 				areaVo =null;
 				crewVo = new CrewVo();
 				List<AreaVo> areaVoList = new ArrayList<AreaVo>();
-				List<MasterDeliveryArea> areaList = crew.getArea();
-				if(null != areaList) {
-					for(MasterDeliveryArea area:areaList) {
-						areaVo = new AreaVo();
-						areaVo.setAreaName(area.getAreaName());
-						areaVo.setSubAreaName(area.getSubAreaName());
-						
-						areaVo.setDeliveryAreaId(area.getDeliveryAreaId());
-						areaVoList.add(areaVo);
-					}
+				MasterDeliveryArea area = crew.getArea();
+				if(null != area) {
+					areaVo = new AreaVo();
+					areaVo.setAreaName(area.getAreaName());
+					
+					areaVo.setDeliveryAreaId(area.getDeliveryAreaId());
+					areaVoList.add(areaVo);
+					
 					crewVo.setArea(areaVoList);
 				}
 				crewVo.setAddress(crew.getAddress());

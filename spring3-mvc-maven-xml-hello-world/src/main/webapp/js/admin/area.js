@@ -52,7 +52,7 @@ $(document).ready(function () {
 	
 	var submitAddMasterArea = function() {
 		
-		ajax.postForm("addMasterArea?F=J", $("#addAreaForm")).done(function(data) {			
+		ajax.postForm("addMasterArea?F=J", $("#addMasterAreaForm")).done(function(data) {			
 							
 	    }).fail(function(data) {        	
 	    	alert("failed");
@@ -73,4 +73,4 @@ $(document).ready(function () {
     $(document).on('click', '.dropdown-menu a', selectFormGroup);
     $("#submitAddArea").on('click', submitAddArea);
     $("#submitAddMasterArea").on('click', submitAddMasterArea);
-}
+});

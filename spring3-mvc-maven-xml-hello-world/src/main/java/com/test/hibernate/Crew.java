@@ -9,7 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,8 +32,9 @@ public class Crew {
 	private long salary;
 	@Column(name="is_available")
 	private boolean isAvailable;
-	@OneToMany(cascade= CascadeType.ALL, mappedBy="crew")
-	private List<MasterDeliveryArea> area;
+	@ManyToOne
+	@JoinColumn(name="delivery_area_id")
+	private MasterDeliveryArea area;
 	@Column
 	private BigDecimal currentLatitude;
 	@Column
@@ -111,13 +115,13 @@ public class Crew {
 	/**
 	 * @return the area
 	 */
-	public List<MasterDeliveryArea> getArea() {
+	public MasterDeliveryArea getArea() {
 		return area;
 	}
 	/**
 	 * @param area the area to set
 	 */
-	public void setArea(List<MasterDeliveryArea> area) {
+	public void setArea(MasterDeliveryArea area) {
 		this.area = area;
 	}
 	/**

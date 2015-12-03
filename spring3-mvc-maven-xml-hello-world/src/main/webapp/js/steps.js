@@ -1,5 +1,6 @@
 $(document).ready(function () {
     //Initialize tooltips
+	var dataSet= [];
     $('.nav-tabs > li a[title]').tooltip();
     
     //Wizard
@@ -58,12 +59,12 @@ $(document).ready(function () {
     	 $("#totalAmount2").html(totalPrice.toFixed(2));
     }
     function hideOverlay() {
-    	$('body').removeClass("overlay");
-		$('container').removeClass("overlay");
+    	//$('body').removeClass("overlay");
+		//$('container').removeClass("overlay");
     }
     function showOverlay() {
-    	$('body').addClass("overlay");
-    	$('container').addClass("overlay");
+    	//$('body').addClass("overlay");
+    	//$('container').addClass("overlay");
     }
     $("#continueToDelivery").on("click", function(e) {
     	showOverlay();
@@ -115,20 +116,7 @@ $(document).ready(function () {
 	    		getAddressDetails();
 	    	}
 	    });
-	    $("#zipcodeAddr").on('input', function(){			
-			var length = $(this).val().length;			
-	    	if(length && length == 6) {	    		
-	    		getDeliverySlots();
-	    	}
-		});
-	    $("#zipcodeAddr").on('blur', function(){			
-			var length = $(this).val().length;			
-	    	if(length && length < 6) {
-	    		 $("#zipcodeAddr").parent().addClass('error-field');
-	    		 errorMessage = "Please enter a valid zipcode of 6 digits.";
-	    		 showErrorMessage(errorMessage);
-	    	}
-		});
+	    
 	    
     }
     function createIndividualItemRow(item) {
@@ -177,7 +165,7 @@ $(document).ready(function () {
     	var addressInfo = "<div class='row'><div class='col-lg-12'>Delivery Address :</div></div><div class='row'><div class='col-lg-12'><label>"+
 							data.addressLine+"</label></div></div><div class='row'><div class='col-lg-12'>"+
 							data.landmarkReturn+" "+
-							data.zipcodeReturn+"</div></div>";    	
+							data.area+"</div></div>";    	
     	var slotInfo = "<div class='row'><div class='col-lg-12'>Delivery Slot Selected :<br><label>"+data.deliverySlot+"</label></div></div>";
     	var deliveryDetailsInfo = addressInfo+slotInfo;
     	return deliveryDetailsInfo;
@@ -188,8 +176,7 @@ $(document).ready(function () {
 	  lastNameVal1 = $("#lastNameAddr").val(),
 	  addressVal1 = $("#addr1").val(),
 	  addressVal2 = $("#addr2").val(),
-	  landMarkVal = $("#landmarkAddr").val(),
-	  zipcodeVal = $("#zipcodeAddr").val(),
+	  landMarkVal = $("#landmarkAddr").val(),	  
 	  deliverySlotVal = $("#selectDeliverySlot").val(),
 	  noOfFieldsInError = 0,
 	  errorMessage = "";
@@ -213,16 +200,7 @@ $(document).ready(function () {
 		  $("#addr1").parent().addClass('error-field');
 		  noOfFieldsInError = noOfFieldsInError+1;
 		  errorMessage = "Address Line 1 is a required field.";
-	  }
-	  if(zipcodeVal === null || zipcodeVal == "") {
-		  $("#zipcodeAddr").parent().addClass('error-field');
-		  noOfFieldsInError = noOfFieldsInError+1;
-		  errorMessage = "Zipcode is a required field.";
-	  } else if(zipcodeVal.length <6) {
-		  $("#zipcodeAddr").parent().addClass('error-field');
-		  noOfFieldsInError = noOfFieldsInError+1;
-		  errorMessage = "Please enter a valid zipcode of 6 digits.";
-	  }
+	  }	  
 	  if(deliverySlotVal === null || deliverySlotVal == "") {
 		  $("#selectDeliverySlot").parent().addClass('error-field');
 		  noOfFieldsInError = noOfFieldsInError+1;
@@ -333,8 +311,19 @@ $(document).ready(function () {
 						ulIndividual = ulIndividual+liIndividual;
 					}	
 					liIndividual = "<li>";					
-					if(d.zipcode) {						
-						liIndividual = liIndividual+"<span id='zipcode'>"+d.zipcode+"</span>";
+					if(d.area) {
+						liIndividual = liIndividual+"<span id='area'>";
+						if(d.area.subAreaName) {
+							liIndividual = liIndividual+d.area.subAreaName+", ";
+						}
+						if(d.area.areaName) {
+							liIndividual = liIndividual+d.area.areaName+ ", ";
+						} 
+						if(d.area.zipcode) {
+							liIndividual = liIndividual+d.area.zipcode;
+						}
+						
+						liIndividual = liIndividual+"</span>"
 					}						
 					liIndividual = liIndividual+ "</li>";		
 					ulIndividual = ulIndividual+liIndividual;					
@@ -352,10 +341,13 @@ $(document).ready(function () {
 				var addressDiv = $("#addressDiv");	
 				addressDiv.empty();
 				addressDiv.append(ulFinal);
+				$('#myModal').modal('handleUpdate')
 				bindAddressModelEvents();
 			} else {
 				clearDeliveryForm();
-				
+				$("#addressFieldsExisting").removeClass("show").addClass("hide");
+				$('#addressFields').removeClass("hide").addClass("show");
+				fetchDeliveryArea();
 			}			
         }).fail(function(data) {
         	
@@ -364,6 +356,7 @@ $(document).ready(function () {
 	}
 	function clearDeliveryForm() {
 		$("#addressFields input[type=text]").val("");
+		$("#addressFieldsExisting").empty();
 		$('.error-field').removeClass('error-field');
 		$('#selectDeliverySlot')
 	    .find('option')
@@ -371,26 +364,191 @@ $(document).ready(function () {
 	    .end()
 	    .append('<option value="">Select Delivery Slot</option>')
 	    .val('');
-		$('#addressFields').removeClass("hide").addClass("show");
+		
+		$('#addressDivElements').removeClass("hide").addClass("show");
 		hideErrorMessage();
+	}
+	function fetchDeliveryArea() {
+		if(dataSet.length === 0) {
+			ajax.getJSON("fetchAllArea").done(function(data) {
+				
+	    		$.each(data.deliveryArea, function (i, area) {
+	    			areaObj = {};
+	    			subAreaArray=area.subArea;
+	    			zipcodeArray=[];
+					var areaName =area.areaName;
+					$.each(area.subArea, function (i, subArea) {
+						if($.inArray(subArea.zipcode, zipcodeArray)=== -1 ) {
+							zipcodeArray.push(subArea.zipcode);
+						}
+					});
+				    areaObj ["area"] = areaName;
+				    areaObj ["subarea"] = subAreaArray;
+	    			areaObj ["zipcodes"] = zipcodeArray;
+	    			dataSet.push(areaObj);
+											
+				});
+	    		bindAreaEvents();
+	    	});
+		}
+		
+	}
+	function showDefaultSubArea() {
+		var inputValueArea = $("input:text[name=areaAddr]").val();
+		$("#subAreaMenu").empty();
+		var regexArea = new RegExp( '(' + inputValueArea + ')', 'gi' );
+		var haveSubMenu = false;
+		$.each(dataSet,function(i, data) {
+			var dataStrArea= data.area;
+			if(dataStrArea.search(regexArea) !==-1) {
+				
+				$.each(data.subarea,function(j, subarea) {
+					haveSubMenu = true;
+					var dataStrSubArea= subarea.areaName;
+					var li = "<div class='list-group-item individualSubArea' data-name='"+dataStrSubArea+"' id='"+subarea.deliveryAreaId+"'>"+dataStrSubArea+"</div>";
+					$("#subAreaMenu").append(li);
+				});					
+				return false;					
+			}
+		});
+		if(!haveSubMenu) {
+			$("#subAreaMenu").removeClass("show");
+			$("#subAreaMenu").addClass("hide");
+		} else {
+			$("#subAreaMenu").removeClass("hide");
+			$("#subAreaMenu").addClass("show");
+		}
+	}
+	function bindAreaEvents() {
+		$("#areaAddr").on("focusin" , function() {			
+			if($("input:text[name=areaAddr]").val() && $("input:text[name=areaAddr]").val().length >0) {
+				if($("input:text[name=areaAddr]").val() !== $("input:text[name=areaAddr]").attr("data-name")) {
+					$("#areaMenu").removeClass("hide");
+					$("#areaMenu").addClass("show");
+				}
+			}	
+		});		
+		/*$("#areaAddr").on("blur" , function() {				
+					$("#areaMenu").removeClass("show");
+					$("#areaMenu").addClass("hide");
+		});*/
+		$("#areaAddr").on("input", function() {
+			if($(this).val() && $(this).val().length >0) {
+				var inputValue = $(this).val();
+				$("#areaMenu").empty();
+				var regex = new RegExp( '(' + inputValue + ')', 'gi' );
+					$.each(dataSet,function(i, data) {
+						var dataStr= data.area;
+						var li ="";
+						if(dataStr.search(regex) !==-1) {
+							li = "<div class='list-group-item individualArea' data-name='"+dataStr+"'>"+dataStr.replace(regex, '<strong>'+inputValue+'</strong>')+"</div>";
+							$("#areaMenu").append(li);
+						} else {
+							$.each(data.zipcodes, function(j, zipcode) {
+								if(zipcode.search(regex) !==-1) {
+									li = "<div class='list-group-item individualArea' data-name='"+dataStr+"'>"+dataStr+"</div>";
+									$("#areaMenu").append(li);
+									return false;
+								}
+							});
+						}
+						
+					});
+				
+				$("#areaMenu").removeClass("hide");
+				$("#areaMenu").addClass("show");
+			} else {
+				$("#areaMenu").removeClass("show");
+				$("#areaMenu").addClass("hide");
+			}
+		});
+		$("#subAreaAddr").on("focusin" , function() {			
+			if($("input:text[name=subAreaAddr]").val() && $("input:text[name=subAreaAddr]").val().length >0) {
+					if($("input:text[name=subAreaAddr]").val() !== $("input:text[name=subAreaAddr]").attr("data-name")) {
+						$("#subAreaMenu").removeClass("hide");
+						$("#subAreaMenu").addClass("show");	
+					}
+								
+			} else {
+				showDefaultSubArea();
+					
+			}	
+		});		
+		/*$("#subAreaAddr").on("blur" , function() {				
+					$("#subAreaMenu").removeClass("show");
+					$("#subAreaMenu").addClass("hide");
+		});*/
+		$("#subAreaAddr").on("input", function() {
+			if($(this).val() && $(this).val().length >0) {
+				var inputValueArea = $("input:text[name=areaAddr]").val();
+				var inputValue = $(this).val();
+				$("#subAreaMenu").empty();
+				var regexArea = new RegExp( '(' + inputValueArea + ')', 'gi' );
+				var regex = new RegExp( '(' + inputValue + ')', 'gi' );
+					$.each(dataSet,function(i, data) {
+						var dataStrArea= data.area;
+						if(dataStrArea.search(regexArea) !==-1) {
+							$.each(data.subarea,function(j, subarea) {
+								var dataStrSubArea= subarea.areaName;
+								var li ="";								
+								if(dataStrSubArea.search(regex) !==-1) {
+									li = "<div class='list-group-item individualSubArea' data-name='"+dataStrSubArea+"' id='"+subarea.deliveryAreaId+"'>"+dataStrSubArea.replace(regex, '<strong>'+inputValue+'</strong>')+"</div>";
+									$("#subAreaMenu").append(li);
+								}
+							});
+							return false;
+						}
+					});
+				
+				$("#subAreaMenu").removeClass("hide");
+				$("#subAreaMenu").addClass("show");
+			} else {
+				showDefaultSubArea();
+			}
+		});
+		$("#addressDivElements").on("click", ".individualSubArea", function() {
+			$("#subAreaAddr").val($(this).attr('data-name'));
+			$("#subAreaAddr").attr("data-name",$(this).attr('data-name'));
+			$("#searchId").val($(this).attr('id'));
+			$("#subAreaMenu").removeClass("show");
+			$("#subAreaMenu").addClass("hide");
+			getDeliverySlots();
+		});
+		$("#addressDivElements").on("click", ".individualArea", function() {
+			if($("#areaAddr").val() !== $(this).attr('data-name')) {
+				$("#areaAddr").attr("data-name",$(this).attr('data-name'));
+				$("#areaAddr").val($(this).attr('data-name'));
+				$("#subAreaAddr").val('');
+			}
+			
+			$("#areaMenu").removeClass("show");
+			$("#areaMenu").addClass("hide");
+		});
+		
 	}
     function bindAddressModelEvents() {
     	$( ".well-sm" ).on('click', function(e) {
     		clearDeliveryForm();
-    		$("#firstNameAddr").val($(this).find("#firstName").html());
+    		$("#addressFieldsExisting").removeClass("hide").addClass("show");
+			$('#addressFields').removeClass("show").addClass("hide");
+			$("#addressFieldsExisting").html($(this).html());
+    		/*$("#firstNameAddr").val($(this).find("#firstName").html());
 			$("#lastNameAddr").val($(this).find("#lastName").html());
 			$("#addr1").val($(this).find("#addressLine1").html());
 			$("#addr2").val($(this).find("#addressLine2").html());
 			$("#landmarkAddr").val($(this).find("#landmark").html());
-			$("#zipcodeAddr").val($(this).find("#zipcode").html());
+			$("#areaAddr").val($(this).find("#area").html());*/
 			$("#deliveryAddressId").val($(this).find("#addressId").val());			
 			$('#myModal').modal('hide');
-			$('#addressFields').removeClass("hide").addClass("show");
+			//$('#addressFields').removeClass("hide").addClass("show");
 			getDeliverySlots();
 		});
     	$("#enterNewAddress").on('click', function(e) {  
     		$('#myModal').modal('hide');
     		clearDeliveryForm();
+    		$("#addressFieldsExisting").removeClass("show").addClass("hide");
+			$('#addressFields').removeClass("hide").addClass("show");
+			fetchDeliveryArea();
     	});
 		
     }

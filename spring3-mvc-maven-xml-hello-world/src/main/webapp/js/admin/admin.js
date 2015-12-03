@@ -77,6 +77,19 @@ $(document).ready(function () {
 	    });
 	    $('#area , #areaMenu').on("click",function() {
 	    	loadFragment("html/admin/areaManagement.html");
+	    	ajax.getJSON("fetchAllMasterArea").done(function(data) {
+	    		$.each(data.masterDeliveryArea, function (i, area) {					
+						var areaName =area.areaName;
+					    var areaId = area.deliveryAreaId;
+					    var option = new Option(areaName, areaId);
+					    
+						/// jquerify the DOM object 'o' so we can use the html method
+						$(option).html(areaName);
+						$("#masterArea").append(option);
+											
+				});
+	    		
+	    	});
 	    });
     }
 	function loadFragment(fagmentName) {

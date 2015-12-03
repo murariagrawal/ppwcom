@@ -94,7 +94,7 @@ public class OrderInitiationController {
 	@RequestMapping(method = RequestMethod.POST, value="/fetchDeliverySlots")
 	public ModelAndView fetchDeliverySlots(HttpServletRequest request) {
 		System.out.println("in fetch deliverydetails controller");
-		String areaId = request.getParameter("areaId");
+		String areaId = request.getParameter("searchId");
 		ModelAndView mv = null;
 		List<DeliverySlotVo> deliverySlots = null;
 		String errorMessage = "";

@@ -25,6 +25,7 @@
     <script src="js/admin/admin.js"></script>
     <script
 	src="js/mwf-core-ajax.js"></script>
+	
 </head>
 
 <body>

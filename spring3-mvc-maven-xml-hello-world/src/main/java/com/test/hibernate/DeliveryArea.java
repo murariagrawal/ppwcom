@@ -2,6 +2,7 @@ package com.test.hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,19 +14,19 @@ import javax.persistence.Table;
 @Table(name="delivery_area")
 public class DeliveryArea {
 	@Id
-	@Column(name="delivery_area_id")
+	@Column(name="area_id")
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long deliveryAreaId;
 	@Column(name="areaName")
 	private String areaName;
 	@Column(name="subAreaName", unique=true)
 	private String subAreaName;
-	@ManyToOne
+	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name="zipcode")
 	private AvailableZipcodes zipcodes;
 	@Column
 	private boolean serving;
-	@ManyToOne
+	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name="delivery_area_id")
 	private MasterDeliveryArea masterArea;
 	/**

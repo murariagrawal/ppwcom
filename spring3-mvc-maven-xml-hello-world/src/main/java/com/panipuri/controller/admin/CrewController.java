@@ -1,8 +1,6 @@
 package com.panipuri.controller.admin;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,23 +24,18 @@ public class CrewController {
 			@RequestParam(value = "contactNumber") String contactNumber) {
 		String address = request.getParameter("crewAddress");
 		String salary = request.getParameter("salary");
-		String[] areaIds;
-		areaIds = request.getParameterValues("areaId");
-		List<AreaVo> areaVoList = new ArrayList<AreaVo>();	
-		if (areaIds != null) {
-            
-            AreaVo area = null;
-            for(int j = 0; j < areaIds.length; j++) {
-				 area = new AreaVo();
-        		 area.setDeliveryAreaId(new Long(areaIds[j]));	
-        		 areaVoList.add(area);
-			}
+		
+		String areaId = request.getParameter("areaId");
+		AreaVo area = null;	
+		if (areaId != null) {            
+			 area = new AreaVo();
+    		 area.setDeliveryAreaId(new Long(areaId));
 		}
 		Long salaryLong= new Long(0);
 		if(salary != null && salary.equals("")) {
 			salaryLong =  new Long(salary);
 		}
-		crewService.addCrew(crewName, contactNumber, address, salaryLong, areaVoList);
+		crewService.addCrew(crewName, contactNumber, address, salaryLong, area);
 		return null;
 	}
 	@RequestMapping(method = RequestMethod.POST, value="/updateCrew")

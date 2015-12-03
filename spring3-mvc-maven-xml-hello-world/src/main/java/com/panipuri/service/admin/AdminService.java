@@ -5,12 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.panipuri.vo.AreaSubAreaVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.StatusVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.AvailableTopping;
-import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
+import com.test.hibernate.MasterDeliveryArea;
 import com.test.hibernate.dao.AvailableDeliveryAreaDaoImpl;
 import com.test.hibernate.dao.ItemDaoImpl;
 
@@ -52,11 +53,14 @@ public class AdminService {
 		availableDeliveryAreaDaoImpl.addMasterDeliveryArea(areaName, areaCity , areaState, deliverySlots);
 		return new StatusVo();
 	}
-	public StatusVo addArea(String areaName, String subAreaName, Long zipcode, String masterAreaId, boolean serving) {
+	public StatusVo addArea(String areaName, String subAreaName, Long zipcode, Long masterAreaId, boolean serving) {
 		availableDeliveryAreaDaoImpl.addDeliveryArea(areaName, subAreaName , zipcode, masterAreaId, serving);
 		return new StatusVo();
 	}
-	public List<DeliveryArea> fetchAllArea(){
+	public List<AreaSubAreaVo> fetchAllArea(){
 		return availableDeliveryAreaDaoImpl.getAllAvailableDeliveryArea();
+	}
+	public List<MasterDeliveryArea> fetchAllMasterArea(){
+		return availableDeliveryAreaDaoImpl.getAllMasterAvailableDeliveryArea();
 	}
 }

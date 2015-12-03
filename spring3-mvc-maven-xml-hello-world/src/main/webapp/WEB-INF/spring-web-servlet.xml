@@ -32,6 +32,8 @@
 				<value>com.test.hibernate.OrderToppings</value>
 				<value>com.test.hibernate.DailyDeliverySlots</value>
 				<value>com.test.hibernate.MasterDeliveryArea</value>
+				<value>com.test.hibernate.DeliveryArea</value>
+				<value>com.test.hibernate.DiscountInformation</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

@@ -1,5 +1,7 @@
 package com.test.hibernate;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +17,8 @@ public class AvailableZipcodes {
 	@Id
 	@Column(name="zipcode")
 	private long zipcode;
-	@OneToMany(fetch = FetchType.EAGER,targetEntity=DeliverySlot.class,cascade= CascadeType.ALL,mappedBy="deliveryArea")	
-	private DeliveryArea area; 
+	@OneToMany(fetch = FetchType.EAGER,targetEntity=DeliveryArea.class,cascade= CascadeType.ALL,mappedBy="zipcodes")	
+	private List<DeliveryArea> area; 
 	
 	/**
 	 * @return the zipcode
@@ -33,13 +35,13 @@ public class AvailableZipcodes {
 	/**
 	 * @return the area
 	 */
-	public DeliveryArea getArea() {
+	public List<DeliveryArea> getArea() {
 		return area;
 	}
 	/**
 	 * @param area the area to set
 	 */
-	public void setArea(DeliveryArea area) {
+	public void setArea(List<DeliveryArea> area) {
 		this.area = area;
 	}
 	

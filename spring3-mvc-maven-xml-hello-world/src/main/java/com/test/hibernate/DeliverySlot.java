@@ -16,15 +16,16 @@ public class DeliverySlot {
 	@Column(name="delivery_slot_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long deliverySlotId;
-	@Column(nullable=false)
+	@Column
 	private String startTime;
-	@Column(nullable=false)
+	@Column
 	private String endTime;
-	@Column(nullable=false)
+	@Column
 	private int slotQuantity;
-	@Column(nullable=false)
+	@Column
 	private int todaySlotQuantity;
-	@ManyToOne
+	
+	@ManyToOne(targetEntity=MasterDeliveryArea.class)
 	@JoinColumn(name="delivery_area_id")
 	private MasterDeliveryArea deliveryArea; 
 	/**

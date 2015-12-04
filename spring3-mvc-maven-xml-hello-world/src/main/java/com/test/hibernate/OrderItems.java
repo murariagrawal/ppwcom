@@ -22,7 +22,8 @@ public class OrderItems {
 	@JoinColumn(name="order_id")
 	
 	private Order order;
-	@OneToOne(targetEntity=Item.class)
+	@ManyToOne
+	@JoinColumn(name="item_id")
 	private Item item;
 	@Column
 	private int quantity;

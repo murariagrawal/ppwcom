@@ -55,6 +55,7 @@ public class AreaController {
 		String zipcode = request.getParameter("areaZipcode");
 		String masterAreaId = request.getParameter("masterArea");
 		String servingStr = request.getParameter("serving");
+		String servingPartyStr = request.getParameter("servingParty");
 		Long zipcodeLong = null;
 		Long masterAreaIdLong = null;
 		if(null != zipcode && !zipcode.equals("")) {
@@ -67,7 +68,11 @@ public class AreaController {
 		if(null != servingStr && servingStr.equals("on")) {
 			serving = true;
 		}
-		adminService.addArea(areaName, subAreaName, zipcodeLong, masterAreaIdLong, serving);
+		boolean servingParty = false;
+		if(null != servingPartyStr && servingPartyStr.equals("on")) {
+			servingParty = true;
+		}
+		adminService.addArea(areaName, subAreaName, zipcodeLong, masterAreaIdLong, serving, servingParty);
 		mv = new ModelAndView("adminHome");
 		return mv;
 	}

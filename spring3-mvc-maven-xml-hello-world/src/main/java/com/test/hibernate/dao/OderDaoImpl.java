@@ -22,6 +22,7 @@ import com.test.hibernate.Item;
 import com.test.hibernate.Order;
 import com.test.hibernate.OrderItems;
 import com.test.hibernate.OrderToppings;
+import com.test.hibernate.PartyItemQuantity;
 import com.test.hibernate.PaymentMode;
 import com.test.hibernate.Status;
 
@@ -190,7 +191,19 @@ public class OderDaoImpl  {
 				ItemVo itemVo = new ItemVo();
 				itemVo.setItemId(item.getItemId());
 				itemVo.setItemName(item.getItemName());
-				itemVo.setItemPrice(item.getItemPrice());
+				itemVo.setPartyItem(item.isPartyItem());
+				if(item.isPartyItem()) {					
+					List<PartyItemQuantity> quantityList = item.getPartyQuantitylist();
+					for(PartyItemQuantity partyQuantity :quantityList) {
+						if(partyQuantity.getQuantity() == orderItem.getQuantity()) {
+							itemVo.setItemPrice(partyQuantity.getPrice());
+						}
+					}
+					
+				} else {
+					itemVo.setItemPrice(item.getItemPrice());
+					
+				}
 				itemVo.setItemQuantity(orderItem.getQuantity());
 				itemDetailList =  new ArrayList<String>();
 				itemDetailString = item.getItemDetails();

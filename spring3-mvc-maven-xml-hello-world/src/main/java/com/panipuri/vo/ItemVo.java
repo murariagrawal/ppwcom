@@ -3,12 +3,16 @@ package com.panipuri.vo;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.test.hibernate.PartyItemQuantity;
+
 public class ItemVo {
 	private long itemId;
 	private String itemName;
 	private List<String> itemDetails;
 	private BigDecimal itemPrice;
 	private int itemQuantity;
+	private boolean partyItem;
+	private List<PartyItemQuantity> partyQuantitylist;
 	/**
 	 * @return the itemId
 	 */
@@ -68,6 +72,30 @@ public class ItemVo {
 	 */
 	public void setItemQuantity(int itemQuantity) {
 		this.itemQuantity = itemQuantity;
+	}
+	/**
+	 * @return the partyItem
+	 */
+	public boolean isPartyItem() {
+		return partyItem;
+	}
+	/**
+	 * @param partyItem the partyItem to set
+	 */
+	public void setPartyItem(boolean partyItem) {
+		this.partyItem = partyItem;
+	}
+	/**
+	 * @return the partyQuantitylist
+	 */
+	public List<PartyItemQuantity> getPartyQuantitylist() {
+		return partyQuantitylist;
+	}
+	/**
+	 * @param partyQuantitylist the partyQuantitylist to set
+	 */
+	public void setPartyQuantitylist(List<PartyItemQuantity> partyQuantitylist) {
+		this.partyQuantitylist = partyQuantitylist;
 	}
 	
 }

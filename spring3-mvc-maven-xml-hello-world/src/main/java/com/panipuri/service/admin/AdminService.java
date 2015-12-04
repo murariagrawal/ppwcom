@@ -53,8 +53,8 @@ public class AdminService {
 		availableDeliveryAreaDaoImpl.addMasterDeliveryArea(areaName, areaCity , areaState, deliverySlots);
 		return new StatusVo();
 	}
-	public StatusVo addArea(String areaName, String subAreaName, Long zipcode, Long masterAreaId, boolean serving) {
-		availableDeliveryAreaDaoImpl.addDeliveryArea(areaName, subAreaName , zipcode, masterAreaId, serving);
+	public StatusVo addArea(String areaName, String subAreaName, Long zipcode, Long masterAreaId, boolean serving, boolean servingParty) {
+		availableDeliveryAreaDaoImpl.addDeliveryArea(areaName, subAreaName , zipcode, masterAreaId, serving, servingParty);
 		return new StatusVo();
 	}
 	public List<AreaSubAreaVo> fetchAllArea(){

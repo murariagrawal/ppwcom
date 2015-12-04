@@ -30,6 +30,8 @@ public class MasterDataFetchService {
 				itemVo.setItemId(item.getItemId());
 				itemVo.setItemName(item.getItemName());
 				itemVo.setItemPrice(item.getItemPrice());
+				itemVo.setPartyItem(item.isPartyItem());
+				itemVo.setPartyQuantitylist(item.getPartyQuantitylist());
 				itemDetailList =  new ArrayList<String>();
 				itemDetailString = item.getItemDetails();
 				String[] itemDetailArray = itemDetailString.split(",");

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.panipuri.service.MasterDataFetchService;
 import com.panipuri.service.admin.AdminService;
 import com.panipuri.vo.ItemVo;
+import com.test.hibernate.PartyItemQuantity;
 @Controller
 public class ItemController {
 	@Autowired
@@ -22,12 +25,31 @@ public class ItemController {
 	private MasterDataFetchService masterService;
 	@RequestMapping(method = RequestMethod.POST, value="/addItem")
 	public ModelAndView addItem(@RequestParam(value = "itemName") String itemName, 
-			@RequestParam(value = "itemPrice") String itemPrice,
-			@RequestParam(value = "itemDetails") String itemDetails) {
+			@RequestParam(value = "itemDetails") String itemDetails,  HttpServletRequest request) {
 		ModelAndView mv = null;
 		ItemVo item = new ItemVo();
 		item.setItemName(itemName);
-		item.setItemPrice(new BigDecimal(itemPrice));
+		String partyItem = request.getParameter("partyItem");
+		if(null!= partyItem && partyItem.equals("on")) {
+			item.setPartyItem(true);
+			String[] quantity;
+			quantity = request.getParameterValues("partyItemQuantity");
+			String[] price;
+			price = request.getParameterValues("partyItemPrice");
+			List<PartyItemQuantity> partyItemQuantityList = new ArrayList<PartyItemQuantity>();
+			PartyItemQuantity partyItemQuantity = null;
+			for(int j = 0; j < quantity.length; j++) {
+				partyItemQuantity = new PartyItemQuantity();
+				partyItemQuantity.setPrice(new BigDecimal(price[j]));
+				partyItemQuantity.setQuantity(new Integer(quantity[j]));
+				partyItemQuantityList.add(partyItemQuantity);
+			}
+			item.setPartyQuantitylist(partyItemQuantityList);
+		} else {
+			String itemPrice = request.getParameter("itemPrice");
+			item.setItemPrice(new BigDecimal(itemPrice));
+		}
+		
 		List<String> itemDetailsList = new ArrayList<String>();
 		itemDetailsList.add(itemDetails);
 		item.setItemDetails(itemDetailsList);

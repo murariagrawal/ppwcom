@@ -65,7 +65,7 @@ public class Order {
 	private Timestamp orderedTime;
 	@OneToOne(targetEntity=DeliverySlot.class)
 	private DeliverySlot deliverySlotSelected;
-	@OneToMany( targetEntity=OrderItems.class, mappedBy="order", cascade=CascadeType.ALL)
+	@OneToMany(targetEntity=OrderItems.class, mappedBy="order", cascade=CascadeType.ALL)
 	private List<OrderItems> orderItems;
 	@OneToMany(targetEntity=OrderToppings.class, mappedBy="order", cascade=CascadeType.ALL)
 	private List<OrderToppings> orderToppings;

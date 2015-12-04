@@ -75,7 +75,7 @@ public class AvailableDeliveryAreaDaoImpl {
 		session.getTransaction().commit();
 		session.close();
 	}
-	public void addDeliveryArea(String areaName,String subAreaName, Long zipcodes,Long masterAreaId, boolean serving) {
+	public void addDeliveryArea(String areaName,String subAreaName, Long zipcodes,Long masterAreaId, boolean serving, boolean servingParty) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		MasterDeliveryArea area = null;
@@ -101,6 +101,7 @@ public class AvailableDeliveryAreaDaoImpl {
 			
 		deliveryArea.setServing(serving);
 		deliveryArea.setMasterArea(area);
+		deliveryArea.setServingParty(servingParty);
 		session.save(deliveryArea);
 		areaZipcodes.setArea(areaList);	
 		session.getTransaction().commit();
@@ -118,9 +119,7 @@ public class AvailableDeliveryAreaDaoImpl {
 			
 		}
 		return null;
-	}
-	@SuppressWarnings("unchecked")
-	public DeliveryArea getDeliveryArea(Long areaId) {
+	}public DeliveryArea getDeliveryArea(Long areaId) {
 		Session session = this.sessionFactory.openSession();
 
 		DeliveryArea deliveryArea = (DeliveryArea) session
@@ -159,6 +158,8 @@ public class AvailableDeliveryAreaDaoImpl {
 							subAreaVo.setAreaName(area.getSubAreaName());
 							subAreaVo.setDeliveryAreaId(area.getDeliveryAreaId());
 							subAreaVo.setZipcode(String.valueOf(area.getZipcodes().getZipcode()));
+							subAreaVo.setServingIndividual(area.isServing());
+							subAreaVo.setServingParty(area.isServingParty());
 							areaVo.getSubArea().add(subAreaVo);
 							areaVo.getZipcodes().add(String.valueOf(area.getZipcodes().getZipcode()));
 							areaExist =true;
@@ -175,6 +176,8 @@ public class AvailableDeliveryAreaDaoImpl {
 					subAreaVo.setAreaName(area.getSubAreaName());
 					subAreaVo.setDeliveryAreaId(area.getDeliveryAreaId());
 					subAreaVo.setZipcode(String.valueOf(area.getZipcodes().getZipcode()));
+					subAreaVo.setServingIndividual(area.isServing());
+					subAreaVo.setServingParty(area.isServingParty());					
 					subAreaList.add(subAreaVo);
 					areaSubAreaVo.setSubArea(subAreaList);
 					zipcodes = new HashSet<String>();

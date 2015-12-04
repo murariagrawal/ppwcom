@@ -10,6 +10,7 @@ import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.AvailableTopping;
 import com.test.hibernate.Item;
+import com.test.hibernate.PartyItemQuantity;
 
 public class ItemDaoImpl {
 	private SessionFactory sessionFactory;
@@ -24,6 +25,13 @@ public class ItemDaoImpl {
 		item.setItemDetails(itemVo.getItemDetails().get(0));
 		item.setItemName(itemVo.getItemName());
 		item.setItemPrice(itemVo.getItemPrice());
+		if(itemVo.isPartyItem()) {
+			item.setPartyItem(itemVo.isPartyItem());
+			item.setPartyQuantitylist(itemVo.getPartyQuantitylist());
+			for(PartyItemQuantity partyItem:itemVo.getPartyQuantitylist()) {
+				partyItem.setItem(item);
+			}
+		}
 		session.save(item);
 		session.getTransaction().commit();
 		session.close();

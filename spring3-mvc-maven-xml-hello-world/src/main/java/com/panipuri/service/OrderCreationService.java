@@ -58,19 +58,25 @@ public class OrderCreationService {
 				ItemVo item= null;
 				while(itemIterator.hasNext()) {
 					item = itemIterator.next();
-					orderDetailsString.append(item.getItemQuantity());
-					orderDetailsString.append(" pack of ");
-					orderDetailsString.append(item.getItemName());
-					if(itemIterator.hasNext()) {
-						orderDetailsString.append(",");
+					if(item.isPartyItem()) {
+						orderDetailsString.append("You have booked a stall at your home for Quantity of");						
+						orderDetailsString.append(item.getItemQuantity());
+						
 					} else {
-						if(null != orderDetails.getToppingList() || !orderDetails.getToppingList().isEmpty()) {
-							Iterator<ToppingVo> toppingsIterator = orderDetails.getToppingList().iterator();
-							if(itemIterator.hasNext()) {
-								orderDetailsString.append(",");
-							}
+						orderDetailsString.append(item.getItemQuantity());
+						orderDetailsString.append(" pack of ");
+						orderDetailsString.append(item.getItemName());
+						if(itemIterator.hasNext()) {
+							orderDetailsString.append(",");
 						} else {
-							orderDetailsString.append(".");
+							if(null != orderDetails.getToppingList() || !orderDetails.getToppingList().isEmpty()) {
+								Iterator<ToppingVo> toppingsIterator = orderDetails.getToppingList().iterator();
+								if(toppingsIterator.hasNext()) {
+									orderDetailsString.append(",");
+								}
+							} else {
+								orderDetailsString.append(".");
+							}
 						}
 					}
 				}

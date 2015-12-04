@@ -10,6 +10,8 @@ public class AreaVo {
 	private String state;
 	private List<DeliverySlotVo> deliverySlots;
 	private String zipcode;
+	private boolean servingIndividual;
+	private boolean servingParty;
 	/**
 	 * @return the deliveryAreaId
 	 */
@@ -93,6 +95,30 @@ public class AreaVo {
 	 */
 	public void setSubAreaName(String subAreaName) {
 		this.subAreaName = subAreaName;
+	}
+	/**
+	 * @return the servingIndividual
+	 */
+	public boolean isServingIndividual() {
+		return servingIndividual;
+	}
+	/**
+	 * @param servingIndividual the servingIndividual to set
+	 */
+	public void setServingIndividual(boolean servingIndividual) {
+		this.servingIndividual = servingIndividual;
+	}
+	/**
+	 * @return the servingParty
+	 */
+	public boolean isServingParty() {
+		return servingParty;
+	}
+	/**
+	 * @param servingParty the servingParty to set
+	 */
+	public void setServingParty(boolean servingParty) {
+		this.servingParty = servingParty;
 	}
 	
 }

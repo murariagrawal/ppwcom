@@ -26,6 +26,8 @@ public class DeliveryArea {
 	private AvailableZipcodes zipcodes;
 	@Column
 	private boolean serving;
+	@Column
+	private boolean servingParty;
 	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name="delivery_area_id")
 	private MasterDeliveryArea masterArea;
@@ -100,6 +102,18 @@ public class DeliveryArea {
 	 */
 	public void setMasterArea(MasterDeliveryArea masterArea) {
 		this.masterArea = masterArea;
+	}
+	/**
+	 * @return the servingParty
+	 */
+	public boolean isServingParty() {
+		return servingParty;
+	}
+	/**
+	 * @param servingParty the servingParty to set
+	 */
+	public void setServingParty(boolean servingParty) {
+		this.servingParty = servingParty;
 	}
 	
 }

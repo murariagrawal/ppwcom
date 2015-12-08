@@ -72,7 +72,18 @@ public class OrderVerificationController {
 			landmarkReturn =landmarkReturn+addressVo.getLandmark();
 		}		
 		AreaVo areaDetails = addressVo.getArea();
-		String zipcodeReturn = areaDetails.getAreaName() + " " + areaDetails.getZipcode();
+		String zipcodeReturn = "";
+		if(null != areaDetails.getSubAreaName()) {
+			zipcodeReturn = zipcodeReturn+areaDetails.getSubAreaName()+" ";
+		}
+		if(null != areaDetails.getAreaName()) {
+			zipcodeReturn = zipcodeReturn+areaDetails.getAreaName()+" ";
+		}
+		
+		if(null != areaDetails.getZipcode()) {
+			zipcodeReturn = zipcodeReturn+areaDetails.getZipcode();
+		}
+		
 			mv = new ModelAndView("");
 			mv.addObject("orderId", orderDetails.getOrderId());
 			mv.addObject("contactNo", orderDetails.getContactNo());

@@ -1,5 +1,6 @@
 package com.panipuri.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.panipuri.service.MasterDataFetchService;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
+import com.test.hibernate.PartyItemQuantity;
 
 @Controller
 public class LoginController {
@@ -58,10 +60,29 @@ public class LoginController {
 	@RequestMapping(method = RequestMethod.GET, value="/home")
 	public ModelAndView orderOnline() {
 		List<ItemVo> itemList = masterDataFetchService.fetchAllAvailableItem();
+		List<PartyItemQuantity> quantityList = new ArrayList<PartyItemQuantity>();
+		List<ItemVo> individualItemList =new ArrayList<ItemVo>();
+		List<ItemVo> partyItemList =new ArrayList<ItemVo>();
+		if(null != itemList) {
+			for(ItemVo itemVo:itemList) {
+				if(itemVo.isPartyItem()) {
+					if(null != itemVo.getPartyQuantitylist()) {
+						quantityList.addAll(itemVo.getPartyQuantitylist());
+						itemVo.setPartyQuantitylist(null);
+						partyItemList.add(itemVo);
+						
+					}
+				} else {
+					individualItemList.add(itemVo);
+				}
+			}
+		}
 		List<ToppingVo> stuffingList = masterDataFetchService.fetchAllAvailableStuffing();
 		ModelAndView mv = null;		
 		mv = new ModelAndView("homePaniPuri");	
-		mv.addObject("itemList", itemList);
+		mv.addObject("itemList", individualItemList);
+		mv.addObject("partyItemList", partyItemList);
+		mv.addObject("quantityList", quantityList);
 		mv.addObject("stuffingList", stuffingList);
 		mv.addObject("orderId", "");
 		return mv;

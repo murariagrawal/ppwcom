@@ -21,10 +21,12 @@
     <script src="js/jquery.metisMenu.js"></script>
     <!-- Morris Chart Js -->
     <!-- Custom Js -->
+    <script
+	src="js/mwf-core-ajax.js"></script>
     <script src="js/admin/custom-scripts.js"></script>
     <script src="js/admin/admin.js"></script>
     <script
-	src="js/mwf-core-ajax.js"></script>
+	src="js/admin/common.js"></script>
 	
 </head>
 

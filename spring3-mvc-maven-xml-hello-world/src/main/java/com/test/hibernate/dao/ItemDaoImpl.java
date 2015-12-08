@@ -1,8 +1,10 @@
 package com.test.hibernate.dao;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -10,6 +12,7 @@ import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.AvailableTopping;
 import com.test.hibernate.Item;
+import com.test.hibernate.OrderItems;
 import com.test.hibernate.PartyItemQuantity;
 
 public class ItemDaoImpl {
@@ -38,13 +41,14 @@ public class ItemDaoImpl {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Item> getAllAvailableItems() {
+	public List<ItemVo> getAllAvailableItems() {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		List<Item> allAvailableItems = (List<Item>)session.createCriteria(Item.class).list();
+		List<ItemVo> itemVoList = convertItemToItemVo(allAvailableItems);
 		session.getTransaction().commit();
 		session.close();
-		return allAvailableItems;
+		return itemVoList;
 	}
 	
 	public void updateItemDetails(BigDecimal itemPrice, String itemDetails, long itemId) {
@@ -73,6 +77,37 @@ public class ItemDaoImpl {
 		session.getTransaction().commit();
 		session.close();
 		
+	}
+	private List<ItemVo> convertItemToItemVo(List<Item> orderItems) {
+		List<ItemVo> itemVoList = new ArrayList<ItemVo>();
+		if(null != orderItems) {
+			for(Item item: orderItems) {
+				List<String> itemDetailList = null;
+				String itemDetailString = null;			
+				ItemVo itemVo = new ItemVo();
+				itemVo.setItemId(item.getItemId());
+				itemVo.setItemName(item.getItemName());
+				itemVo.setPartyItem(item.isPartyItem());
+				if(item.isPartyItem()) {					
+					Hibernate.initialize(item.getPartyQuantitylist());
+					itemVo.setPartyQuantitylist(item.getPartyQuantitylist());
+										
+				} else {
+					itemVo.setItemPrice(item.getItemPrice());
+					
+				}
+				itemDetailList =  new ArrayList<String>();
+				itemDetailString = item.getItemDetails();
+				String[] itemDetailArray = itemDetailString.split(",");
+				for(String itemDetail:itemDetailArray) {
+					itemDetailList.add(itemDetail);
+				}
+				itemVo.setItemDetails(itemDetailList);
+				itemVoList.add(itemVo);
+			}
+		}
+		
+		return itemVoList;
 	}
 	
 	public void addStuffing(ToppingVo toppingVo) {

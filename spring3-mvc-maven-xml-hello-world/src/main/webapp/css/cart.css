@@ -33,6 +33,9 @@
  	margin-right: 15px;
     margin-left: 0px;
  }
+ .custombuttontd {
+ 	padding: 6px 6px;
+ }
 @media screen and (max-width: 600px) {
     table#cart tbody td .form-control{
 		width:20%;
@@ -51,8 +54,8 @@
 	}
 	
 	table#cart thead { display: none; }
-	table#cart tbody td { display: block; padding: .6rem; min-width:320px;}
-	table#cart tbody tr td:first-child { background: #286090; color: #fff; }
+	table#cart tbody td { display: block; padding: .6rem;}
+	table#cart tbody tr td:first-child { background: #fff; color: #333; }
 	table#cart tbody td:before {
 		content: attr(data-th); font-weight: bold;
 		display: inline-block; width: 8rem;

@@ -20,6 +20,49 @@ $(document).ready(function () {
         nextTab($active);
 
     };
+    $("#individualOrdernav").on("click", function() {
+    	$("select[name*='partyQauntity']" ).each(function(i, partyQuantity) { 
+    		
+    	  	var selectId = $(this).attr("id");
+    	  	$("#"+selectId+" option[selected='selected']").removeAttr('selected');
+    	  	// mark the first option as selected
+    	  	$("#"+selectId+" option:first").attr('selected','selected'); 
+    	  	 var itemId = $(this).attr("data-itemId");
+    	      var subtotalId = "subTotalItem"+ itemId;
+    	  	  var itemPriceId = "itemPrice" +itemId;
+    	  	  var quantityId = "quantity" +itemId; 
+    	  	  $("#"+itemPriceId).html('0.00');
+    	  	  $("#"+quantityId).val('');
+    	  	  $("#"+subtotalId).html('0.00');
+    	  	  calculateTotal();
+    	});
+    });
+    $("#partyOrdernav").on("click", function() {
+    	$('[data-th="Quantity"]').each(function(i, quantity){
+    		var itemId = $(this).attr("data-itemId");
+    		var quantityId = "quantity" +itemId; 
+    		var itemQuantity = $("#"+quantityId).val(0);
+    	});
+    	$('[data-th="QuantityStuffing"]').each(function(i, quantity){
+    		var stuffingId = $(this).attr("data-stuffingId");
+    		var stuffingQuantityId = "quantity" +stuffingId; 
+    		var stuffingQuantity = $("#"+stuffingQuantityId).val(0);
+    	});
+    	
+    });
+    $("select[name*='partyQauntity']" ).change(function() {
+      var str = "";
+      var itemId = $(this).attr("data-itemId");
+      var subtotalId = "subTotalItem"+ itemId;
+  	  var itemPriceId = "itemPrice" +itemId;
+  	  var quantityId = "quantity" +itemId; 
+  	  $("#"+itemPriceId).html($( "select option:selected" ).attr('data-price'));
+  	  $("#"+quantityId).val($( "select option:selected" ).val());
+  	  var price = $("select option:selected").attr('data-price');
+  	  $("#"+subtotalId).html(price);
+  	  calculateTotal();
+     
+    });
     $('[data-th="Quantity"]').on('change',function (e) {
     	
     	var itemId = $(this).attr("data-itemId");
@@ -59,11 +102,11 @@ $(document).ready(function () {
     	 $("#totalAmount2").html(totalPrice.toFixed(2));
     }
     function hideOverlay() {
-    	//$('body').removeClass("overlay");
+    	$('#spinnerModal').modal('hide');
 		//$('container').removeClass("overlay");
     }
     function showOverlay() {
-    	//$('body').addClass("overlay");
+    	$('#spinnerModal').modal();
     	//$('container').addClass("overlay");
     }
     $("#continueToDelivery").on("click", function(e) {
@@ -77,6 +120,9 @@ $(document).ready(function () {
     			 noIfItemsSelected = noIfItemsSelected+1;
     		 }
     	 });
+    	 if($("select[name*='partyQauntity']  option[selected='selected']" ).val() !=='') {
+    		 noIfItemsSelected = noIfItemsSelected+1;
+    	 }
     	 if(noIfItemsSelected>0) {
     		 var deliveryAddressId = $("#deliveryAddressId").val();
     		 if(deliveryAddressId && deliveryAddressId!== ""){    			 
@@ -103,7 +149,8 @@ $(document).ready(function () {
     		 }
     		 
     	 } else {
-    		 showErrorMessage('Please add atleast one Box of Pani puri to continue');    		
+    		 showErrorMessage('Please add atleast one Box of Pani puri to continue');    
+    		 hideOverlay();
     	 }
 		
     
@@ -121,6 +168,7 @@ $(document).ready(function () {
     }
     function createIndividualItemRow(item) {
     	var itemName= item.itemName;
+    	var isPartyItem = item.partyItem;
 		var itemQuantity= item.itemQuantity;
 		var itemPrice= item.itemPrice;
 		
@@ -129,14 +177,23 @@ $(document).ready(function () {
 							'<p><a class="accordion-toggle" data-toggle="collapse"	href="#itemDetails'+itemId+'">'+
 							'<span	class="label label-info">View Details</span></a></p></div></div>';
 		var itemDetailsLabel = "";
+		var itemDetailsDiv= "";
 		$.each(item.itemDetails, function(j, itemdetail ) {
 			itemDetailsLabel = itemDetailsLabel+"<label>"+itemdetail+"</label><br>";
 		});
-		var itemDetailsDiv='<div id="itemDetails'+itemId+'"	class="accordion-body collapse"><div class="accordion-inner">'+
-							'<table class="table table-hover table-condensed">'+	
-							'<tr><td>'+itemDetailsLabel+
-							'</td></tr></table></div></div>';
-		var itemTotalPrice = itemPrice*itemQuantity;
+		if(itemDetailsLabel !== "") {
+			itemDetailsDiv='<div id="itemDetails'+itemId+'"	class="accordion-body collapse"><div class="accordion-inner">'+
+			'<table class="table table-hover table-condensed">'+	
+			'<tr><td>'+itemDetailsLabel+
+			'</td></tr></table></div></div>';
+		}
+		var itemTotalPrice = 0.00;
+		if(isPartyItem) {
+			itemTotalPrice = itemPrice;
+		} else {
+			itemTotalPrice = itemPrice*itemQuantity;
+		}
+		
 		var individualItemRow='<tr> <td>'+itemNameDiv+itemDetailsDiv+'</td><td>'+
 								itemPrice+'</td><td>'+
 								itemQuantity+'</td><td class="text-center subtotal">'+
@@ -164,8 +221,8 @@ $(document).ready(function () {
     	
     	var addressInfo = "<div class='row'><div class='col-lg-12'>Delivery Address :</div></div><div class='row'><div class='col-lg-12'><label>"+
 							data.addressLine+"</label></div></div><div class='row'><div class='col-lg-12'>"+
-							data.landmarkReturn+" "+
-							data.area+"</div></div>";    	
+							data.landmarkReturn+"<div class='row'><div class='col-lg-12'>"+
+							data.zipcodeReturn+"</div></div></div></div>";    	
     	var slotInfo = "<div class='row'><div class='col-lg-12'>Delivery Slot Selected :<br><label>"+data.deliverySlot+"</label></div></div>";
     	var deliveryDetailsInfo = addressInfo+slotInfo;
     	return deliveryDetailsInfo;
@@ -662,7 +719,7 @@ $(document).ready(function () {
     		$("#"+tableId+" > tbody").append(individualToppingRow);
     	});
 		var totalPrice = 0.00;
-		$(".subtotal").each(function() {
+		$("#"+tableId+" .subtotal").each(function() {
 			if ($(this).html() && !isNaN($(this).html())) {
 				totalPrice += parseFloat($(this).html());
 			}

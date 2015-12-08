@@ -179,6 +179,22 @@ $(document).ready(function () {
 				alert("failed");
 			});
 		});
+		
+		$("#partySelectedButton").on("click", function() {
+			$("#addPartyItemQuantity").removeClass("hide");
+			$("#addPartyItemQuantity").addClass('show');
+			$("#addIndividualItemPrice").removeClass("show");
+			$("#addIndividualItemPrice").addClass('hide');
+			$("#partyItem").val("Y");
+		});
+		$("#partyNotSelectedButton").on("click", function() {
+			$("#addPartyItemQuantity").removeClass("show");
+			$("#addPartyItemQuantity").addClass('hide');
+			$("#addIndividualItemPrice").removeClass("hide");
+			$("#addIndividualItemPrice").addClass('show');
+			$("#partyItem").val("N");
+			
+		});
 	}
 	
 });

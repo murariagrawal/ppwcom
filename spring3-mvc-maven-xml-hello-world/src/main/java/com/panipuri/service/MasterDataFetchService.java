@@ -20,29 +20,9 @@ public class MasterDataFetchService {
 	@Autowired
 	private ItemDaoImpl itemDaoImpl;
 	public List<ItemVo> fetchAllAvailableItem() {
-		List<Item> itemsList = itemDaoImpl.getAllAvailableItems();		
-		List<ItemVo> itemList = new ArrayList<ItemVo>();		
-		List<String> itemDetailList = null;
-		String itemDetailString = null;		
-		if(null != itemsList) {
-			for(Item item: itemsList) {
-				ItemVo itemVo = new ItemVo();
-				itemVo.setItemId(item.getItemId());
-				itemVo.setItemName(item.getItemName());
-				itemVo.setItemPrice(item.getItemPrice());
-				itemVo.setPartyItem(item.isPartyItem());
-				itemVo.setPartyQuantitylist(item.getPartyQuantitylist());
-				itemDetailList =  new ArrayList<String>();
-				itemDetailString = item.getItemDetails();
-				String[] itemDetailArray = itemDetailString.split(",");
-				for(String itemDetail:itemDetailArray) {
-					itemDetailList.add(itemDetail);
-				}
-				itemVo.setItemDetails(itemDetailList);
-				itemList.add(itemVo);
-			}
-		}		
-		return itemList;
+		List<ItemVo> itemsList = itemDaoImpl.getAllAvailableItems();		
+		
+		return itemsList;
 	}
 	public List<ToppingVo> fetchAllAvailableStuffing() {
 		

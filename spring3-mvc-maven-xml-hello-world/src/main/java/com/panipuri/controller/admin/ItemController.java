@@ -30,7 +30,7 @@ public class ItemController {
 		ItemVo item = new ItemVo();
 		item.setItemName(itemName);
 		String partyItem = request.getParameter("partyItem");
-		if(null!= partyItem && partyItem.equals("on")) {
+		if(null!= partyItem && partyItem.equals("Y")) {
 			item.setPartyItem(true);
 			String[] quantity;
 			quantity = request.getParameterValues("partyItemQuantity");
@@ -62,8 +62,20 @@ public class ItemController {
 		ModelAndView mv = null;
 		
 		List<ItemVo> itemList = masterService.fetchAllAvailableItem();
+		List<PartyItemQuantity> quantityList = new ArrayList<PartyItemQuantity>();
+		if(null != itemList) {
+			for(ItemVo itemVo:itemList) {
+				if(itemVo.isPartyItem()) {	
+					if(null != itemVo.getPartyQuantitylist()) {
+						quantityList.addAll(itemVo.getPartyQuantitylist());
+						itemVo.setPartyQuantitylist(null);
+					}
+				}
+			}
+		}
 		mv = new ModelAndView("");
 		mv.addObject("itemList",itemList);
+		mv.addObject("quantityList",quantityList);
 		return mv;
 	}
 	@RequestMapping(method = RequestMethod.POST, value="/updateItem")

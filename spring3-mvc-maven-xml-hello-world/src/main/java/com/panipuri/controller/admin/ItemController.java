@@ -2,6 +2,7 @@ package com.panipuri.controller.admin;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.panipuri.service.MasterDataFetchService;
 import com.panipuri.service.admin.AdminService;
 import com.panipuri.vo.ItemVo;
+import com.test.hibernate.ComboItemQuantity;
+import com.test.hibernate.Item;
 import com.test.hibernate.PartyItemQuantity;
 @Controller
 public class ItemController {
@@ -29,8 +32,8 @@ public class ItemController {
 		ModelAndView mv = null;
 		ItemVo item = new ItemVo();
 		item.setItemName(itemName);
-		String partyItem = request.getParameter("partyItem");
-		if(null!= partyItem && partyItem.equals("Y")) {
+		String partyItem = request.getParameter("itemType");
+		if(null!= partyItem && partyItem.equals("P")) {
 			item.setPartyItem(true);
 			String[] quantity;
 			quantity = request.getParameterValues("partyItemQuantity");
@@ -45,10 +48,39 @@ public class ItemController {
 				partyItemQuantityList.add(partyItemQuantity);
 			}
 			item.setPartyQuantitylist(partyItemQuantityList);
-		} else {
+		} else if(null!= partyItem && partyItem.equals("I")) {
 			String itemPrice = request.getParameter("itemPrice");
 			item.setItemPrice(new BigDecimal(itemPrice));
+		} else if(null!= partyItem && partyItem.equals("C")) {
+			item.setComboItem(true);
+			Enumeration<String> paramNames = request.getParameterNames();
+			List<ComboItemQuantity> comboItemQuantityList = new ArrayList<ComboItemQuantity>();
+			 if (paramNames != null) {
+		            String paramName = null;
+		            String itemQuantity = null;
+		            while (paramNames.hasMoreElements()) {
+		                paramName = paramNames.nextElement();
+		                String[] paramValues = paramName.split("~");
+		                if (null != paramValues) {
+		                    if ("itemNameCombo".equalsIgnoreCase(paramValues[0])) {
+		                    	ComboItemQuantity combo = new ComboItemQuantity();
+		                    	Item selectedItem = new Item();	                    
+		                    	selectedItem.setItemId(Long.parseLong(paramValues[1]));
+		                    	itemQuantity = request.getParameter("itemQuantityCombo~"+paramValues[1]);
+		                    	combo.setQuantity(Integer.parseInt(itemQuantity));
+		                    	combo.setItemIds(paramValues[1]);
+		                    	comboItemQuantityList.add(combo);
+		                    }
+		                }
+		            }
+			 }
+			
+			String itemPrice = request.getParameter("itemPriceCombo");
+			
+			item.setComboQuantityList(comboItemQuantityList);
+			item.setItemPrice(new BigDecimal(itemPrice));
 		}
+		
 		
 		List<String> itemDetailsList = new ArrayList<String>();
 		itemDetailsList.add(itemDetails);
@@ -75,7 +107,7 @@ public class ItemController {
 		}
 		mv = new ModelAndView("");
 		mv.addObject("itemList",itemList);
-		mv.addObject("quantityList",quantityList);
+		//mv.addObject("quantityList",quantityList);
 		return mv;
 	}
 	@RequestMapping(method = RequestMethod.POST, value="/updateItem")

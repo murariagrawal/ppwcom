@@ -35,6 +35,7 @@
 				<value>com.test.hibernate.DeliveryArea</value>
 				<value>com.test.hibernate.DiscountInformation</value>
 				<value>com.test.hibernate.PartyItemQuantity</value>
+				<value>com.test.hibernate.ComboItemQuantity</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

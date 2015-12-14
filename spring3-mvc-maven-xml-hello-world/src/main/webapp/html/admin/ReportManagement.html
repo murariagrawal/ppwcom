@@ -33,15 +33,14 @@
                                 <div class="row">
 	                    			<div class="col-lg-12">                 
 			                             <div class="form-group">
-								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Item Type</label>
+								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Is Party Item?</label>
 								    		<div class="col-sm-7 col-md-7">
 								    			<div class="input-group">
 								    				<div class="radioBtn btn-group">
-								    					<a class="btn btn-primary  notActive" id="partySelectedButton">Party</a>
-								    					<a class="btn btn-primary  active" id="individualSelectedButton">Individual</a>
-								    					<a class="btn btn-primary  active" id="comboSelectedButton">Combo</a>
+								    					<a class="btn btn-primary  notActive" id="partySelectedButton">YES</a>
+								    					<a class="btn btn-primary  notActive" id="partyNotSelectedButton">NO</a>
 								    				</div>
-								    				<input type="hidden" name="itemType" id="itemType" class="partyItem">
+								    				<input type="hidden" name="partyItem" id="partyItem" class="partyItem">
 								    			</div>
 								    		</div>
 								    	</div>
@@ -72,8 +71,6 @@
 			                                	<input id="itemPrice" name="itemPrice" type="text" class="form-control">
 			                           		 </div>                                   
 		                                  </div>
-		                                  <div id="addComboItem" class="hide">
-			                                  </div>
 	                                  </div>
                                   </div>
                                   <div class="row">

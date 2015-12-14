@@ -1,5 +1,5 @@
 <script src="js/admin/panel.js"></script>
-<script src="js/admin/area.js"></script>
+<script src="js/admin/crew.js"></script>
  <link rel="stylesheet" href="css/admin/panel.css">
 
 <div class="row">
@@ -7,41 +7,56 @@
             <div class="panel panel-primary">
                 <div class="panel-heading clickable panel-collapsed">
                     <h3 class="panel-title">
-                        Add Item</h3>
+                        Add Crew</h3>
                     <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
                 </div>
                 <div class="panel-body">
 	                 <div class="row">
 	                     <div class="col-lg-12">
-	                        <form role="form" id="addItemForm">
+	                        <form role="form" id="addCrewForm">
 	                         	<div class="row">
 		                    		<div class="col-lg-12">
 			                            <div class="form-group">
-			                                <label>Item Name:</label>
-			                                <input id="itemName" name="itemName" type="text" class="form-control">
+			                                <label>Crew Name:</label>
+			                                <input id="crewName" name="crewName" type="text" class="form-control">
 			                            </div>
 		                            </div>
 	                            </div>
 	                            <div class="row">
 		                    		<div class="col-lg-12">
 			                            <div class="form-group">
-			                                <label>Item Details:</label>
-			                                <input id="itemDetails" name="itemDetails" type="text" class="form-control">
+			                                <label>Crew Phone Number:</label>
+			                                <input id="crewPhone" name="crewPhone" type="text" class="form-control">
+			                            </div>  
+		                            </div>
+	                            </div>
+	                            <div class="row">
+		                    		<div class="col-lg-12">
+			                            <div class="form-group">
+			                                <label>App userid:</label>
+			                                <input id="crewUserId" name="crewUserId" type="text" class="form-control">
+			                            </div>  
+		                            </div>
+	                            </div>
+	                            <div class="row">
+		                    		<div class="col-lg-12">
+			                            <div class="form-group">
+			                                <label>App password:</label>
+			                                <input id="crewPassword" name="crewPassword" type="text" class="form-control">
 			                            </div>  
 		                            </div>
 	                            </div>
                                 <div class="row">
 	                    			<div class="col-lg-12">                 
 			                             <div class="form-group">
-								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Item Type</label>
+								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Is Party Crew?</label>
 								    		<div class="col-sm-7 col-md-7">
 								    			<div class="input-group">
 								    				<div class="radioBtn btn-group">
-								    					<a class="btn btn-primary  notActive" id="partySelectedButton">Party</a>
-								    					<a class="btn btn-primary  active" id="individualSelectedButton">Individual</a>
-								    					<a class="btn btn-primary  active" id="comboSelectedButton">Combo</a>
+								    					<a class="btn btn-primary  notActive" id="partySelectedCrew">YES</a>
+								    					<a class="btn btn-primary  notActive" id="partyNotSelectedCrew">NO</a>
 								    				</div>
-								    				<input type="hidden" name="itemType" id="itemType" class="partyItem">
+								    				<input type="hidden" name="partyCrew" id="partyCrew" class="partyCrew">
 								    			</div>
 								    		</div>
 								    	</div>
@@ -49,36 +64,12 @@
 	                            </div>
 	                            <div class="row">
 	                    			<div class="col-lg-12"> 
-								    	<div id="addPartyItemQuantity" class="hide">
-			                            	<label>Part Item Quantity:</label>
-			                            	
-						                    <div class="form-group multiple-form-group input-group">
-						                   		<div class="col-lg-4"> 
-						                        	<input type="text" name="partyItemQuantity" placeholder="Quantity" class="form-control">
-						                        </div>
-						                        <div class="col-lg-4"> 
-						                        	<input type="text" name="partyItemPrice" placeholder="Price" class="form-control">
-						                        </div>
-						                        <div class="col-lg-4"> 
-							                        <span class="input-group-btn">
-							                            <button type="button" class="btn btn-success btn-add">+</button>
-							                        </span>
-						                        </div>
-						                    </div>
-		                                  </div>
-		                                  <div id="addIndividualItemPrice" class="hide">
-											<div class="form-group">
-			                                	<label>Item Price:</label>
-			                                	<input id="itemPrice" name="itemPrice" type="text" class="form-control">
-			                           		 </div>                                   
-		                                  </div>
-		                                  <div id="addComboItem" class="hide">
-			                                  </div>
+								    	
 	                                  </div>
                                   </div>
                                   <div class="row">
 	                    			<div class="col-lg-12"> 
-                                  		<button type="button" id="submitAddItem" class="btn btn-default">Add Item</button>
+                                  		<button type="button" id="submitAddCrew" class="btn btn-default">Add Crew</button>
                                		</div>
                            		</div>
 	                        </form>
@@ -91,7 +82,7 @@
             <div class="panel panel-success">
                 <div class="panel-heading clickable panel-collapsed">
                     <h3 class="panel-title">
-                        Update Item</h3>
+                        Update Crew</h3>
                     <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
                 </div>
                 <div class="panel-body">

@@ -68,7 +68,7 @@ public class OderDaoImpl  {
 		}
 		order.setOrderItems(orderItems);
 		order.setOrderToppings(orderToppings);
-		order.setStatus(Status.INITIATED);
+		order.setStatus(Status.INITIATED.name());
 		
 		session.save(order);
 		session.getTransaction().commit();
@@ -132,8 +132,8 @@ public class OderDaoImpl  {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
-		orderDetails.setPaymentMode(PaymentMode.COD);
-		orderDetails.setStatus(Status.ACCEPTED);
+		orderDetails.setPaymentMode(PaymentMode.COD.name());
+		orderDetails.setStatus(Status.ACCEPTED.name());
 		int todaySlotQuantity = orderDetails.getDeliverySlotSelected().getTodaySlotQuantity();
 		if(todaySlotQuantity > 0) {
 			todaySlotQuantity = todaySlotQuantity-1;
@@ -172,7 +172,7 @@ public class OderDaoImpl  {
 		session.beginTransaction();
 		Order orderDetails = (Order)session.get(Order.class, new Long(orderId));
 		
-		orderDetails.setStatus(Status.DELIVERED);
+		orderDetails.setStatus(Status.DELIVERED.name());
 		CashInvoice invoice = new CashInvoice();
 		invoice.setOrder(orderDetails);
 		OrderVo orderVo = createOrderVO(orderDetails);
@@ -199,6 +199,10 @@ public class OderDaoImpl  {
 							itemVo.setItemPrice(partyQuantity.getPrice());
 						}
 					}
+					
+				} else if(item.isComboItem()) {					
+					itemVo.setComboQuantityList(item.getComboQuantityList());
+					
 					
 				} else {
 					itemVo.setItemPrice(item.getItemPrice());

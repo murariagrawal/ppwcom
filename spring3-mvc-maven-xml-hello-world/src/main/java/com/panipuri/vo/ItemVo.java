@@ -3,6 +3,7 @@ package com.panipuri.vo;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.test.hibernate.ComboItemQuantity;
 import com.test.hibernate.PartyItemQuantity;
 
 public class ItemVo {
@@ -12,7 +13,9 @@ public class ItemVo {
 	private BigDecimal itemPrice;
 	private int itemQuantity;
 	private boolean partyItem;
+	private boolean comboItem;
 	private List<PartyItemQuantity> partyQuantitylist;
+	private List<ComboItemQuantity> comboQuantityList;
 	/**
 	 * @return the itemId
 	 */
@@ -96,6 +99,30 @@ public class ItemVo {
 	 */
 	public void setPartyQuantitylist(List<PartyItemQuantity> partyQuantitylist) {
 		this.partyQuantitylist = partyQuantitylist;
+	}
+	/**
+	 * @return the comboItem
+	 */
+	public boolean isComboItem() {
+		return comboItem;
+	}
+	/**
+	 * @param comboItem the comboItem to set
+	 */
+	public void setComboItem(boolean comboItem) {
+		this.comboItem = comboItem;
+	}
+	/**
+	 * @return the comboQuantityList
+	 */
+	public List<ComboItemQuantity> getComboQuantityList() {
+		return comboQuantityList;
+	}
+	/**
+	 * @param comboQuantityList the comboQuantityList to set
+	 */
+	public void setComboQuantityList(List<ComboItemQuantity> comboQuantityList) {
+		this.comboQuantityList = comboQuantityList;
 	}
 	
 }

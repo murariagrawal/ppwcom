@@ -1,4 +1,6 @@
 $(document).ready(function () {
+	
+	var itemSet= [];
 	ajax.loadFragment("html/admin/adminmenu.html").done(function(data) {
 		$("#menuWrapper").empty();
 		$("#menuWrapper").append(data);
@@ -33,8 +35,11 @@ $(document).ready(function () {
 	    });
 	    $('#items, #itemsMenu').on("click",function() {
 	    	loadFragment("html/admin/ItemManagement.html");
+	    	
 	    	ajax.getJSON("getAllItems").done(function(data) {
-	    		$.each(data.itemList, function (i, item) {					
+	    		itemSet= data;
+	    		
+	    		$.each(itemSet.itemList, function (i, item) {					
 						var itemText =item.itemName;
 					    var itemValue = item.itemId;
 					    var option = new Option(itemText, itemValue);
@@ -43,9 +48,18 @@ $(document).ready(function () {
 						$(option).html(itemText);
 						$(option).attr("data-price",item.itemPrice);
 						$(option).attr("data-details",item.itemDetails);
+						
+						var comboNameDiv = '<div class="form-group"><label>Item Name:</label><input id="itemNameCombo~'+itemValue+'" value="'+itemText+'" name="itemNameCombo~'+itemValue+'" type="text" class="form-control">'
+						var comboQuantityDiv = '<label>Item Quantity:</label><input id="itemQuantityCombo~'+itemValue+'"  name="itemQuantityCombo~'+itemValue+'" type="text" class="form-control"></div>'
+						
 						$("#selectUpdateItem").append(option);
-						$("#selectDeleteItem").append(option);					
+						$("#selectDeleteItem").append(option);
+						$("#addComboItem").append(comboNameDiv);
+						$("#addComboItem").append(comboQuantityDiv);
+						
 				});
+	    		var comboPriceDiv = '<div class="form-group"><label>Combo Price:</label><input id="itemPriceCombo" name="itemPriceCombo" type="text" class="form-control"></div></div>'
+	    		$("#addComboItem").append(comboPriceDiv);
 	    		bindItemEvents();
 	    		
 	    	});
@@ -69,11 +83,22 @@ $(document).ready(function () {
 	    	});
 	    	
 	    });
-	    $('#stuffing').on("click",function() {
-	    	loadFragment("html/admin/ItemManagement.html");
-	    });
-	    $('#user, #usersMenu').on("click",function() {
-	    	loadFragment("html/admin/ItemManagement.html");
+	   
+	    $('#discount, #usersMenu').on("click",function() {
+	    	loadFragment("html/admin/DiscountManagement.html");
+	    	ajax.getJSON("fetchAllDiscountInfo").done(function(data) {
+	    		$.each(data.masterDeliveryArea, function (i, area) {					
+						var areaName =area.areaName;
+					    var areaId = area.deliveryAreaId;
+					    var option = new Option(areaName, areaId);
+					    
+						/// jquerify the DOM object 'o' so we can use the html method
+						$(option).html(areaName);
+						$("#masterArea").append(option);
+											
+				});
+	    		
+	    	});
 	    });
 	    $('#area , #areaMenu').on("click",function() {
 	    	loadFragment("html/admin/areaManagement.html");
@@ -185,14 +210,28 @@ $(document).ready(function () {
 			$("#addPartyItemQuantity").addClass('show');
 			$("#addIndividualItemPrice").removeClass("show");
 			$("#addIndividualItemPrice").addClass('hide');
-			$("#partyItem").val("Y");
+			$("#addComboItemPrice").removeClass("show");
+			$("#addComboItemPrice").addClass('hide');
+			$("#itemType").val("P");
 		});
-		$("#partyNotSelectedButton").on("click", function() {
+		$("#individualSelectedButton").on("click", function() {
 			$("#addPartyItemQuantity").removeClass("show");
 			$("#addPartyItemQuantity").addClass('hide');
 			$("#addIndividualItemPrice").removeClass("hide");
 			$("#addIndividualItemPrice").addClass('show');
-			$("#partyItem").val("N");
+			$("#addComboItemPrice").removeClass("show");
+			$("#addComboItemPrice").addClass('hide');
+			$("#itemType").val("I");
+			
+		});
+		$("#comboSelectedButton").on("click", function() {
+			$("#addPartyItemQuantity").removeClass("show");
+			$("#addPartyItemQuantity").addClass('hide');
+			$("#addIndividualItemPrice").removeClass("show");
+			$("#addIndividualItemPrice").addClass('hide');
+			$("#addComboItem").removeClass("hide");
+			$("#addComboItem").addClass('show');
+			$("#itemType").val("C");
 			
 		});
 	}

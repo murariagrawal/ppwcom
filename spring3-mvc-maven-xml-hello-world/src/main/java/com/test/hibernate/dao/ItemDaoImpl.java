@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.AvailableTopping;
+import com.test.hibernate.ComboItemQuantity;
 import com.test.hibernate.Item;
 import com.test.hibernate.OrderItems;
 import com.test.hibernate.PartyItemQuantity;
@@ -28,13 +29,25 @@ public class ItemDaoImpl {
 		item.setItemDetails(itemVo.getItemDetails().get(0));
 		item.setItemName(itemVo.getItemName());
 		item.setItemPrice(itemVo.getItemPrice());
+		item.setComboItem(itemVo.isComboItem());
+		item.setPartyItem(itemVo.isPartyItem());
 		if(itemVo.isPartyItem()) {
-			item.setPartyItem(itemVo.isPartyItem());
+			
 			item.setPartyQuantitylist(itemVo.getPartyQuantitylist());
 			for(PartyItemQuantity partyItem:itemVo.getPartyQuantitylist()) {
 				partyItem.setItem(item);
 			}
 		}
+		if(itemVo.isComboItem()) {
+			for(ComboItemQuantity comboItem :itemVo.getComboQuantityList()) {
+				
+				comboItem.setComboItem(item);
+				
+			}
+			
+			item.setComboQuantityList(itemVo.getComboQuantityList());
+		}
+		
 		session.save(item);
 		session.getTransaction().commit();
 		session.close();
@@ -88,6 +101,7 @@ public class ItemDaoImpl {
 				itemVo.setItemId(item.getItemId());
 				itemVo.setItemName(item.getItemName());
 				itemVo.setPartyItem(item.isPartyItem());
+				itemVo.setComboItem(item.isComboItem());
 				if(item.isPartyItem()) {					
 					Hibernate.initialize(item.getPartyQuantitylist());
 					itemVo.setPartyQuantitylist(item.getPartyQuantitylist());

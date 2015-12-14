@@ -1,6 +1,7 @@
 package com.test.hibernate;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,8 +28,13 @@ public class Item {
 	private BigDecimal itemPrice;
 	@Column
 	private boolean partyItem;
+	@Column
+	private boolean comboItem;
 	@OneToMany(targetEntity=PartyItemQuantity.class, mappedBy="item", cascade=CascadeType.ALL)
 	private List<PartyItemQuantity> partyQuantitylist;
+	@OneToMany(targetEntity=ComboItemQuantity.class, mappedBy="comboItem", cascade=CascadeType.ALL)
+	private List<ComboItemQuantity> comboQuantityList = new ArrayList<ComboItemQuantity>();
+	
 	/**
 	 * @return the itemId
 	 */
@@ -100,6 +106,30 @@ public class Item {
 	 */
 	public void setPartyQuantitylist(List<PartyItemQuantity> partyQuantitylist) {
 		this.partyQuantitylist = partyQuantitylist;
+	}
+	/**
+	 * @return the comboItem
+	 */
+	public boolean isComboItem() {
+		return comboItem;
+	}
+	/**
+	 * @param comboItem the comboItem to set
+	 */
+	public void setComboItem(boolean comboItem) {
+		this.comboItem = comboItem;
+	}
+	/**
+	 * @return the comboQuantityList
+	 */
+	public List<ComboItemQuantity> getComboQuantityList() {
+		return comboQuantityList;
+	}
+	/**
+	 * @param comboQuantityList the comboQuantityList to set
+	 */
+	public void setComboQuantityList(List<ComboItemQuantity> comboQuantityList) {
+		this.comboQuantityList = comboQuantityList;
 	}
 	
 

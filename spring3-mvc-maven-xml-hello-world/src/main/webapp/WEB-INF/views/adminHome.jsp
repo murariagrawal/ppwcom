@@ -15,9 +15,9 @@
     <link href="css/admin/custom-styles.css" rel="stylesheet" />
     <!-- Google Fonts-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/vendor/jquery-1.10.2.js"></script>
     <!-- Latest compiled and minified JavaScript -->
-	<script src="js/bootstrap.min.js"></script>	
+	<script src="js/vendor/bootstrap.min.js"></script>	
     <script src="js/jquery.metisMenu.js"></script>
     <!-- Morris Chart Js -->
     <!-- Custom Js -->

@@ -7,7 +7,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading clickable panel-collapsed">
                     <h3 class="panel-title">
-                        Add Item</h3>
+                        Add Coupon</h3>
                     <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
                 </div>
                 <div class="panel-body">
@@ -17,31 +17,30 @@
 	                         	<div class="row">
 		                    		<div class="col-lg-12">
 			                            <div class="form-group">
-			                                <label>Item Name:</label>
-			                                <input id="itemName" name="itemName" type="text" class="form-control">
+			                                <label>Coupon Code:</label>
+			                                <input id="couponCode" name="couponCode" type="text" class="form-control">
 			                            </div>
 		                            </div>
 	                            </div>
 	                            <div class="row">
 		                    		<div class="col-lg-12">
 			                            <div class="form-group">
-			                                <label>Item Details:</label>
-			                                <input id="itemDetails" name="itemDetails" type="text" class="form-control">
+			                                <label>Coupon Description:</label>
+			                                <input id="couponDetails" name="couponDetails" type="text" class="form-control">
 			                            </div>  
 		                            </div>
 	                            </div>
                                 <div class="row">
 	                    			<div class="col-lg-12">                 
 			                             <div class="form-group">
-								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Item Type</label>
+								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Is Party Item?</label>
 								    		<div class="col-sm-7 col-md-7">
 								    			<div class="input-group">
 								    				<div class="radioBtn btn-group">
-								    					<a class="btn btn-primary  notActive" id="partySelectedButton">Party</a>
-								    					<a class="btn btn-primary  active" id="individualSelectedButton">Individual</a>
-								    					<a class="btn btn-primary  active" id="comboSelectedButton">Combo</a>
+								    					<a class="btn btn-primary  notActive" id="partySelectedButton">YES</a>
+								    					<a class="btn btn-primary  notActive" id="partyNotSelectedButton">NO</a>
 								    				</div>
-								    				<input type="hidden" name="itemType" id="itemType" class="partyItem">
+								    				<input type="hidden" name="partyItem" id="partyItem" class="partyItem">
 								    			</div>
 								    		</div>
 								    	</div>
@@ -72,8 +71,6 @@
 			                                	<input id="itemPrice" name="itemPrice" type="text" class="form-control">
 			                           		 </div>                                   
 		                                  </div>
-		                                  <div id="addComboItem" class="hide">
-			                                  </div>
 	                                  </div>
                                   </div>
                                   <div class="row">

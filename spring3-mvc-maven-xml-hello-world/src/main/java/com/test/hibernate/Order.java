@@ -38,7 +38,7 @@ public class Order {
 	 * Payment mode of the order which can be a cash or online payment.
 	 */
 	@Column(name="payment_mode")
-	private PaymentMode paymentMode;
+	private String paymentMode;
 	/**
 	 * In an order the total box quantity would be the sum of all the
 	 * individual item quantity. This is a calculated field. 
@@ -60,7 +60,7 @@ public class Order {
 	@OneToOne(targetEntity=Address.class)
 	private Crew deliveryCrew;
 	@Column
-	private Status status;
+	private String status;
 	@Column(name="ordered_time")
 	private Timestamp orderedTime;
 	@OneToOne(targetEntity=DeliverySlot.class)
@@ -108,13 +108,13 @@ public class Order {
 	/**
 	 * @return the paymentMode
 	 */
-	public PaymentMode getPaymentMode() {
+	public String getPaymentMode() {
 		return paymentMode;
 	}
 	/**
 	 * @param paymentMode the paymentMode to set
 	 */
-	public void setPaymentMode(PaymentMode paymentMode) {
+	public void setPaymentMode(String paymentMode) {
 		this.paymentMode = paymentMode;
 	}
 	/**
@@ -168,13 +168,13 @@ public class Order {
 	/**
 	 * @return the status
 	 */
-	public Status getStatus() {
+	public String getStatus() {
 		return status;
 	}
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(Status status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	/**

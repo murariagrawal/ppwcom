@@ -21,18 +21,14 @@
         var stripped = (response.substring(response.indexOf('%') + 1, response.lastIndexOf('%')));
         return stripped.replace(/\\x([0-9A-Fa-f]{2})/g);
       },
-      // Replace String with Special Characters
-      specialCharacters = function(response) {
-        var modifiedResponse = response.replace(/&reg;/gi, "®");
-        return modifiedResponse;
-      },
+      
       // Filter the response when the AJAX call completed successfully,
       // examine the response for an error condition (typically a business error)
       successFilter = function(result) {
         var deferred = $.Deferred(),
           data;
         try {
-          data = $.parseJSON(specialCharacters(result));
+          data = $.parseJSON(result);
         } catch (err) {          
           var error = buildGlobalError("Error parsing the server response.");
           deferred.rejectWith(error, [error]);

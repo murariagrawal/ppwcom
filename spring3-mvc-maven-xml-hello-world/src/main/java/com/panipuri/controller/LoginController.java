@@ -48,7 +48,7 @@ public class LoginController {
 		mv = new ModelAndView("index");			
 		return mv;
 	}
-	/*@RequestMapping(method = RequestMethod.GET, value="/home")
+	@RequestMapping(method = RequestMethod.GET, value="/home")
 	public ModelAndView homePaniPuri() {
 		
 		ModelAndView mv = null;		
@@ -56,12 +56,13 @@ public class LoginController {
 		
 		mv.addObject("orderId", "");
 		return mv;
-	}*/
-	@RequestMapping(method = RequestMethod.GET, value="/home")
+	}
+	@RequestMapping(method = RequestMethod.GET, value="/orderOnline")
 	public ModelAndView orderOnline() {
 		List<ItemVo> itemList = masterDataFetchService.fetchAllAvailableItem();
 		List<PartyItemQuantity> quantityList = new ArrayList<PartyItemQuantity>();
 		List<ItemVo> individualItemList =new ArrayList<ItemVo>();
+		List<ItemVo> comboItemList =new ArrayList<ItemVo>();
 		List<ItemVo> partyItemList =new ArrayList<ItemVo>();
 		if(null != itemList) {
 			for(ItemVo itemVo:itemList) {
@@ -72,7 +73,9 @@ public class LoginController {
 						partyItemList.add(itemVo);
 						
 					}
-				} else {
+				} else if(itemVo.isComboItem()) { 
+					comboItemList.add(itemVo);
+				} else  {
 					individualItemList.add(itemVo);
 				}
 			}
@@ -81,6 +84,7 @@ public class LoginController {
 		ModelAndView mv = null;		
 		mv = new ModelAndView("homePaniPuri");	
 		mv.addObject("itemList", individualItemList);
+		mv.addObject("comboList", comboItemList);
 		mv.addObject("partyItemList", partyItemList);
 		mv.addObject("quantityList", quantityList);
 		mv.addObject("stuffingList", stuffingList);

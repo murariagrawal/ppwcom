@@ -89,8 +89,7 @@ public class OrderPaymentController {
 			mv.addObject("addressLine", addressLine);
 			mv.addObject("landmarkReturn", landmarkReturn);
 			mv.addObject("zipcodeReturn", zipcodeReturn);
-			mv.addObject("itemList", orderDetails.getItemList());
-			mv.addObject("toppingList", orderDetails.getToppingList());																																	
+																																			
 		} else {
 			mv.addObject("errormessage", errorMessageString);
 		}

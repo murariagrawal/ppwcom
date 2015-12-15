@@ -21,7 +21,7 @@ public class DiscountInformation {
 	@Column
 	private Date endDate;
 	@Column
-	private DiscountOn discountCategory;
+	private String discountCategory;
 	@Column
 	private String discountCondition;
 	@Column
@@ -94,13 +94,13 @@ public class DiscountInformation {
 	/**
 	 * @return the discountCategory
 	 */
-	public DiscountOn getDiscountCategory() {
+	public String getDiscountCategory() {
 		return discountCategory;
 	}
 	/**
 	 * @param discountCategory the discountCategory to set
 	 */
-	public void setDiscountCategory(DiscountOn discountCategory) {
+	public void setDiscountCategory(String discountCategory) {
 		this.discountCategory = discountCategory;
 	}
 	/**

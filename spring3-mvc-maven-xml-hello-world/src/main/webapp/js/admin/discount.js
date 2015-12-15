@@ -11,7 +11,7 @@ $(document).ready(function () {
 	        .html('–');
 	
 	    $formGroupClone.find('input').val('');
-	    $formGroupClone.find('.concept').text('Select Slot');
+	    $formGroupClone.find('.concept').text('Select Condition');
 	    $formGroupClone.insertAfter($formGroup);
 	
 	    var $lastFormGroupLast = $multipleFormGroup.find('.form-group:last');
@@ -59,7 +59,7 @@ $(document).ready(function () {
 	    });
 		
 	}
-	var submitAddArea = function() {
+	var submitAddDiscount = function() {
 		
 		ajax.postForm("addArea?F=J", $("#addAreaForm")).done(function(data) {			
 							
@@ -68,9 +68,9 @@ $(document).ready(function () {
 	    });
 		
 	}
-	$("#addAreaDeliverySlots").on('click', '.btn-add', addFormGroup);
-    $("#addAreaDeliverySlots").on('click', '.btn-remove', removeFormGroup);
-    $("#addAreaDeliverySlots").on('click', '.dropdown-menu a', selectFormGroup);
-    $("#submitAddArea").on('click', submitAddArea);
-    $("#submitAddMasterArea").on('click', submitAddMasterArea);
+	$("#addDiscountCondition").on('click', '.btn-add', addFormGroup);
+    $("#addDiscountCondition").on('click', '.btn-remove', removeFormGroup);
+    $("#addDiscountCondition").on('click', '.dropdown-menu a', selectFormGroup);
+    $("#submitAddDiscount").on('click', submitAddDiscount);
+    $("#deleteDiscount").on('click', submitAddMasterArea);
 });

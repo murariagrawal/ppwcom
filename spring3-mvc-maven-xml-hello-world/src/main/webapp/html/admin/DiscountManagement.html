@@ -1,152 +1,196 @@
 <script src="js/admin/panel.js"></script>
 <script src="js/admin/area.js"></script>
- <link rel="stylesheet" href="css/admin/panel.css">
+<link rel="stylesheet" href="css/admin/panel.css">
 
 <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Add Coupon</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-	                 <div class="row">
-	                     <div class="col-lg-12">
-	                        <form role="form" id="addItemForm">
-	                         	<div class="row">
-		                    		<div class="col-lg-12">
-			                            <div class="form-group">
-			                                <label>Coupon Code:</label>
-			                                <input id="couponCode" name="couponCode" type="text" class="form-control">
-			                            </div>
-		                            </div>
-	                            </div>
-	                            <div class="row">
-		                    		<div class="col-lg-12">
-			                            <div class="form-group">
-			                                <label>Coupon Description:</label>
-			                                <input id="couponDetails" name="couponDetails" type="text" class="form-control">
-			                            </div>  
-		                            </div>
-	                            </div>
-                                <div class="row">
-	                    			<div class="col-lg-12">                 
-			                             <div class="form-group">
-								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Is Party Item?</label>
-								    		<div class="col-sm-7 col-md-7">
-								    			<div class="input-group">
-								    				<div class="radioBtn btn-group">
-								    					<a class="btn btn-primary  notActive" id="partySelectedButton">YES</a>
-								    					<a class="btn btn-primary  notActive" id="partyNotSelectedButton">NO</a>
-								    				</div>
-								    				<input type="hidden" name="partyItem" id="partyItem" class="partyItem">
-								    			</div>
-								    		</div>
-								    	</div>
-								     </div>
-	                            </div>
-	                            <div class="row">
-	                    			<div class="col-lg-12"> 
-								    	<div id="addPartyItemQuantity" class="hide">
-			                            	<label>Part Item Quantity:</label>
-			                            	
-						                    <div class="form-group multiple-form-group input-group">
-						                   		<div class="col-lg-4"> 
-						                        	<input type="text" name="partyItemQuantity" placeholder="Quantity" class="form-control">
-						                        </div>
-						                        <div class="col-lg-4"> 
-						                        	<input type="text" name="partyItemPrice" placeholder="Price" class="form-control">
-						                        </div>
-						                        <div class="col-lg-4"> 
-							                        <span class="input-group-btn">
-							                            <button type="button" class="btn btn-success btn-add">+</button>
-							                        </span>
-						                        </div>
-						                    </div>
-		                                  </div>
-		                                  <div id="addIndividualItemPrice" class="hide">
-											<div class="form-group">
-			                                	<label>Item Price:</label>
-			                                	<input id="itemPrice" name="itemPrice" type="text" class="form-control">
-			                           		 </div>                                   
-		                                  </div>
-	                                  </div>
-                                  </div>
-                                  <div class="row">
-	                    			<div class="col-lg-12"> 
-                                  		<button type="button" id="submitAddItem" class="btn btn-default">Add Item</button>
-                               		</div>
-                           		</div>
-	                        </form>
-	                     </div>
-	                   </div>
-                   </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-success">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Update Item</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                 <div class="row">
-	                     <div class="col-lg-12">
-	                        <form role="form" id="updateItemForm">
-	                            <div class="form-group">
-	                                <label>Item Name:</label>
-	                                <select id="selectUpdateItem" class = "form-control"name="selectUpdateItem">
-										<option value="">Select Item</option>									
-									</select>
-	                               
-	                            </div>
-	                            <div class="form-group">
-	                                <label>Item Price:</label>
-	                                <input id="itemUpdatePrice" name="itemUpdatePrice" type="text" class="form-control">
-	                            </div>                            
-	                            <div class="form-group">
-	                                <label>Item Details:</label>
-	                                <input id="itemUpdateDetails" name="itemUpdateDetails" type="text" class="form-control">
-	                            </div> 
-                                  <button type="button" id="submitUpdateItem" class="btn btn-default">Update Item</button>
-	                        </form>
-	                     </div>
-	                   </div>
-                    </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                       Delete Item</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                	<form role="form" id="deleteItemForm">
-                         <div class="form-group">
-                         <label>Item Name:</label>
-                         <select id="selectDeleteItem" class = "form-control"name="selectDeleteItem">
-									<option value="">Select Item</option>									
-							</select>
-                             
-                            
-                         </div>
-                         <div class="form-group">
-                             <label>Item Price:</label>
-                             <input id="itemDeletePrice" name="itemDeletePrice" type="text" class="form-control">
-                         </div>                            
-                         
-                              <button type="button" id="submitDeleteItem" class="btn btn-default">Delete Item</button>
-                     </form>
-               </div>
-            </div>
-        </div>        
-    </div>
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Add Coupon</h3>
+				<span class="pull-right "><i
+					class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<form role="form" id="addItemForm">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>Coupon Code:</label> <input id="couponCode"
+											name="couponCode" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>Coupon Description:</label> <input id="couponDetails"
+											name="couponDetails" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>Coupon Exception Message:</label> <input
+											id="couponException" name="couponException" type="text"
+											class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>Start Date:</label> <input id="startDate"
+											name="startDate" type="text" class="form-control">
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label>End Date:</label> <input id="endDate" name="endDate"
+											type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div id="addDiscountCondition">
+										<label>Discount On:</label>
+										<div class="form-group multiple-form-group input-group">
+											<div class="input-group-btn input-group-select">
+												<button type="button"
+													class="btn btn-default dropdown-toggle"
+													data-toggle="dropdown">
+													<span class="concept">Select Condition</span> <span
+														class="caret"></span>
+												</button>
+												<ul class="dropdown-menu" role="menu">
+													<li><a href="#3-4">Item</a></li>
+													<li><a href="#4-5">Total Price</a></li>
+													<li><a href="#5-6">5-6</a></li>
+													<li><a href="#6-7">6-7</a></li>
+													<li><a href="#7-8">7-8</a></li>
+													<li><a href="#8-9">8-9</a></li>
+													<li><a href="#9-10">9-10</a></li>
+												</ul>
+												<input type="hidden" class="input-group-select-val"
+													name="discountCondition" value="">
+											</div>
+											 <span
+												class="input-group-btn">
+												<button type="button" class="btn btn-success btn-add">+</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div id="addPartyItemQuantity" class="hide">
+										<label>Part Item Quantity:</label>
+
+										<div class="form-group multiple-form-group input-group">
+											<div class="col-lg-4">
+												<input type="text" name="partyItemQuantity"
+													placeholder="Quantity" class="form-control">
+											</div>
+											<div class="col-lg-4">
+												<input type="text" name="partyItemPrice" placeholder="Price"
+													class="form-control">
+											</div>
+											<div class="col-lg-4">
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-success btn-add">+</button>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div id="addIndividualItemPrice" class="hide">
+										<div class="form-group">
+											<label>Item Price:</label> <input id="itemPrice"
+												name="itemPrice" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<button type="button" id="submitAddItem"
+										class="btn btn-default">Add Item</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-success">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Update Item</h3>
+				<span class="pull-right "><i
+					class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<form role="form" id="updateItemForm">
+							<div class="form-group">
+								<label>Item Name:</label> <select id="selectUpdateItem"
+									class="form-control" name="selectUpdateItem">
+									<option value="">Select Item</option>
+								</select>
+
+							</div>
+							<div class="form-group">
+								<label>Item Price:</label> <input id="itemUpdatePrice"
+									name="itemUpdatePrice" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label>Item Details:</label> <input id="itemUpdateDetails"
+									name="itemUpdateDetails" type="text" class="form-control">
+							</div>
+							<button type="button" id="submitUpdateItem"
+								class="btn btn-default">Update Item</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Delete Item</h3>
+				<span class="pull-right "><i
+					class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<form role="form" id="deleteItemForm">
+					<div class="form-group">
+						<label>Item Name:</label> <select id="selectDeleteItem"
+							class="form-control" name="selectDeleteItem">
+							<option value="">Select Item</option>
+						</select>
+
+
+					</div>
+					<div class="form-group">
+						<label>Item Price:</label> <input id="itemDeletePrice"
+							name="itemDeletePrice" type="text" class="form-control">
+					</div>
+
+					<button type="button" id="submitDeleteItem" class="btn btn-default">Delete
+						Item</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 

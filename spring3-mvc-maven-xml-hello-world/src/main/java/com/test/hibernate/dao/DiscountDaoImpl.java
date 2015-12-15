@@ -24,7 +24,7 @@ public class DiscountDaoImpl {
 		session.beginTransaction();
 		DiscountInformation discountInfo = new DiscountInformation();
 		discountInfo.setCouponCode(discountVo.getCouponCode());
-		discountInfo.setDiscountCategory(discountVo.getDiscountCategory());
+		discountInfo.setDiscountCategory(discountVo.getDiscountCategory().name());
 		discountInfo.setDiscountPercentage(discountVo.getDiscountPercentage());
 		discountInfo.setStartDate(discountVo.getStartDate());
 		discountInfo.setEndDate(discountVo.getEndDate());

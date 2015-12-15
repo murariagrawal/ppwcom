@@ -88,11 +88,7 @@ public class OrderVerificationController {
 			mv.addObject("orderId", orderDetails.getOrderId());
 			mv.addObject("contactNo", orderDetails.getContactNo());
 			mv.addObject("deliverySlot", orderDetails.getDeliverySlot());
-			mv.addObject("addressLine", addressLine);
-			mv.addObject("landmarkReturn", landmarkReturn);
-			mv.addObject("zipcodeReturn", zipcodeReturn);
-			mv.addObject("itemList", orderDetails.getItemList());
-			mv.addObject("toppingList", orderDetails.getToppingList());
+			
 		return mv;
 	}
 }

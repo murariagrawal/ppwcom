@@ -426,7 +426,7 @@
 													</div>
 
 												</div>
-												<div class="row" id="couponCode">
+												<div class="row hide" id="couponCode">
 													<div class="col-md-12">
 														<div class="input-group">
 															<input type="text" class="form-control"

@@ -7,9 +7,13 @@
 				<input type="hidden" name="deliveryOrderId" id="deliveryOrderId">
 					<div class="form-group">				
 						<div class="row customrow">
-						 	<div class="col-xs-12 col-md-8">	
+						 	<div class="col-xs-12 col-md-6">	
 								<input class="form-control" type="number" maxlength="10" name="phoneNumber"
 										id="phoneNumber" placeholder="Phone Number" value="" /><span class="icon-place"></span>							
+							</div>
+							<div class="col-xs-12 col-md-6 hide">	
+								<input class="form-control" type="text"  name="emailAddress"
+										id="emailAddress" placeholder="Email Address" value="" /><span class="icon-place"></span>							
 							</div>
 						</div>
 					</div>
@@ -17,10 +21,21 @@
 						<input type="hidden" name="deliveryAddressId" id="deliveryAddressId">
 						<input type="hidden" name="searchId" id="searchId">
 						<div class="row customrow">						 
-							<div class="col-xs-12" >
+							<div class="col-xs-6 col-md-4" >
 								<div class="list-inline">									
-									<h3>Address Details</h3>
+									<h4>Address Details</h4>
 								</div>
+							</div>
+							<div class="col-xs-6 col-md-8" >
+								<div id="changeAddress" class="col-xs-6 col-md-4 hide"><span><a id="changeAddresslink">Change Address</a>
+								</span></div>
+								<div id="editAddress" class="col-xs-6 col-md-4 hide"><span><a id="editAddresslink">Edit Address</a>
+								</span></div>
+								<div id="addAddress" class="col-xs-6 col-md-4 hide"><span><button type="button" id="addAddressButton">Add Address</button>
+								</span></div>
+								
+								<span>
+								</span>
 							</div>
 						</div>						
 						<fieldset id="addressFields">
@@ -49,13 +64,13 @@
 							 	<div class="row customrow">						 
 									<div class="col-xs-12 col-md-6 control-group" >
 										<div class="controls">
-										<input placeholder="Name First" class="form-control" type="text" size="8" name="name[first]" id="firstNameAddr"/>
+										<input placeholder="First Name" class="form-control" type="text" size="8" name="name[first]" id="firstNameAddr"/>
 										<span class="icon-place"></span>
 										</div>
 									</div>
 									<div class="col-xs-12 col-md-6 control-group" >
 										<div class="controls">
-										<input placeholder="Name Last" type="text" class="form-control" size="14" name="name[last]" id="lastNameAddr"/>
+										<input placeholder="Last Name" type="text" class="form-control" size="14" name="name[last]" id="lastNameAddr"/>
 										<span class="icon-place"></span>
 										</div>
 									</div>
@@ -67,16 +82,13 @@
 										<input placeholder="Address Line 1" class="form-control" type="text" name="addr1"  id="addr1"/>
 										<span class="icon-place"></span>										
 									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="row customrow control-group">
 									<div class="col-xs-12 col-md-6 controls" >								
 										<input placeholder="Address Line 2" class="form-control" type="text" name="addr2"  id="addr2" />
 										<span class="icon-place"></span>
 									</div>
 								</div>
 							</div>
+							
 							<div class="form-group">
 								<div class="row customrow control-group">
 									<div class="col-xs-12 col-md-6 controls" >									

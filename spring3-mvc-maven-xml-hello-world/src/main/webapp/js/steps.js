@@ -164,10 +164,7 @@ $(document).ready(function () {
 					
 			}	
 		});		
-		/*$("#subAreaAddr").on("blur" , function() {				
-					$("#subAreaMenu").removeClass("show");
-					$("#subAreaMenu").addClass("hide");
-		});*/
+		
 		$("#subAreaAddr").on("input", function() {
 			if($(this).val() && $(this).val().length >0) {
 				var inputValueArea = $("input:text[name=areaAddr]").val();
@@ -328,25 +325,71 @@ $(document).ready(function () {
 						if(d.addressLine1 || d.addressline1) {
 						 	divIndividual = divIndividual+ulIndividual+hiddenAreaId+hiddenAddressId+"</div>";
 							liFinal = "<li>"+divIndividual+"</li>";
-							var liedit = "<li><div class='row editbutton'><button>Edit Address</button></li>";
+							var liedit = "<li><div class='row editbutton'><button type='button'>Edit Address</button></li>";
 							ulFinal = ulFinal+liFinal+liedit;
 						}
 					});
 				}
 				ulFinal = ulFinal+"</ul>";
-				if(addressList && addressList !== null && addressList.length>0) {
+				if(addressList && addressList !== null && addressList.length===1) {
+					clearDeliveryForm();
+					var addressExistingDiv = $("#addressFieldsExisting");	
+					addressExistingDiv.empty();
+					
+					var addressIndividual = "<ul style='list-style:none'>"+$(liFinal).find('.well-sm').html()+"</ul>"
+					addressExistingDiv.append(addressIndividual);
+					$("#addressFieldsExisting").removeClass("hide").addClass("show");
+					$('#addressFields').removeClass("show").addClass("hide");
+					$("#deliveryAddressId").val($(addressIndividual).find("#addressId").val());
+					$('#editAddress').removeClass("hide").addClass("show");
+					$("#changeAddress").removeClass("show").addClass("hide");
+					$("#addAddress").removeClass("hide").addClass("show");
+				} else if(addressList && addressList !== null && addressList.length>1) {
 					$('#myModal').modal();
 					var addressDiv = $("#addressDiv");	
 					addressDiv.empty();
 					addressDiv.append(ulFinal);
-					$('#myModal').modal('handleUpdate')
+					$('#myModal').modal('handleUpdate');
+					$('#editAddress').removeClass("hide").addClass("show");
+					$("#changeAddress").removeClass("hide").addClass("show");
+					$("#addAddress").removeClass("show").addClass("hide");
 					bindAddressModelEvents();
 				} else {
 					clearDeliveryForm();
 					$("#addressFieldsExisting").removeClass("show").addClass("hide");
 					$('#addressFields').removeClass("hide").addClass("show");
+					$('#editAddress').removeClass("hide").addClass("show");
+					$("#changeAddress").removeClass("hide").addClass("show");
+					$("#addAddress").removeClass("hide").addClass("show");
 					fetchDeliveryArea();
-				}			
+				}	
+				$("#addAddressButton").on('click', function(e) {  			
+					clearDeliveryForm();
+					$("#addressFieldsExisting").removeClass("show").addClass("hide");
+					$('#addressFields').removeClass("hide").addClass("show");
+					$("#deliveryAddressId").val('');
+					fetchDeliveryArea();
+				});
+				$("#changeAddresslink").on('click', function(e) {  			
+					$('#myModal').modal();
+				});
+				$( "#editAddresslink" ).on('click', function(e) {
+					
+					
+					$("#firstNameAddr").val($("#addressFieldsExisting").find("#firstName").html());
+					$("#lastNameAddr").val($("#addressFieldsExisting").find("#lastName").html());
+					$("#addr1").val($("#addressFieldsExisting").find("#addressLine1").html());
+					$("#addr2").val($("#addressFieldsExisting").find("#addressLine2").html());
+					$("#landmarkAddr").val($("#addressFieldsExisting").find("#landmark").html());
+					$("#areaAddr").val($("#addressFieldsExisting").find("#area").html());
+					$("#subAreaAddr").val($("#addressFieldsExisting").find("#subAreaAddr").html());
+					$("#deliveryAddressId").val($("#addressFieldsExisting").find("#addressId").val());
+					$("#searchId").val($("#addressFieldsExisting").find("#areaId").val());	
+					$('#myModal').modal('hide');
+					clearDeliveryForm();
+					$('#addressFields').removeClass("hide").addClass("show");
+					getDeliverySlots();
+				});
 	        }).fail(function(data) {
 	        	
 	        	alert("failed");
@@ -484,16 +527,19 @@ $(document).ready(function () {
   		   $("#continueToVerifySummary").removeClass("show").addClass("hide");
   		   $("#continueToConfirmSummary").removeClass("show").addClass("hide");
   		   $("#placeNewOrderSummary").removeClass("show").addClass("hide");
+  		   $("#couponCode").removeClass("show").addClass("hide");
   	   } else if(nextStep === "address") {
   		   $("#continueToDeliverySummary").removeClass("show").addClass("hide");
   		   $("#continueToVerifySummary").removeClass("hide").addClass("show");
   		   $("#continueToConfirmSummary").removeClass("show").addClass("hide");
   		   $("#placeNewOrderSummary").removeClass("show").addClass("hide");
+  			$("#couponCode").removeClass("show").addClass("hide");
   	   } else if(nextStep === "verify") {
   		   $("#continueToDeliverySummary").removeClass("show").addClass("hide");
   		   $("#continueToVerifySummary").removeClass("show").addClass("hide");
   		   $("#continueToConfirmSummary").removeClass("hide").addClass("show");
   		   $("#placeNewOrderSummary").removeClass("show").addClass("hide");
+  		 $("#couponCode").removeClass("hide").addClass("show");
   	   } else if(nextStep === "confirm") {
   		   $("#continueToDeliverySummary").removeClass("show").addClass("hide");
   		   $("#continueToVerifySummary").removeClass("show").addClass("hide");
@@ -596,8 +642,8 @@ $(document).ready(function () {
 	    		var subtotal = stuffingQuantity *stuffingPrice;
 	    		var stuffingName = $(this).attr("data-itemName");	    		
    			var stuffingOrderSummaryDiv = '<div class="customrow" id="'+stuffingOrderId+'">'
-   										+'<div class="col-md-4"><span>'+stuffingName+'</span></div>'
-   										+'<div class="col-md-4" style="text-align: center;"><span class="quantity">'+stuffingQuantity+'</span></div>'
+   										+'<div class="col-md-6"><span>'+stuffingName+'</span></div>'
+   										+'<div class="col-md-2" style="text-align: center;"><span class="quantity">'+stuffingQuantity+'</span></div>'
    										+'<div class="col-md-4"><span class="subtotal">'+subtotal.toFixed(2)+'</span></div></div>';
    			$("#stuffiingQuantitySummary").append(stuffingOrderSummaryDiv);	    		
 	    	} else {
@@ -651,7 +697,7 @@ $(document).ready(function () {
     	 if(noIfItemsSelected>0) {
     		 var deliveryAddressId = $("#deliveryAddressId").val();
     		 if(deliveryAddressId && deliveryAddressId!== ""){    			 
-    			 goToNextStep();
+    			 goToNextStep("address");
     			 hideOverlay();
     			 
     		 } else {

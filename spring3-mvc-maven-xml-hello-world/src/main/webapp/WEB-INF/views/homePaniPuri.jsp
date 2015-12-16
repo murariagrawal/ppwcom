@@ -4,25 +4,16 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">\
+<script data-main="js/mainconfig" src="js/vendor/require.js"></script>
 <!-- Latest compiled and minified CSS -->
 <script src="js/vendor/jquery.min.js"></script>
 <link rel="stylesheet" href="css/bootstrap.min.css">
-
 <!-- Optional theme -->
 <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="js/vendor/bootstrap.min.js"></script>
-<script src="js/vendor/bootstrap-formhelpers.js"></script>
 <link rel="stylesheet" href="css/bootstrap-formhelpers.min.css">
 <link rel="stylesheet" href="css/state.css">
 <link rel="stylesheet" href="css/cart.css">
-<script src="js/mwf-core-ajax.js"></script>
-<script src="js/common.js"></script>
-<script src="js/deliveryaddress.js"></script>
-<script src="js/steps.js"></script>
-<script src="js/inputnumber.js"></script>
 
 </head>
 <body>

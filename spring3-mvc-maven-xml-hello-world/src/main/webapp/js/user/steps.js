@@ -1,3 +1,6 @@
+define(["jquery", "common/mwf-core-ajax","bootstrap.min", "bootstrap-formhelpers", "user/inputnumber"], function($) {
+
+
 $(document).ready(function () {
 
 	
@@ -344,6 +347,8 @@ $(document).ready(function () {
 					$('#editAddress').removeClass("hide").addClass("show");
 					$("#changeAddress").removeClass("show").addClass("hide");
 					$("#addAddress").removeClass("hide").addClass("show");
+					$("#searchId").val($("#addressFieldsExisting").find("#areaId").val());
+					getDeliverySlots();
 				} else if(addressList && addressList !== null && addressList.length>1) {
 					$('#myModal').modal();
 					var addressDiv = $("#addressDiv");	
@@ -358,15 +363,17 @@ $(document).ready(function () {
 					clearDeliveryForm();
 					$("#addressFieldsExisting").removeClass("show").addClass("hide");
 					$('#addressFields').removeClass("hide").addClass("show");
-					$('#editAddress').removeClass("hide").addClass("show");
-					$("#changeAddress").removeClass("hide").addClass("show");
-					$("#addAddress").removeClass("hide").addClass("show");
+					$('#editAddress').removeClass("show").addClass("hide");
+					$("#changeAddress").removeClass("show").addClass("hide");
+					$("#addAddress").removeClass("show").addClass("hide");
 					fetchDeliveryArea();
 				}	
 				$("#addAddressButton").on('click', function(e) {  			
 					clearDeliveryForm();
 					$("#addressFieldsExisting").removeClass("show").addClass("hide");
 					$('#addressFields').removeClass("hide").addClass("show");
+					$('#editAddress').removeClass("show").addClass("hide");
+					$("#addAddress").removeClass("show").addClass("hide");
 					$("#deliveryAddressId").val('');
 					fetchDeliveryArea();
 				});
@@ -386,7 +393,7 @@ $(document).ready(function () {
 					$("#deliveryAddressId").val($("#addressFieldsExisting").find("#addressId").val());
 					$("#searchId").val($("#addressFieldsExisting").find("#areaId").val());	
 					$('#myModal').modal('hide');
-					clearDeliveryForm();
+					$('#addressFieldsExisting').removeClass("show").addClass("hide");
 					$('#addressFields').removeClass("hide").addClass("show");
 					getDeliverySlots();
 				});
@@ -918,3 +925,4 @@ function nextTab(elem) {
 function prevTab(elem) {
     $(elem).prev().find('a[data-toggle="tab"]').click();
 }
+});

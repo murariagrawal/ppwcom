@@ -1,12 +1,14 @@
 package com.test.hibernate;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name="discount")
@@ -20,12 +22,11 @@ public class DiscountInformation {
 	private Date startDate;
 	@Column
 	private Date endDate;
-	@Column
-	private String discountCategory;
-	@Column
-	private String discountCondition;
-	@Column
-	private String discountConditionValue;
+	@OneToMany
+	private List<DiscountCondition> discountOn;
+	@OneToMany
+	private List<DiscountCondition> discountConditions;
+	
 	@Column
 	private float discountPercentage;
 	@Column
@@ -91,52 +92,5 @@ public class DiscountInformation {
 	public void setDiscountPercentage(float discountPercentage) {
 		this.discountPercentage = discountPercentage;
 	}
-	/**
-	 * @return the discountCategory
-	 */
-	public String getDiscountCategory() {
-		return discountCategory;
-	}
-	/**
-	 * @param discountCategory the discountCategory to set
-	 */
-	public void setDiscountCategory(String discountCategory) {
-		this.discountCategory = discountCategory;
-	}
-	/**
-	 * @return the oncePerUser
-	 */
-	public boolean isOncePerUser() {
-		return oncePerUser;
-	}
-	/**
-	 * @param oncePerUser the oncePerUser to set
-	 */
-	public void setOncePerUser(boolean oncePerUser) {
-		this.oncePerUser = oncePerUser;
-	}
-	/**
-	 * @return the discountCondition
-	 */
-	public String getDiscountCondition() {
-		return discountCondition;
-	}
-	/**
-	 * @param discountCondition the discountCondition to set
-	 */
-	public void setDiscountCondition(String discountCondition) {
-		this.discountCondition = discountCondition;
-	}
-	/**
-	 * @return the discountConditionValue
-	 */
-	public String getDiscountConditionValue() {
-		return discountConditionValue;
-	}
-	/**
-	 * @param discountConditionValue the discountConditionValue to set
-	 */
-	public void setDiscountConditionValue(String discountConditionValue) {
-		this.discountConditionValue = discountConditionValue;
-	}
+	
 }

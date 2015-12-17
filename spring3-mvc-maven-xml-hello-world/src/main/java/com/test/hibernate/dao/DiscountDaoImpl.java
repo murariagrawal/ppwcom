@@ -1,6 +1,5 @@
 package com.test.hibernate.dao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import org.hibernate.criterion.Restrictions;
 
 import com.panipuri.vo.DiscountVo;
 import com.test.hibernate.DiscountInformation;
-import com.test.hibernate.Item;
 
 public class DiscountDaoImpl {
 	private SessionFactory sessionFactory;
@@ -24,13 +22,13 @@ public class DiscountDaoImpl {
 		session.beginTransaction();
 		DiscountInformation discountInfo = new DiscountInformation();
 		discountInfo.setCouponCode(discountVo.getCouponCode());
-		discountInfo.setDiscountCategory(discountVo.getDiscountCategory().name());
+		//discountInfo.setDiscountCategory(discountVo.getDiscountCategory().name());
 		discountInfo.setDiscountPercentage(discountVo.getDiscountPercentage());
 		discountInfo.setStartDate(discountVo.getStartDate());
 		discountInfo.setEndDate(discountVo.getEndDate());
-		discountInfo.setOncePerUser(discountVo.isOncePerUser());
-		discountInfo.setDiscountCondition(discountVo.getDiscountCondition());
-		discountInfo.setDiscountConditionValue(discountVo.getDiscountConditionValue());
+		//discountInfo.setOncePerUser(discountVo.isOncePerUser());
+		//discountInfo.setDiscountCondition(discountVo.getDiscountCondition());
+		//discountInfo.setDiscountConditionValue(discountVo.getDiscountConditionValue());
 		
 		session.save(discountInfo);
 		session.getTransaction().commit();

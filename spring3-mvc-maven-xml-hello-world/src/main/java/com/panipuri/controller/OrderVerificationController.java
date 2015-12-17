@@ -35,6 +35,7 @@ public class OrderVerificationController {
 		String orderId = request.getParameter("deliveryOrderId");
 		String customerId = request.getParameter("customerId");
 		String addressId = request.getParameter("deliveryAddressId");
+		String emailAddress = request.getParameter("emailAddress");
 		
 		Customer customer = new Customer();
 		if(null != customerId && !customerId.equals("")) {
@@ -44,6 +45,7 @@ public class OrderVerificationController {
 		customer.setContactNo1(phoneNumber);
 		customer.setCustomerFirstName(firstName);
 		customer.setCustomerLastName(lastName);
+		customer.setEmailAddress(emailAddress);
 		Address address = new Address();
 		if(null != addressId && !addressId.equals("")) {
 			address.setAddressId(new Long(addressId));
@@ -90,5 +92,10 @@ public class OrderVerificationController {
 			mv.addObject("deliverySlot", orderDetails.getDeliverySlot());
 			
 		return mv;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/applyDiscount")
+	public ModelAndView applyDiscount(final HttpServletRequest request) {
+		return null;
 	}
 }

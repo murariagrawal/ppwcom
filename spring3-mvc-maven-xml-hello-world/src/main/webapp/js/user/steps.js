@@ -82,7 +82,7 @@ $(document).ready(function () {
 		var haveSubMenu = false;
 		$.each(dataSet,function(i, data) {
 			var dataStrArea= data.area;
-			if(dataStrArea.search(regexArea) !==-1) {
+			if(dataStrArea === inputValueArea) {
 				
 				$.each(data.subarea,function(j, subarea) {
 					haveSubMenu = true;
@@ -111,10 +111,7 @@ $(document).ready(function () {
 				}
 			}	
 		});		
-		/*$("#areaAddr").on("blur" , function() {				
-					$("#areaMenu").removeClass("show");
-					$("#areaMenu").addClass("hide");
-		});*/
+		
 		$("#areaAddr").on("input", function() {
 			if($(this).val() && $(this).val().length >0) {
 				var inputValue = $(this).val();
@@ -214,7 +211,14 @@ $(document).ready(function () {
 			$("#areaMenu").removeClass("show");
 			$("#areaMenu").addClass("hide");
 		});
-		
+		$("#areaLink").on("blur", function() {				
+			$("#areaMenu").removeClass("show");
+			$("#areaMenu").addClass("hide");
+		});
+		$("#subAreaLink").on("blur", function() {				
+			$("#subAreaMenu").removeClass("show");
+			$("#subAreaMenu").addClass("hide");
+		});
 	}
 	function bindAddressModelEvents() {
 		$( ".well-sm" ).on('click', function(e) {
@@ -258,11 +262,13 @@ $(document).ready(function () {
 			fetchDeliveryArea();
 		});
 	}
-		function getAddressDetails() {		
+		function getAddressDetails() {
+			
 			ajax.postForm("fetchDeliveryDetails?F=J", $("#deliveryForm")).done(function(data) {		
 				var ulFinal = "<ul style='list-style:none'>";
 				var liFinal = "";
 				var addressList= data.addressList;
+				var email = data.eamilAddress;
 				if(addressList) {
 					$.each(addressList, function(i, d) {			
 						var divIndividual = "<div class='well well-sm' data-th='individualAddress'>";
@@ -334,6 +340,10 @@ $(document).ready(function () {
 					});
 				}
 				ulFinal = ulFinal+"</ul>";
+				if(email && email!=="") {
+					$("#emailDiv").removeClass("hide").addClass("show");
+					$("#emailAddress").val(email);
+				}
 				if(addressList && addressList !== null && addressList.length===1) {
 					clearDeliveryForm();
 					var addressExistingDiv = $("#addressFieldsExisting");	
@@ -362,6 +372,7 @@ $(document).ready(function () {
 				} else {
 					clearDeliveryForm();
 					$("#addressFieldsExisting").removeClass("show").addClass("hide");
+					$("#emailDiv").removeClass("hide").addClass("show");
 					$('#addressFields').removeClass("hide").addClass("show");
 					$('#editAddress').removeClass("show").addClass("hide");
 					$("#changeAddress").removeClass("show").addClass("hide");

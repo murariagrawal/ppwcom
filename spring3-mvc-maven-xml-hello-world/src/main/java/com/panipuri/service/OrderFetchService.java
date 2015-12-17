@@ -25,7 +25,7 @@ public class OrderFetchService {
 		return orderDetails;
 		
 	}
-	private void calculateTotalOrderPrice(OrderVo orderDetails) {
+	public void calculateTotalOrderPrice(OrderVo orderDetails) {
 		List<ItemVo> itemList = orderDetails.getItemList();
 		List<ToppingVo> toppingList = orderDetails.getToppingList();
 		Float totalPrice = new Float(0);

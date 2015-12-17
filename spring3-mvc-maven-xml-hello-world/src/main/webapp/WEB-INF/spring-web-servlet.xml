@@ -36,6 +36,7 @@
 				<value>com.test.hibernate.DiscountInformation</value>
 				<value>com.test.hibernate.PartyItemQuantity</value>
 				<value>com.test.hibernate.ComboItemQuantity</value>
+				<value>com.test.hibernate.DiscountCondition</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -44,7 +45,7 @@
 <!-- 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
 				<prop key="hibernate.current_session_context_class">thread</prop>
 				<prop key="hibernate.show_sql">true</prop>
-<!-- 				<prop key="hibernate.hbm2ddl.auto">create</prop> -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
 	</bean>
@@ -59,7 +60,7 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
-		<property name="url" value="jdbc:derby://localhost:1527/panipuri" />
+		<property name="url" value="jdbc:derby://localhost:1527/piyush" />
 		<property name="username" value="piyush" />
 		<property name="password" value="piyush" />
 	</bean>

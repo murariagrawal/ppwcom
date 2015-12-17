@@ -8,10 +8,10 @@
 					<div class="form-group">				
 						<div class="row customrow">
 						 	<div class="col-xs-12 col-md-6">	
-								<input class="form-control" type="number" maxlength="10" name="phoneNumber"
+								<input class="form-control" type="text" maxlength="10" name="phoneNumber"
 										id="phoneNumber" placeholder="Phone Number" value="" /><span class="icon-place"></span>							
 							</div>
-							<div class="col-xs-12 col-md-6 hide">	
+							<div id="emailDiv" class="col-xs-12 col-md-6 hide">	
 								<input class="form-control" type="text"  name="emailAddress"
 										id="emailAddress" placeholder="Email Address" value="" /><span class="icon-place"></span>							
 							</div>
@@ -40,24 +40,32 @@
 						</div>						
 						<fieldset id="addressFields">
 							<div class="form-group">
-								<div class="row customrow">						 
-									<div class="col-xs-12 col-md-6 control-group" >
-										<div class="row customrow controls">
-									        <input type="text" class="form-control" id="areaAddr" name="areaAddr" placeholder="Search Area/Zipcode" />										    
+								<div class="row customrow">		
+									<a id="areaLink" style="text-decoration: none">				 
+									<div class="col-xs-12 col-md-6 control-group"  >
+									
+										<div class="row customrow controls" id="areaAddrDiv">
+										
+									        <input type="text" class="form-control" id="areaAddr" name="areaAddr" placeholder="Search Area/Zipcode" />		
+									        							    
 										</div>
 										<div class="row customrow">										    
 										    <div id="areaMenu" class = "list-group"></div>								  			
 										</div>
 									</div>
-									<div class="col-xs-12 col-md-6 control-group" >
-										<div class="row customrow controls">
-									        <input type="text" class="form-control" id="subAreaAddr" name="subAreaAddr" placeholder="Search Sub Area" />										  				    
+									</a>	
+									<a id="subAreaLink" style="text-decoration: none">
+									<div class="col-xs-12 col-md-6 control-group"  >
+										<div class="row customrow controls" id="subAreaAddrDiv">
+																			
+									        <input type="text" class="form-control" id="subAreaAddr" name="subAreaAddr" placeholder="Search Sub Area" />
+											
 										</div>	 
-								
 										<div class="row customrow">
 											<div id="subAreaMenu" class="list-group"></div>								  			
 								 		</div>
 								 	</div>
+								 	</a>
 							 	</div>
 							 </div>
 							 <div class="form-group">

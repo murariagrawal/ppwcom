@@ -37,6 +37,24 @@ public class CustomerDaoImpl {
     	}
     	return addressVoList;
     }
+    public List<AddressVo> fetchCustomerinfo(String phoneNumber) {
+    	Session session = this.sessionFactory.openSession();
+    	List<Address> addressList = session.createCriteria(Address.class, "address").createAlias("address.customer","customer")
+    	.add(Restrictions.eq("customer.contactNo1", phoneNumber)).list();
+    	List<AddressVo> addressVoList = new ArrayList<AddressVo>();
+    	if(null != addressList && !addressList.isEmpty()) {
+			String firstName = addressList.get(0).getCustomer().getCustomerFirstName();
+			String lastName = addressList.get(0).getCustomer().getCustomerLastName();
+			AddressVo deliveryAddress =null;
+			for(Address address :addressList) {
+				deliveryAddress = convertAddressToAddressVo(address);
+				deliveryAddress.setFirstName(firstName);
+				deliveryAddress.setLastName(lastName);
+				addressVoList.add(deliveryAddress);
+			}
+    	}
+    	return addressVoList;
+    }
     private AddressVo convertAddressToAddressVo(Address address) {
 		AddressVo addressVo = null;
 		AreaVo areaVo = null;

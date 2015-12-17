@@ -200,7 +200,8 @@ public class OderDaoImpl  {
 						}
 					}
 					
-				} else if(item.isComboItem()) {					
+				} else if(item.isComboItem()) {
+					itemVo.setComboItem(true);
 					itemVo.setComboQuantityList(item.getComboQuantityList());
 					itemVo.setItemPrice(item.getItemPrice());
 					

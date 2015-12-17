@@ -3,6 +3,7 @@ package com.test.hibernate;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,10 +23,12 @@ public class DiscountInformation {
 	private Date startDate;
 	@Column
 	private Date endDate;
-	@OneToMany
+	@OneToMany(targetEntity=DiscountCondition.class, mappedBy="discount", cascade=CascadeType.ALL)
 	private List<DiscountCondition> discountOn;
-	@OneToMany
+	@OneToMany(targetEntity=DiscountCondition.class, mappedBy="discount", cascade=CascadeType.ALL)
 	private List<DiscountCondition> discountConditions;
+	@Column
+	private String discountExceptionMessage;
 	
 	@Column
 	private float discountPercentage;
@@ -91,6 +94,54 @@ public class DiscountInformation {
 	 */
 	public void setDiscountPercentage(float discountPercentage) {
 		this.discountPercentage = discountPercentage;
+	}
+	/**
+	 * @return the discountOn
+	 */
+	public List<DiscountCondition> getDiscountOn() {
+		return discountOn;
+	}
+	/**
+	 * @param discountOn the discountOn to set
+	 */
+	public void setDiscountOn(List<DiscountCondition> discountOn) {
+		this.discountOn = discountOn;
+	}
+	/**
+	 * @return the discountConditions
+	 */
+	public List<DiscountCondition> getDiscountConditions() {
+		return discountConditions;
+	}
+	/**
+	 * @param discountConditions the discountConditions to set
+	 */
+	public void setDiscountConditions(List<DiscountCondition> discountConditions) {
+		this.discountConditions = discountConditions;
+	}
+	/**
+	 * @return the oncePerUser
+	 */
+	public boolean isOncePerUser() {
+		return oncePerUser;
+	}
+	/**
+	 * @param oncePerUser the oncePerUser to set
+	 */
+	public void setOncePerUser(boolean oncePerUser) {
+		this.oncePerUser = oncePerUser;
+	}
+	/**
+	 * @return the discountExceptionMessage
+	 */
+	public String getDiscountExceptionMessage() {
+		return discountExceptionMessage;
+	}
+	/**
+	 * @param discountExceptionMessage the discountExceptionMessage to set
+	 */
+	public void setDiscountExceptionMessage(String discountExceptionMessage) {
+		this.discountExceptionMessage = discountExceptionMessage;
 	}
 	
 }

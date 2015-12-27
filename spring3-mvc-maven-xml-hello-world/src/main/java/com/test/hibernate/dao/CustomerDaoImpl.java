@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.AreaVo;
 import com.test.hibernate.Address;
+import com.test.hibernate.Customer;
 import com.test.hibernate.DeliveryArea;
 
 public class CustomerDaoImpl {
@@ -37,23 +38,15 @@ public class CustomerDaoImpl {
     	}
     	return addressVoList;
     }
-    public List<AddressVo> fetchCustomerinfo(String phoneNumber) {
+    public Customer fetchCustomerinfo(String phoneNumber) {
     	Session session = this.sessionFactory.openSession();
-    	List<Address> addressList = session.createCriteria(Address.class, "address").createAlias("address.customer","customer")
+    	List<Customer> customerList = session.createCriteria(Customer.class, "customer")
     	.add(Restrictions.eq("customer.contactNo1", phoneNumber)).list();
-    	List<AddressVo> addressVoList = new ArrayList<AddressVo>();
-    	if(null != addressList && !addressList.isEmpty()) {
-			String firstName = addressList.get(0).getCustomer().getCustomerFirstName();
-			String lastName = addressList.get(0).getCustomer().getCustomerLastName();
-			AddressVo deliveryAddress =null;
-			for(Address address :addressList) {
-				deliveryAddress = convertAddressToAddressVo(address);
-				deliveryAddress.setFirstName(firstName);
-				deliveryAddress.setLastName(lastName);
-				addressVoList.add(deliveryAddress);
-			}
+    	Customer custInfo=null;
+    	if(null != customerList && !customerList.isEmpty()) {
+    		custInfo = customerList.get(0);
     	}
-    	return addressVoList;
+    	return custInfo;
     }
     private AddressVo convertAddressToAddressVo(Address address) {
 		AddressVo addressVo = null;

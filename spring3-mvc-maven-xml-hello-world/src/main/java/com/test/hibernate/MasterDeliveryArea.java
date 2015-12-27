@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +27,8 @@ public class MasterDeliveryArea {
 	private String state;
 	@OneToMany(targetEntity=DeliverySlot.class,cascade= CascadeType.ALL,mappedBy="deliveryArea")
 	private List<DeliverySlot> deliverySlots;
+	@OneToMany(targetEntity=DeliverySlotStock.class,cascade= CascadeType.ALL, mappedBy="area")
+	private List<DeliverySlotStock> deliveryStockList;
 	
 	/**
 	 * @return the deliveryAreaId
@@ -87,6 +90,18 @@ public class MasterDeliveryArea {
 	 */
 	public void setState(String state) {
 		this.state = state;
+	}
+	/**
+	 * @return the deliveryStockList
+	 */
+	public List<DeliverySlotStock> getDeliveryStockList() {
+		return deliveryStockList;
+	}
+	/**
+	 * @param deliveryStockList the deliveryStockList to set
+	 */
+	public void setDeliveryStockList(List<DeliverySlotStock> deliveryStockList) {
+		this.deliveryStockList = deliveryStockList;
 	}
 	
 	

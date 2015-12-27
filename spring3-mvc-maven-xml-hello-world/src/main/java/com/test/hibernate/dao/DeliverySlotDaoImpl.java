@@ -8,6 +8,8 @@ import org.hibernate.SessionFactory;
 
 import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
+import com.test.hibernate.DeliverySlotStock;
+import com.test.hibernate.MasterDeliveryArea;
 
 public class DeliverySlotDaoImpl {
 	
@@ -69,6 +71,32 @@ public class DeliverySlotDaoImpl {
 		session.beginTransaction();
 		DeliverySlot selectedDeliverySlot = (DeliverySlot)session.get(DeliverySlot.class, deliverySlotId);
 		session.delete(selectedDeliverySlot);
+		session.getTransaction().commit();
+		session.close();
+		
+	}
+	public void resetSlotQuantity() {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		List<DeliverySlot> deliverySlotList = (List<DeliverySlot>)session.createCriteria(DeliverySlot.class).list();
+		if(deliverySlotList !=null) {
+			MasterDeliveryArea area = null;
+			for(DeliverySlot slot:deliverySlotList) {
+				area = slot.getDeliveryArea();
+				
+				if(area.getDeliveryStockList() != null) {
+					for(DeliverySlotStock stock:area.getDeliveryStockList()) {
+						for(DeliverySlotStock stockdelivery: slot.getDeliveryStockList()) {
+							if(stock.getId() == stockdelivery.getId() && stockdelivery.isStuffing()==stock.isStuffing()) {
+								stockdelivery.setQuantity(stock.getQuantity());
+							}
+						}
+					}
+				}
+				
+				slot.setTodaySlotQuantity(slot.getSlotQuantity());
+			}
+		}
 		session.getTransaction().commit();
 		session.close();
 		

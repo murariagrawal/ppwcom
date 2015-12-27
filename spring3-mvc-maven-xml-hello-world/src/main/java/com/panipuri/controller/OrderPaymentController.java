@@ -54,7 +54,8 @@ public class OrderPaymentController {
 		String zipcodeReturn = "";
 		try {
 			orderDetails = orderCreationService.validateOTP(otp, orderId);
-			addressVo = orderDetails.getDeliveryAddress();			
+			addressVo = orderDetails.getDeliveryAddress();	
+			
 			if(null != addressVo.getAddressLine1()) {
 				addressLine= addressLine+addressVo.getAddressLine1();
 				if(null!=addressVo.getAddressline2()){

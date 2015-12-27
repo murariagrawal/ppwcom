@@ -128,6 +128,16 @@ public class CrewDaoImpl {
 		
 	}
 	
+	public Crew validateCrewCredential(String userId, String password) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		Crew selectedCrew = (Crew)session.createCriteria(Crew.class).add(Restrictions.eq("", userId)).add(Restrictions.eq("", password));
+		
+			session.getTransaction().commit();
+			session.close();
+		return selectedCrew;
+		
+	}
 	public void deleteCrew(long crewId) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.beginTransaction();

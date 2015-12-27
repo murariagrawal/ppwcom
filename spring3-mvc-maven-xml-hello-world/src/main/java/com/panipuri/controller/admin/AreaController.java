@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.panipuri.service.admin.AdminService;
 import com.panipuri.vo.AreaSubAreaVo;
 import com.test.hibernate.DeliverySlot;
+import com.test.hibernate.DeliverySlotStock;
 import com.test.hibernate.MasterDeliveryArea;
 @Controller
 public class AreaController {
@@ -30,16 +31,41 @@ public class AreaController {
 		slots = request.getParameterValues("deliverySlots");
 		String[] quantity;
 		quantity = request.getParameterValues("dliveryQuantity");
+		String[] itemIds = request.getParameterValues("itemId");
+		String[] stuffingIds = request.getParameterValues("stuffingId");
+		String[] stuffingQuantity = request.getParameterValues("stuffingQuantity");
+		String[] itemQuantity = request.getParameterValues("itemQuantity");
 		
 		List<DeliverySlot> deliverySlots = new ArrayList<DeliverySlot>();
 		DeliverySlot deliverySlot = null;
-		for(int j = 0; j < slots.length; j++) {
+		
+		for(int k = 0; k < slots.length; k++) {
+			List<DeliverySlotStock> stockInfo = new ArrayList<DeliverySlotStock>();
+			DeliverySlotStock deliverySlotStock =  null;
+			
 			deliverySlot = new DeliverySlot();
-			String[] slotTimes = slots[j].split("-");
+			String[] slotTimes = slots[k].split("-");
 			deliverySlot.setStartTime(slotTimes[0]+"PM");
 			deliverySlot.setEndTime(slotTimes[1]+"PM");
-			deliverySlot.setSlotQuantity(Integer.parseInt(quantity[j]));
-			deliverySlot.setTodaySlotQuantity(Integer.parseInt(quantity[j]));
+			deliverySlot.setSlotQuantity(Integer.parseInt(quantity[k]));
+			deliverySlot.setTodaySlotQuantity(Integer.parseInt(quantity[k]));
+			for(int i = 0; i < itemIds.length; i++) {
+				deliverySlotStock = new DeliverySlotStock();
+				deliverySlotStock.setId(new Long(itemIds[i]));
+				deliverySlotStock.setQuantity(new Integer(itemQuantity[i]));
+				deliverySlotStock.setSlot(deliverySlot);
+				stockInfo.add(deliverySlotStock);
+			}
+			for(int j = 0; j < stuffingIds.length; j++) {
+				deliverySlotStock = new DeliverySlotStock();
+				deliverySlotStock.setId(new Long(stuffingIds[j]));
+				deliverySlotStock.setQuantity(new Integer(stuffingQuantity[j]));
+				deliverySlotStock.setStuffing(true);
+				deliverySlotStock.setSlot(deliverySlot);
+				stockInfo.add(deliverySlotStock);
+			}
+			
+			deliverySlot.setDeliveryStockList(stockInfo);
 			deliverySlots.add(deliverySlot);
 		}
 		adminService.addMasterArea(areaName, areaCity, areaState, deliverySlots);

@@ -23,8 +23,19 @@ public class OTPDaoImpl {
 		long oldTime = new Date().getTime();
 		oldTime = oldTime - (15*60*100);
 		
-		List<OneTimePassword> oldOtps = (List<OneTimePassword>)session.createCriteria(OneTimePassword.class).add(Restrictions.le("generatedTime", oldTime));
-		session.delete(oldOtps);
+		
+		List<OneTimePassword> oldOtps = (List<OneTimePassword>)session.createCriteria(OneTimePassword.class).add(Restrictions.le("generatedTime", oldTime)).list();
+		System.out.println(oldOtps);
+		if(oldOtps != null) {
+			System.out.println(oldOtps.size());
+		}
+		if(oldOtps != null) {
+			for(OneTimePassword otp:oldOtps) {
+				session.delete(otp);
+			}
+		}
+		
+		
 		session.getTransaction().commit();
 		session.close();
 		

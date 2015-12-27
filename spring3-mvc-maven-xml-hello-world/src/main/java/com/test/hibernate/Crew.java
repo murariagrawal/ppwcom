@@ -1,9 +1,7 @@
 package com.test.hibernate;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -39,6 +35,10 @@ public class Crew {
 	private BigDecimal currentLatitude;
 	@Column
 	private BigDecimal currentLongitude;
+	@Column
+	private String userId;
+	@Column
+	private String password;
 	
 	/**
 	 * @return the crewId
@@ -147,6 +147,30 @@ public class Crew {
 	 */
 	public void setCurrentLongitude(BigDecimal currentLongitude) {
 		this.currentLongitude = currentLongitude;
+	}
+	/**
+	 * @return the userId
+	 */
+	public String getUserId() {
+		return userId;
+	}
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

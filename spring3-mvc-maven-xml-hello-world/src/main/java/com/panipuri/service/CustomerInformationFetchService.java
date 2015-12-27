@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.panipuri.vo.AddressVo;
+import com.test.hibernate.Customer;
 import com.test.hibernate.dao.CustomerDaoImpl;
 
 @Component
@@ -21,6 +22,13 @@ public class CustomerInformationFetchService {
 		
 		
 		return addressList;
+	}
+	public Customer fetchCustomerinfo(String phoneNumber) {
+		
+		Customer customer = customerDaoImpl.fetchCustomerinfo(phoneNumber);
+		
+		
+		return customer;
 	}
 
 	/**

@@ -10,6 +10,7 @@ public class OrderVo {
 	private AddressVo deliveryAddress;
 	private String deliverySlot;
 	private String contactNo;
+	private String paymentType;
 	/**
 	 * @return the orderId
 	 */
@@ -93,5 +94,17 @@ public class OrderVo {
 	 */
 	public void setContactNo(String contactNo) {
 		this.contactNo = contactNo;
+	}
+	/**
+	 * @return the paymentType
+	 */
+	public String getPaymentType() {
+		return paymentType;
+	}
+	/**
+	 * @param paymentType the paymentType to set
+	 */
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
 	}
 }

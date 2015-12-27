@@ -8,8 +8,8 @@
 				<div class="row">
 					<div class="col-lg-10">
 						<form id='form-id'>
-							<input id='cashoption' name='paymentOption' type='radio' checked /> Cash On
-							Delivery <input id='otheroption' name='paymentOption' type='radio' /> Other
+							<input id='cashoption' name='paymentOption' type='radio' checked /> Cash On	Delivery 
+							<br><input id='otheroption' name='paymentOption' type='radio' /> Other
 							Payment Options
 						</form>
 
@@ -21,9 +21,9 @@
 								<input type="hidden" id="orderIdPayment" name="orderIdPayment">
 								<div class="input-group" id="getCodeDiv">
 								<label>Verify Your Number with OTP For Confirming your Order</label><br>
-								 <span class="label label-default" id="contactNumber">  </span>
+								 <input type="text" disabled id="contactNumber"/> 
 									<span>
-							              <button type="button" id="getCodeButton" class="btn-success">Get Code</button>
+							              <button type="button" id="getCodeButton" class="btn-success">Get OTP</button>
 							          </span>
 								</div>
 								<div class="input-group hide" id="submitCodeDiv">
@@ -34,7 +34,7 @@
 							         </div>
 							         <div class="row">
 							         <span>
-								              <button type="button" id="resendCodeButton" >Resend Code</button>
+								              <button type="button" id="resendCodeButton" >Resend OTP</button>
 								          </span>
 							         </div>
 								</div>

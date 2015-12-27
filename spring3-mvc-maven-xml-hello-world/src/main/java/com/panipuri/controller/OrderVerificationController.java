@@ -36,12 +36,15 @@ public class OrderVerificationController {
 		String customerId = request.getParameter("customerId");
 		String addressId = request.getParameter("deliveryAddressId");
 		String emailAddress = request.getParameter("emailAddress");
-		
+		String editAddressRequested = request.getParameter("editAddressRequested");
 		Customer customer = new Customer();
 		if(null != customerId && !customerId.equals("")) {
 			customer.setCustomerId(new Long(customerId));
 		}
-		
+		boolean isEditAddress = false;
+		if(null != editAddressRequested && editAddressRequested.equals("true")) {
+			isEditAddress =  true;
+		}
 		customer.setContactNo1(phoneNumber);
 		customer.setCustomerFirstName(firstName);
 		customer.setCustomerLastName(lastName);
@@ -56,7 +59,7 @@ public class OrderVerificationController {
 		DeliveryArea area = new DeliveryArea();
 		area.setDeliveryAreaId(new Long(areaId));
 		address.setArea(area);
-		OrderVo orderDetails = orderFetchService.updateOrderAndgetOrderDetails(orderId, address, customer, slotId);
+		OrderVo orderDetails = orderFetchService.updateOrderAndgetOrderDetails(orderId, address, customer, slotId, isEditAddress);
 		AddressVo addressVo = orderDetails.getDeliveryAddress();
 		
 		String addressLine = "";
@@ -92,6 +95,79 @@ public class OrderVerificationController {
 			mv.addObject("deliverySlot", orderDetails.getDeliverySlot());
 			
 		return mv;
+	}
+	@RequestMapping(method = RequestMethod.POST, value="/saveAddress")
+	public ModelAndView saveAddress(final HttpServletRequest request) {
+//		System.out.println("in controller");
+//		ModelAndView mv = null;
+//		String firstName = request.getParameter("name[first]");
+//		String lastName = request.getParameter("name[last]");
+//		String address1 = request.getParameter("addr1");
+//		String address2 = request.getParameter("addr2");
+//		String landmark = request.getParameter("landmarkAddr");
+//		String areaId = request.getParameter("searchId");
+//		String phoneNumber = request.getParameter("phoneNumber");
+//		String orderId = request.getParameter("deliveryOrderId");
+//		String customerId = request.getParameter("customerId");
+//		String addressId = request.getParameter("deliveryAddressId");
+//		String emailAddress = request.getParameter("emailAddress");
+//		
+//		Customer customer = new Customer();
+//		if(null != customerId && !customerId.equals("")) {
+//			customer.setCustomerId(new Long(customerId));
+//		}
+//		
+//		customer.setContactNo1(phoneNumber);
+//		customer.setCustomerFirstName(firstName);
+//		customer.setCustomerLastName(lastName);
+//		customer.setEmailAddress(emailAddress);
+//		Address address = new Address();
+//		if(null != addressId && !addressId.equals("")) {
+//			address.setAddressId(new Long(addressId));
+//		}
+//		address.setAddressLine1(address1);
+//		address.setAddressLine2(address2);
+//		address.setLandmark(landmark);
+//		DeliveryArea area = new DeliveryArea();
+//		area.setDeliveryAreaId(new Long(areaId));
+//		address.setArea(area);
+//		OrderVo orderDetails = orderFetchService.updateOrderAndgetOrderDetails(orderId, address, customer, slotId);
+//		AddressVo addressVo = orderDetails.getDeliveryAddress();
+//		
+//		String addressLine = "";
+//		if(null != addressVo.getAddressLine1()) {
+//			addressLine= addressLine+addressVo.getAddressLine1();
+//			if(null!=addressVo.getAddressline2()){
+//				addressLine =addressLine+" ";
+//			}
+//		}
+//		if(null!=addressVo.getAddressline2()){
+//			addressLine =addressLine+addressVo.getAddressline2();
+//		}
+//		String landmarkReturn = ""; 
+//		if(null!=addressVo.getLandmark()){
+//			landmarkReturn =landmarkReturn+addressVo.getLandmark();
+//		}		
+//		AreaVo areaDetails = addressVo.getArea();
+//		String zipcodeReturn = "";
+//		if(null != areaDetails.getSubAreaName()) {
+//			zipcodeReturn = zipcodeReturn+areaDetails.getSubAreaName()+" ";
+//		}
+//		if(null != areaDetails.getAreaName()) {
+//			zipcodeReturn = zipcodeReturn+areaDetails.getAreaName()+" ";
+//		}
+//		
+//		if(null != areaDetails.getZipcode()) {
+//			zipcodeReturn = zipcodeReturn+areaDetails.getZipcode();
+//		}
+//		
+//			mv = new ModelAndView("");
+//			mv.addObject("orderId", orderDetails.getOrderId());
+//			mv.addObject("contactNo", orderDetails.getContactNo());
+//			mv.addObject("deliverySlot", orderDetails.getDeliverySlot());
+//			
+//		return mv;
+		return null;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/applyDiscount")

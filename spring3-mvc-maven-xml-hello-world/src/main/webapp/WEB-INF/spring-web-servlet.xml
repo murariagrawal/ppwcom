@@ -37,6 +37,7 @@
 				<value>com.test.hibernate.PartyItemQuantity</value>
 				<value>com.test.hibernate.ComboItemQuantity</value>
 				<value>com.test.hibernate.DiscountCondition</value>
+				<value>com.test.hibernate.DeliverySlotStock</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -45,14 +46,14 @@
 <!-- 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
 				<prop key="hibernate.current_session_context_class">thread</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+<!-- 				<prop key="hibernate.hbm2ddl.auto">update</prop> -->
 			</props>
 		</property>
 	</bean>
-	<!-- <bean id="dataSource"
+	 <!--<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://piyush.panipuri.jvmhost.net/piyushpa_panipuri" />
+		<property name="url" value="jdbc:mysql://localhost:3306/piyushpa_panipuri" />
 		<property name="username" value="piyushpa_piyush" />
 		<property name="password" value="piyush123" />
 	</bean>
@@ -60,7 +61,7 @@
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
-		<property name="url" value="jdbc:derby://localhost:1527/piyush" />
+		<property name="url" value="jdbc:derby://localhost:1527/panipuri" />
 		<property name="username" value="piyush" />
 		<property name="password" value="piyush" />
 	</bean>

@@ -17,6 +17,12 @@
 		</init-param>
 		 -->
 	</servlet>
+	<servlet>
+		<servlet-name>batch</servlet-name>
+		<servlet-class>com.panipuri.controller.BatchProcessorServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>spring-web</servlet-name>

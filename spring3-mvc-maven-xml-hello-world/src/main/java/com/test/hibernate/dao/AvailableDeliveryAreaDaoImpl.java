@@ -67,6 +67,7 @@ public class AvailableDeliveryAreaDaoImpl {
 		if(null != deliverySlots) {
 			for(DeliverySlot deliverySlot:deliverySlots) {				
 				deliverySlot.setDeliveryArea(masterDeliveryArea);
+				
 				session.save(deliverySlot);
 			}
 		}

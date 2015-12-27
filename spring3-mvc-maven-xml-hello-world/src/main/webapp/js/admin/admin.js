@@ -71,11 +71,14 @@ $(document).ready(function () {
 						var stuffingText =stuffing.toppingName;
 					    var stuffingValue = stuffing.toppingId;
 					    var option = new Option(stuffingText, stuffingValue);
+					    var option1 = new Option(stuffingText, stuffingValue);
 					    
 						/// jquerify the DOM object 'o' so we can use the html method
 						$(option).html(stuffingText);
 						$(option).attr("data-price",stuffing.toppingPrice);
-						$("#selectUpdateStuffing").append(option);
+						$(option1).html(stuffingText);
+						$(option1).attr("data-price",stuffing.toppingPrice);
+						$("#selectUpdateStuffing").append(option1);
 						$("#selectDeleteStuffing").append(option);					
 				});
 	    		bindStuffingEvents();
@@ -102,6 +105,32 @@ $(document).ready(function () {
 	    });
 	    $('#area , #areaMenu').on("click",function() {
 	    	loadFragment("html/admin/areaManagement.html");
+	    	ajax.getJSON("getAllItemAndStuffing").done(function(data) {
+	    		var itemSet= data;
+	    		
+	    		$.each(itemSet.itemList, function (i, item) {
+	    			var itemText =item.itemName;
+				    var itemid = item.itemId;
+	    			if(!item.comboItem && !item.partyItem) {
+	    				var itemDiv = '<div class="form-group"><div class="col-md-6"><input id="itemName'+itemid+'"  name="itemName" type="text" disabled class="form-control" value="'+itemText+'">'
+	    								+'<input id="itemId'+itemid+'"  name="itemId" type="hidden" class="form-control" value="'+itemid+'">'
+	    								+'</div><div class="col-md-6"><input id="itemQuantity'+itemid+'" type="text" name="itemQuantity" class="form-control" value="0" ></div></div>';
+	    								
+	    				$("#slotItemStock").append(itemDiv);
+	    			}
+	    			
+	    		});
+	    		$.each(itemSet.stuffingList, function (i, stuffing) {
+	    			var itemText =stuffing.toppingName;
+				    var itemid = stuffing.toppingId;
+	    			var stuffingDiv = '<div class="form-group"><div class="col-md-6"><input id="stuffingName'+itemid+'"  name="stuffingName" type="text" disabled class="form-control" value="'+itemText+'">'
+					+'<input id="stuffingId'+itemid+'"  name="stuffingId" type="hidden" class="form-control" value="'+itemid+'">'
+					+'</div><div class="col-md-6"><input id="stuffingQuantity'+itemid+'" type="text" name="stuffingQuantity" class="form-control" value="0" ></div></div>';
+					
+					$("#slotStuffingStock").append(stuffingDiv);
+	    		});
+	    		
+	    	});
 	    	ajax.getJSON("fetchAllMasterArea").done(function(data) {
 	    		$.each(data.masterDeliveryArea, function (i, area) {					
 						var areaName =area.areaName;

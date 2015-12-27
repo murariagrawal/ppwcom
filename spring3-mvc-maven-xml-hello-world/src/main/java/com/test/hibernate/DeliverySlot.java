@@ -1,12 +1,17 @@
 package com.test.hibernate;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +29,8 @@ public class DeliverySlot {
 	private int slotQuantity;
 	@Column
 	private int todaySlotQuantity;
+	@OneToMany(fetch = FetchType.EAGER,cascade= CascadeType.ALL, mappedBy="slot")
+	private List<DeliverySlotStock> deliveryStockList;
 	
 	@ManyToOne(targetEntity=MasterDeliveryArea.class)
 	@JoinColumn(name="delivery_area_id")
@@ -99,6 +106,18 @@ public class DeliverySlot {
 	 */
 	public void setTodaySlotQuantity(int todaySlotQuantity) {
 		this.todaySlotQuantity = todaySlotQuantity;
+	}
+	/**
+	 * @return the deliveryStockList
+	 */
+	public List<DeliverySlotStock> getDeliveryStockList() {
+		return deliveryStockList;
+	}
+	/**
+	 * @param deliveryStockList the deliveryStockList to set
+	 */
+	public void setDeliveryStockList(List<DeliverySlotStock> deliveryStockList) {
+		this.deliveryStockList = deliveryStockList;
 	}
 	
 

@@ -13,8 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.panipuri.service.admin.CrewService;
 import com.panipuri.vo.AreaVo;
+import com.test.hibernate.Crew;
 
 @Controller
+
 public class CrewController {
 	@Autowired
 	private CrewService crewService;
@@ -78,10 +80,22 @@ public class CrewController {
 		crewService.getAllCrewInformation();
 		return null;
 	}
-	@RequestMapping(method = RequestMethod.POST, value="/getCrewDetails")
-	public ModelAndView getCrewDetails() {
-		return null;
+	@RequestMapping(method = RequestMethod.POST, value="/loginCrew")
+	public ModelAndView loginCrew(@RequestParam("userId") String userId,@RequestParam("password") String password ) {
+		Crew crew = crewService.loginCrew(userId, password);
+		ModelAndView mv = null;
+		if(null != crew) {
+			mv = new ModelAndView();
+			mv.addObject("loginSucceded", true);
+		} else {
+			mv = new ModelAndView();
+			mv.addObject("loginSucceded", false);
+		}
+		mv = new ModelAndView("adminHome");
+		return mv;
+		
 	}
+	
 	/**
 	 * @param crewService the crewService to set
 	 */

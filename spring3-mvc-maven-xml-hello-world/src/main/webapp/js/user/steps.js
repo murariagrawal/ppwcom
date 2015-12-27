@@ -14,7 +14,8 @@ $(document).ready(function () {
 		    .end()
 		    .append('<option value="">Select Delivery Slot</option>')
 		    .val('');
-			
+			$("#areaMenu").empty();
+			$("#subAreaMenu").empty();
 			$('#addressDivElements').removeClass("hide").addClass("show");
 			hideErrorMessage();
 		}
@@ -122,7 +123,7 @@ $(document).ready(function () {
 						
 						var li ="";
 						if(dataStr.search(regex) !==-1) {
-							li = "<div class='list-group-item individualArea' data-name='"+dataStr+"'>"+dataStr.replace(regex, '<strong>'+inputValue+'</strong>')+"</div>";
+							li = "<div class='list-group-item individualArea' data-index='"+dataStr.indexOf(regex)+"' data-name='"+dataStr+"'>"+dataStr.replace(regex, '<strong>'+inputValue+'</strong>')+"</div>";
 							$("#areaMenu").append(li);
 						} else {
 							$.each(data.zipcodes, function(j, zipcode) {
@@ -137,7 +138,7 @@ $(document).ready(function () {
 							
 							var li ="";								
 							if(dataStrSubArea.search(regex) !==-1) {
-								li = "<div class='list-group-item individualSubArea' data-name='"+dataStrSubArea+"' id='"+subarea.deliveryAreaId+"'>"+dataStrSubArea.replace(regex, '<strong>'+inputValue+'</strong>')+", "+
+								li = "<div class='list-group-item individualAreaSubArea' data-name='"+dataStrSubArea+"' data-areaName='"+dataStr+"' id='"+subarea.deliveryAreaId+"'>"+dataStrSubArea.replace(regex, '<strong>'+inputValue+'</strong>')+", "+
 								dataStr+"</div>";
 								$("#areaMenu").append(li);
 							}
@@ -201,6 +202,17 @@ $(document).ready(function () {
 			$("#subAreaMenu").addClass("hide");
 			getDeliverySlots();
 		});
+		$("#addressDivElements").on("click", ".individualAreaSubArea", function() {
+			$("#subAreaAddr").val($(this).attr('data-name'));
+			$("#subAreaAddr").attr("data-name",$(this).attr('data-name'));
+			$("#areaAddr").val($(this).attr('data-areaName'));
+			$("#areaAddr").attr("data-name",$(this).attr('data-areaName'));
+			
+			$("#searchId").val($(this).attr('id'));
+			$("#areaMenu").removeClass("show").addClass("hide");
+			$("#subAreaMenu").removeClass("show").addClass("hide");
+			getDeliverySlots();
+		});
 		$("#addressDivElements").on("click", ".individualArea", function() {
 			if($("#areaAddr").val() !== $(this).attr('data-name')) {
 				$("#areaAddr").attr("data-name",$(this).attr('data-name'));
@@ -211,17 +223,10 @@ $(document).ready(function () {
 			$("#areaMenu").removeClass("show");
 			$("#areaMenu").addClass("hide");
 		});
-		$("#areaLink").on("blur", function() {				
-			$("#areaMenu").removeClass("show");
-			$("#areaMenu").addClass("hide");
-		});
-		$("#subAreaLink").on("blur", function() {				
-			$("#subAreaMenu").removeClass("show");
-			$("#subAreaMenu").addClass("hide");
-		});
+		
 	}
 	function bindAddressModelEvents() {
-		$( ".well-sm" ).on('click', function(e) {
+		$( "[data-th='individualAddress']" ).on('click', function(e) {
 			clearDeliveryForm();
 			$("#addressFieldsExisting").removeClass("hide").addClass("show");
 			$('#addressFields').removeClass("show").addClass("hide");
@@ -234,122 +239,128 @@ $(document).ready(function () {
 			$("#areaAddr").val($(this).find("#area").html());*/
 			$("#deliveryAddressId").val($(this).find("#addressId").val());	
 			$("#searchId").val($(this).find("#areaId").val());
+			$('#editAddress').removeClass("hide").addClass("show");
+			$('#saveAddress').removeClass("show").addClass("hide");
 			$('#myModal').modal('hide');
 			//$('#addressFields').removeClass("hide").addClass("show");
 			getDeliverySlots();
 		});
 		$( ".editbutton" ).on('click', function(e) {
-			clearDeliveryForm();
+			editAddress($(this).parent().parent().parent().parent().find("[data-th='individualAddress']"));
 			
-			$("#firstNameAddr").val($(this).find("#firstName").html());
-			$("#lastNameAddr").val($(this).find("#lastName").html());
-			$("#addr1").val($(this).find("#addressLine1").html());
-			$("#addr2").val($(this).find("#addressLine2").html());
-			$("#landmarkAddr").val($(this).find("#landmark").html());
-			$("#areaAddr").val($(this).find("#area").html());
-			$("#subAreaAddr").val($(this).find("#subAreaAddr").html());
-			$("#deliveryAddressId").val($(this).find("#addressId").val());
-			$("#searchId").val($(this).find("#areaId").val());	
-			$('#myModal').modal('hide');
-			$('#addressFields').removeClass("hide").addClass("show");
-			getDeliverySlots();
+			
 		});
 		$("#enterNewAddress").on('click', function(e) {  
 			$('#myModal').modal('hide');
 			clearDeliveryForm();
 			$("#addressFieldsExisting").removeClass("show").addClass("hide");
 			$('#addressFields').removeClass("hide").addClass("show");
+			$('#editAddress').removeClass("show").addClass("hide");
+			$("#addAddress").removeClass("show").addClass("hide");
+			$('#saveAddress').removeClass("hide").addClass("show");
 			fetchDeliveryArea();
 		});
+	}
+	function createIndividualAddressRow(d) {
+		var divIndividual = "<div class='customrow well well-sm' >";
+		var divIndividual1 = "<div class='col-lg-8 col-xs-8' data-th='individualAddress' style='padding: 0px;'>";
+		var ulIndividual = "<ul style='list-style:none;-webkit-padding-start: 15px;'>";
+		var liIndividual="";
+		var hiddenAddressId = "<input type='hidden' id='addressId' value='"+d.addressId+"' />"
+		var hiddenAreaId = "<input type='hidden' id='areaId' value='"+d.area.deliveryAreaId+"' />"
+		if(d.firstName || d.lastName) {
+			var firstName= "";
+			var lastName= "";
+			if(d.firstName && d.firstName !== null){
+				firstName =d.firstName;
+			}
+			if(d.lastName && d.lastName !== null){
+				lastName =d.lastName;
+			}
+			if(firstName != "" || lastName !== ""){
+				liIndividual = "<li id='addressName'>"
+				if(firstName != "") {
+					liIndividual = liIndividual+"<span id='firstName'>"+firstName+"</span>";
+					if(lastName !== "") {
+						liIndividual = liIndividual+" ";
+					}
+				}
+				if(lastName !== "") {
+					liIndividual = liIndividual+"<span id='lastName'>"+lastName+"</span>";
+				}
+				liIndividual = liIndividual+"</li>";
+				ulIndividual = ulIndividual+liIndividual;
+			}
+			
+		}
+		if(d.addressLine1) {
+			liIndividual = "<li id='addressLine1'>"+d.addressLine1+"</li>";
+			ulIndividual = ulIndividual+liIndividual;
+		}
+		if(d.addressline2) {
+			liIndividual = "<li id='addressLine2'>" +d.addressline2+"</li>";
+			ulIndividual = ulIndividual+liIndividual;
+		}	
+		if(d.landmark) {
+			liIndividual = "<li id='landmark'>" +d.landmark+"</li>";
+			ulIndividual = ulIndividual+liIndividual;
+		}	
+		liIndividual = "<li>";					
+		if(d.area) {
+			
+			if(d.area.subAreaName) {
+				liIndividual = liIndividual+"<span id='subArea'>";
+				liIndividual = liIndividual+d.area.subAreaName;
+				liIndividual = liIndividual+"</span>, ";
+			}
+			if(d.area.areaName) {
+				liIndividual = liIndividual+"<span id='area'>";
+				liIndividual = liIndividual+d.area.areaName;
+				liIndividual = liIndividual+"</span>, ";
+			} 
+			if(d.area.zipcode) {
+				liIndividual = liIndividual+d.area.zipcode;
+			}
+			
+			liIndividual = liIndividual+"</span>"
+		}						
+		liIndividual = liIndividual+ "</li>";		
+		ulIndividual = ulIndividual+liIndividual;					
+		ulIndividual = ulIndividual+"</ul></a>";
+		if(d.addressLine1 || d.addressline1) {
+			var liedit = "<li><div class='editbutton col-lg-4' style='text-align: right;'><a><span class='glyphicon glyphicon-edit'> Edit</span></a></div></li>";
+			divIndividual1 = divIndividual1+ulIndividual+hiddenAreaId+hiddenAddressId+"</div>";
+		 	divIndividual = divIndividual+divIndividual1+"<div class='row'><ul style='list-style:none;'>"+liedit+"</ul></div></div>";
+			
+		}
+		return divIndividual;
 	}
 		function getAddressDetails() {
 			
 			ajax.postForm("fetchDeliveryDetails?F=J", $("#deliveryForm")).done(function(data) {		
-				var ulFinal = "<ul style='list-style:none'>";
+				var ulFinal = "<ul style='list-style:none;padding: 0px;'>";
 				var liFinal = "";
 				var addressList= data.addressList;
-				var email = data.eamilAddress;
+				var email = data.emailAddress;
 				if(addressList) {
 					$.each(addressList, function(i, d) {			
-						var divIndividual = "<div class='well well-sm' data-th='individualAddress'>";
-						var ulIndividual = "<ul style='list-style:none'>";
-						var liIndividual="";
-						var hiddenAddressId = "<input type='hidden' id='addressId' value='"+d.addressId+"' />"
-						var hiddenAreaId = "<input type='hidden' id='areaId' value='"+d.area.deliveryAreaId+"' />"
-						if(d.firstName || d.lastName) {
-							var firstName= "";
-							var lastName= "";
-							if(d.firstName && d.firstName !== null){
-								firstName =d.firstName;
-							}
-							if(d.lastName && d.lastName !== null){
-								lastName =d.lastName;
-							}
-							if(firstName != "" || lastName !== ""){
-								liIndividual = "<li id='addressName'>"
-								if(firstName != "") {
-									liIndividual = liIndividual+"<span id='firstName'>"+firstName+"</span>";
-									if(lastName !== "") {
-										liIndividual = liIndividual+" ";
-									}
-								}
-								if(lastName !== "") {
-									liIndividual = liIndividual+"<span id='lastName'>"+lastName+"</span>";
-								}
-								liIndividual = liIndividual+"</li>";
-								ulIndividual = ulIndividual+liIndividual;
-							}
-							
-						}
-						if(d.addressLine1) {
-							liIndividual = "<li id='addressLine1'>"+d.addressLine1+"</li>";
-							ulIndividual = ulIndividual+liIndividual;
-						}
-						if(d.addressline2) {
-							liIndividual = "<li id='addressLine2'>" +d.addressline2+"</li>";
-							ulIndividual = ulIndividual+liIndividual;
-						}	
-						if(d.landmark) {
-							liIndividual = "<li id='landmark'>" +d.landmark+"</li>";
-							ulIndividual = ulIndividual+liIndividual;
-						}	
-						liIndividual = "<li>";					
-						if(d.area) {
-							liIndividual = liIndividual+"<span id='area'>";
-							if(d.area.subAreaName) {
-								liIndividual = liIndividual+d.area.subAreaName+", ";
-							}
-							if(d.area.areaName) {
-								liIndividual = liIndividual+d.area.areaName+ ", ";
-							} 
-							if(d.area.zipcode) {
-								liIndividual = liIndividual+d.area.zipcode;
-							}
-							
-							liIndividual = liIndividual+"</span>"
-						}						
-						liIndividual = liIndividual+ "</li>";		
-						ulIndividual = ulIndividual+liIndividual;					
-						ulIndividual = ulIndividual+"</ul></a>";
-						if(d.addressLine1 || d.addressline1) {
-						 	divIndividual = divIndividual+ulIndividual+hiddenAreaId+hiddenAddressId+"</div>";
-							liFinal = "<li>"+divIndividual+"</li>";
-							var liedit = "<li><div class='row editbutton'><button type='button'>Edit Address</button></li>";
-							ulFinal = ulFinal+liFinal+liedit;
-						}
+						var divIndividual = createIndividualAddressRow(d);
+						liFinal = "<li>"+divIndividual+"</li>";
+						
+						ulFinal = ulFinal+liFinal;
 					});
 				}
 				ulFinal = ulFinal+"</ul>";
-				if(email && email!=="") {
+				
 					$("#emailDiv").removeClass("hide").addClass("show");
 					$("#emailAddress").val(email);
-				}
+				
 				if(addressList && addressList !== null && addressList.length===1) {
 					clearDeliveryForm();
 					var addressExistingDiv = $("#addressFieldsExisting");	
 					addressExistingDiv.empty();
 					
-					var addressIndividual = "<ul style='list-style:none'>"+$(liFinal).find('.well-sm').html()+"</ul>"
+					var addressIndividual = "<ul style='list-style:none;padding-left: 20px;'>"+$(liFinal).find('[data-th="individualAddress"]').html()+"</ul>"
 					addressExistingDiv.append(addressIndividual);
 					$("#addressFieldsExisting").removeClass("hide").addClass("show");
 					$('#addressFields').removeClass("show").addClass("hide");
@@ -357,6 +368,7 @@ $(document).ready(function () {
 					$('#editAddress').removeClass("hide").addClass("show");
 					$("#changeAddress").removeClass("show").addClass("hide");
 					$("#addAddress").removeClass("hide").addClass("show");
+					$('#saveAddress').removeClass("show").addClass("hide");
 					$("#searchId").val($("#addressFieldsExisting").find("#areaId").val());
 					getDeliverySlots();
 				} else if(addressList && addressList !== null && addressList.length>1) {
@@ -368,6 +380,7 @@ $(document).ready(function () {
 					$('#editAddress').removeClass("hide").addClass("show");
 					$("#changeAddress").removeClass("hide").addClass("show");
 					$("#addAddress").removeClass("show").addClass("hide");
+					$('#saveAddress').removeClass("show").addClass("hide");
 					bindAddressModelEvents();
 				} else {
 					clearDeliveryForm();
@@ -377,6 +390,7 @@ $(document).ready(function () {
 					$('#editAddress').removeClass("show").addClass("hide");
 					$("#changeAddress").removeClass("show").addClass("hide");
 					$("#addAddress").removeClass("show").addClass("hide");
+					$('#saveAddress').removeClass("show").addClass("hide");
 					fetchDeliveryArea();
 				}	
 				$("#addAddressButton").on('click', function(e) {  			
@@ -385,6 +399,7 @@ $(document).ready(function () {
 					$('#addressFields').removeClass("hide").addClass("show");
 					$('#editAddress').removeClass("show").addClass("hide");
 					$("#addAddress").removeClass("show").addClass("hide");
+					$('#saveAddress').removeClass("hide").addClass("show");
 					$("#deliveryAddressId").val('');
 					fetchDeliveryArea();
 				});
@@ -392,26 +407,45 @@ $(document).ready(function () {
 					$('#myModal').modal();
 				});
 				$( "#editAddresslink" ).on('click', function(e) {
+					editAddress($("#addressFieldsExisting"));
 					
 					
-					$("#firstNameAddr").val($("#addressFieldsExisting").find("#firstName").html());
-					$("#lastNameAddr").val($("#addressFieldsExisting").find("#lastName").html());
-					$("#addr1").val($("#addressFieldsExisting").find("#addressLine1").html());
-					$("#addr2").val($("#addressFieldsExisting").find("#addressLine2").html());
-					$("#landmarkAddr").val($("#addressFieldsExisting").find("#landmark").html());
-					$("#areaAddr").val($("#addressFieldsExisting").find("#area").html());
-					$("#subAreaAddr").val($("#addressFieldsExisting").find("#subAreaAddr").html());
-					$("#deliveryAddressId").val($("#addressFieldsExisting").find("#addressId").val());
-					$("#searchId").val($("#addressFieldsExisting").find("#areaId").val());	
-					$('#myModal').modal('hide');
-					$('#addressFieldsExisting').removeClass("show").addClass("hide");
-					$('#addressFields').removeClass("hide").addClass("show");
-					getDeliverySlots();
+				});
+				$( "#saveAddress" ).on('click', function(e) {
+					$("#editAddressRequested").val("true");
+					ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
+						$("#editAddressRequested").val("false");
+						getAddressDetails();				
+			        }).fail(function(data) {        	
+			        	showErrorMessage("Something went wrong. Please try again later.");
+			        	hideOverlay();
+			        });
+					
+					
 				});
 	        }).fail(function(data) {
 	        	
 	        	alert("failed");
 	        });		
+		}
+		function editAddress(address) {
+			$("#firstNameAddr").val($(address).find("#firstName").html());
+			$("#lastNameAddr").val($(address).find("#lastName").html());
+			$("#addr1").val($(address).find("#addressLine1").html());
+			$("#addr2").val($(address).find("#addressLine2").html());
+			$("#landmarkAddr").val($(address).find("#landmark").html());
+			$("#areaAddr").val($(address).find("#area").html());
+			$("#subAreaAddr").val($(address).find("#subArea").html());
+			$("#deliveryAddressId").val($(address).find("#addressId").val());
+			$("#searchId").val($(address).find("#areaId").val());	
+			$('#myModal').modal('hide');
+			
+			$('#addressFieldsExisting').removeClass("show").addClass("hide");
+			$('#addressFields').removeClass("hide").addClass("show");
+			$('#addressDivElements').removeClass("hide").addClass("show");
+			$('#saveAddress').removeClass("hide").addClass("show");
+			$('#editAddress').removeClass("show").addClass("hide");
+			getDeliverySlots();
 		}
 		function validateDeliveryForm(){
 			  var phoneNumberVal =  $("#phoneNumber").val(),
@@ -419,6 +453,9 @@ $(document).ready(function () {
 			  lastNameVal1 = $("#lastNameAddr").val(),
 			  addressVal1 = $("#addr1").val(),
 			  addressVal2 = $("#addr2").val(),
+			  areaAddrVal = $("#areaAddr").val(),
+			  subAreaAddrVal = $("#subAreaAddr").val(),
+			  emailAddressVal = $("#emailAddress").val(),
 			  landMarkVal = $("#landmarkAddr").val(),	  
 			  deliverySlotVal = $("#selectDeliverySlot").val(),
 			  existingAddress = $("#addressFieldsExisting").html(),
@@ -426,25 +463,40 @@ $(document).ready(function () {
 			  errorMessage = "";
 			  if(existingAddress ==="") {
 				  if(phoneNumberVal === null || phoneNumberVal == "" || phoneNumberVal.length <10) {
-					  $("#phoneNumber").parent().addClass('error');
+					  $("#phoneNumber").parent().addClass('has-error');
 					  noOfFieldsInError = noOfFieldsInError+1;
 					  errorMessage = "Phone Number is a required field.";
 				  }
 				  if(firstNameVal1 === null || firstNameVal1 == "") {
-					  $("#firstNameAddr").parent().addClass('error');
+					  $("#firstNameAddr").parent().addClass('has-error');
 					  noOfFieldsInError = noOfFieldsInError+1;
 					  errorMessage = "First Name is a required field.";
 				  }
 				  if(lastNameVal1 === null || lastNameVal1 == "") {
-					  $("#lastNameAddr").parent().addClass('error');
+					  $("#lastNameAddr").parent().addClass('has-error');
 					  noOfFieldsInError = noOfFieldsInError+1;
 					  errorMessage = "Last Name is a required field.";
 				  }
 				  if(addressVal1 === null || addressVal1 == "") {
-					  $("#addr1").parent().addClass('error');
+					  $("#addr1").parent().addClass('has-error');
 					  noOfFieldsInError = noOfFieldsInError+1;
 					  errorMessage = "Address Line 1 is a required field.";
-				  }	  
+				  }	 
+				  if(areaAddrVal === null || areaAddrVal == "") {
+					  $("#areaAddr").parent().addClass('has-error');
+					  noOfFieldsInError = noOfFieldsInError+1;
+					  errorMessage = "Area is a required field.";
+				  }
+				  if(subAreaAddrVal === null || subAreaAddrVal == "") {
+					  $("#subAreaAddr").parent().addClass('has-error');
+					  noOfFieldsInError = noOfFieldsInError+1;
+					  errorMessage = "SubArea is a required field.";
+				  }	 
+				  if(emailAddressVal === null || emailAddressVal == "") {
+					  $("#emailAddress").parent().addClass('has-error');
+					  noOfFieldsInError = noOfFieldsInError+1;
+					  errorMessage = "Email Address is a required field.";
+				  }	 
 			  } else {
 				  if($("#deliveryAddressId").val() === "") {
 					  noOfFieldsInError = noOfFieldsInError+1;
@@ -452,7 +504,7 @@ $(document).ready(function () {
 				  }
 			  }
 			  if(deliverySlotVal === null || deliverySlotVal == "") {
-				  $("#selectDeliverySlot").parent().addClass('error');
+				  $("#selectDeliverySlot").parent().addClass('has-error');
 				  noOfFieldsInError = noOfFieldsInError+1;
 				  errorMessage = "Please select a delivery slot to continue.";
 			  }
@@ -490,22 +542,7 @@ $(document).ready(function () {
 			  $("#errorDiv").removeClass("hide");
 			  $("#errorDiv").append("<Strong>"+errorMessage+"");
 	}
-	function createIndividualToppingRow(topping) {
-		var toppingName= topping.toppingName;
-		var toppingQuantity= topping.quantity;
-		var toppingPrice= topping.price;
-		
-		var toppingId= topping.toppingId;
-		var toppingNameDiv = '<div class="row"><div class="col-sm-10"><h4 class="nomargin"><label>'+toppingName+'</label></h4></div></div>';
-				
-		var toppingTotalPrice = toppingPrice*toppingQuantity;
-		var individualToppingRow='<tr> <td>'+toppingNameDiv+'</td><td>'+
-								toppingPrice+'</td><td>'+
-								toppingQuantity+'</td><td class="text-center subtotal" >'+
-								toppingTotalPrice+'</td></tr>';
-		return individualToppingRow;
-		
-	}
+	
 	function createDeliveryDetailsInfo(data) {
 		
 		var addressInfo = "<div class='row'><div class='col-lg-12'>Delivery Address :</div></div><div class='row'><div class='col-lg-12'><label>"+
@@ -532,37 +569,39 @@ $(document).ready(function () {
     });
 
    function goToNextStep(nextStep) {
+	   hideErrorMessage();
 	   $("#pageContentCarousel").carousel('next');
 	   showHideButtons(nextStep);
     };
     function goToPreviousStep(previousStep) {
+    	hideErrorMessage();
  	   $("#pageContentCarousel").carousel('prev');
  	  showHideButtons(previousStep);
      };
      function showHideButtons(nextStep){
     	 if(nextStep === "order") {
-  		   $("#continueToDeliverySummary").removeClass("hide").addClass("show");
-  		   $("#continueToVerifySummary").removeClass("show").addClass("hide");
-  		   $("#continueToConfirmSummary").removeClass("show").addClass("hide");
-  		   $("#placeNewOrderSummary").removeClass("show").addClass("hide");
+  		   $(".continueToDeliverySummary").removeClass("hide").addClass("show");
+  		   $(".continueToVerifySummary").removeClass("show").addClass("hide");
+  		   $(".continueToConfirmSummary").removeClass("show").addClass("hide");
+  		   $(".placeNewOrderSummary").removeClass("show").addClass("hide");
   		   $("#couponCode").removeClass("show").addClass("hide");
   	   } else if(nextStep === "address") {
-  		   $("#continueToDeliverySummary").removeClass("show").addClass("hide");
-  		   $("#continueToVerifySummary").removeClass("hide").addClass("show");
-  		   $("#continueToConfirmSummary").removeClass("show").addClass("hide");
-  		   $("#placeNewOrderSummary").removeClass("show").addClass("hide");
+  		   $(".continueToDeliverySummary").removeClass("show").addClass("hide");
+  		   $(".continueToVerifySummary").removeClass("hide").addClass("show");
+  		   $(".continueToConfirmSummary").removeClass("show").addClass("hide");
+  		   $(".placeNewOrderSummary").removeClass("show").addClass("hide");
   			$("#couponCode").removeClass("show").addClass("hide");
   	   } else if(nextStep === "verify") {
-  		   $("#continueToDeliverySummary").removeClass("show").addClass("hide");
-  		   $("#continueToVerifySummary").removeClass("show").addClass("hide");
-  		   $("#continueToConfirmSummary").removeClass("hide").addClass("show");
-  		   $("#placeNewOrderSummary").removeClass("show").addClass("hide");
+  		   $(".continueToDeliverySummary").removeClass("show").addClass("hide");
+  		   $(".continueToVerifySummary").removeClass("show").addClass("hide");
+  		   $(".continueToConfirmSummary").removeClass("hide").addClass("show");
+  		   $(".placeNewOrderSummary").removeClass("show").addClass("hide");
   		 $("#couponCode").removeClass("hide").addClass("show");
   	   } else if(nextStep === "confirm") {
-  		   $("#continueToDeliverySummary").removeClass("show").addClass("hide");
-  		   $("#continueToVerifySummary").removeClass("show").addClass("hide");
-  		   $("#continueToConfirmSummary").removeClass("show").addClass("hide");
-  		   $("#placeNewOrderSummary").removeClass("hide").addClass("show");
+  		   $(".continueToDeliverySummary").removeClass("show").addClass("hide");
+  		   $(".continueToVerifySummary").removeClass("show").addClass("hide");
+  		   $(".continueToConfirmSummary").removeClass("show").addClass("hide");
+  		   $(".placeNewOrderSummary").removeClass("hide").addClass("show");
   		   $("#couponCode").removeClass("show").addClass("hide");
   	   } 
      }
@@ -629,16 +668,18 @@ $(document).ready(function () {
     	 $('[data-th="Quantity"]').each(function() {
     		 var itemId = $(this).attr("data-itemId");
     	    	var itemOrderId = "itemOrderSummary"+itemId;    
-    	    	var itemQuantity = $("#quantity"+itemId).val();
-    	    	var itemPrice = $("#itemPrice"+itemId).html();     	
+    	    	var itemQuantity = $(this).find(".quantity-counter-input").text();
+    	    	var itemPrice = $("#itemPrice"+itemId).html();  
+    	    	$(this).find("input").val(itemQuantity);
     	    	if(itemQuantity > 0) {
     	    		itemAdded = true;
+    	    		
     	    		var subtotal = itemQuantity *itemPrice;
     	    		var itemName = $(this).attr("data-itemName");    	    		
     	    		var itemOrderSummaryDiv = '<div class="customrow" id="'+itemOrderId+'">'
-    	    										+'<div class="col-md-6"><span>'+itemName+'</span></div>'
-    	    										+'<div class="col-md-2" style="text-align: center;"><span class="quantity">'+itemQuantity+'</span></div>'
-    	    										+'<div class="col-md-4"><span class="subtotal">'+subtotal.toFixed(2)+'</span></div></div>';
+    	    										+'<div class="col-md-6 col-xs-6 col-sm-6"><span>'+itemName+'</span></div>'
+    	    										+'<div class="col-md-2 col-xs-2 col-sm-2" style="text-align: center;"><span class="quantity">'+itemQuantity+'</span></div>'
+    	    										+'<div class="col-md-4 col-xs-4 col-sm-4"><span class="subtotal">'+subtotal.toFixed(2)+'</span></div></div>';
     	    		$("#itemQuantitySummary").append(itemOrderSummaryDiv);
     	    	} else {
     	    		
@@ -655,14 +696,16 @@ $(document).ready(function () {
 	    	var stuffingOrderId = "stuffingOrderSummary"+stuffingId;
 	    	var subtotalId = "subTotalStuffing"+ stuffingId;	    	   	
 	    	var stuffingPrice = $("#stuffingPrice"+stuffingId).html();  
-	    	var stuffingQuantity = $("#stuffingquantity"+stuffingId).val();	    	
+	    	var stuffingQuantity = $(this).find(".quantity-counter-input").text()	
+	    	$(this).find("input").val(stuffingQuantity);
 	    	if(stuffingQuantity > 0) {
+	    		
 	    		var subtotal = stuffingQuantity *stuffingPrice;
 	    		var stuffingName = $(this).attr("data-itemName");	    		
    			var stuffingOrderSummaryDiv = '<div class="customrow" id="'+stuffingOrderId+'">'
-   										+'<div class="col-md-6"><span>'+stuffingName+'</span></div>'
-   										+'<div class="col-md-2" style="text-align: center;"><span class="quantity">'+stuffingQuantity+'</span></div>'
-   										+'<div class="col-md-4"><span class="subtotal">'+subtotal.toFixed(2)+'</span></div></div>';
+   										+'<div class="col-md-6 col-xs-6 col-sm-6"><span>'+stuffingName+'</span></div>'
+   										+'<div class="col-md-2 col-xs-2 col-sm-2" style="text-align: center;"><span class="quantity">'+stuffingQuantity+'</span></div>'
+   										+'<div class="col-md-4 col-xs-4 col-sm-4"><span class="subtotal">'+subtotal.toFixed(2)+'</span></div></div>';
    			$("#stuffiingQuantitySummary").append(stuffingOrderSummaryDiv);	    		
 	    	} else {
 	    		
@@ -688,17 +731,18 @@ $(document).ready(function () {
              }
          });    	 
     	 $("#totalAmount1").html(totalPrice.toFixed(2));
-    	 $("#totalAmount2").html(totalPrice.toFixed(2));
+    	 $("#subTotal").html(totalPrice.toFixed(2));
+    	 $("#totalAmount").html(totalPrice.toFixed(2));
     }
     
     
-    $("#continueToDelivery").on("click", function(e) {
+    $(".continueToDelivery").on("click", function(e) {
     	showOverlay();
     	var noIfItemsSelected = 0;
     	 $('[data-th="Quantity"]').each(function() {
     		 var itemId = $(this).attr("data-itemId");
     		 var quantityId = "quantity" +itemId;  
-    		 var itemQuantity = $("#"+quantityId).val();
+    		 var itemQuantity = $(this).find(".quantity-counter-input").text();
     		 if(itemQuantity>0) {
     			 noIfItemsSelected = noIfItemsSelected+1;
     		 }
@@ -713,31 +757,32 @@ $(document).ready(function () {
     	 });		
     	 
     	 if(noIfItemsSelected>0) {
-    		 var deliveryAddressId = $("#deliveryAddressId").val();
-    		 if(deliveryAddressId && deliveryAddressId!== ""){    			 
-    			 goToNextStep("address");
-    			 hideOverlay();
-    			 
-    		 } else {
-    		 	ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {			
-    				ajax.loadFragment("html/deliverydetails.html").done(function(out) {				
-    					$("#deliveryDetailsDiv").empty();
-    					$("#deliveryDetailsDiv").append(out);
-    					$("input[id=deliveryOrderId]").val(data.orderId);
-    					bindDeliveryEvents();
-    					hideErrorMessage();
-    					goToNextStep("address");
-    					
-    					 hideOverlay();
-    				}).fail(function(data) {	        	
-    		        	alert("failed");
-    		        	hideOverlay();
-    		        });						
-    	        }).fail(function(data) {        	
-    	        	alert("failed");
-    	        	hideOverlay();
-    	        }); 
-    		 }
+    		 var deliveryAddressId = $("#deliveryAddressId").val();    		 
+		 	ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {
+		 		$("#orderId").val(data.orderId);
+		 		if(deliveryAddressId && deliveryAddressId!== ""){    			 
+	    			 goToNextStep("address");
+	    			 hideOverlay();
+	    			 getDeliverySlots();
+	    		 } else {
+					ajax.loadFragment("html/deliverydetails.html").done(function(out) {				
+						$("#deliveryDetailsDiv").empty();
+						$("#deliveryDetailsDiv").append(out);
+						$("input[id=deliveryOrderId]").val(data.orderId);
+						bindDeliveryEvents();
+						hideErrorMessage();
+						goToNextStep("address");
+						
+						 hideOverlay();
+					}).fail(function(data) {	        	
+			        	alert("failed");
+			        	hideOverlay();
+			        });		
+	    		 }
+	        }).fail(function(data) {        	
+	        	alert("failed");
+	        	hideOverlay();
+	        }); 
     		 
     	 } else {
     		 showErrorMessage('Please add atleast one Box of Pani puri to continue');    
@@ -792,16 +837,16 @@ $(document).ready(function () {
 		return individualItemRow;
 		
     }
-    $("#editOrder").on("click", function(e) {
+    $(".editOrder").on("click", function(e) {
     	goToPreviousStep("order");
     });
-    $("#backToAddress").on("click", function(e) {
+    $(".backToAddress").on("click", function(e) {
     	goToPreviousStep("address");
     });
    
-    $("#continueToVerify").on("click", function(e) {
+    $(".continueToVerify").on("click", function(e) {
     	
-    	$('.error-field').removeClass('error-field');
+    	$('.has-error').removeClass('has-error');
     	hideErrorMessage();
     	if(validateDeliveryForm()) {
     		showOverlay();
@@ -815,7 +860,7 @@ $(document).ready(function () {
 						$("#verifyDetailsDiv").empty();
 						$("#verifyDetailsDiv").append(out);
 						$("#orderIdPayment").val(data.orderId);
-				    	$("#contactNumber").html(data.contactNo);
+				    	$("#contactNumber").val(data.contactNo);
 						bindVerifyEvents(data);
 						goToNextStep("verify");						
 						hideOverlay();
@@ -837,8 +882,8 @@ $(document).ready(function () {
    
     function bindVerifyEvents(data) {    	
     
-    	$("#paymentOption, #otheroption").change(function () {
-	    	if($("#paymentOption").is(":checked")) {
+    	$("#cashoption, #otheroption").change(function () {
+	    	if($("#cashoption").is(":checked")) {
 	    		$("#cashOnDeliveryDiv").show();
 	    		$("#otherPaymentOptionDiv").hide();
 	    	}
@@ -872,7 +917,7 @@ $(document).ready(function () {
             	alert("failed");
             });
     	});  
-		$("#confirmOrderButton").on("click", function(e) {
+		$(".confirmOrderButton").on("click", function(e) {
 			showOverlay();
 			ajax.postForm("validateOTP?F=J", $("#oneTimePasswordForm")).done(function(data) {
 				if(data.errormessage && data.errormessage!== "") {
@@ -883,13 +928,12 @@ $(document).ready(function () {
 	    			ajax.loadFragment("html/orderconfirmation.html").done(function(out) {	
 		    			$("#confirmDetailsDiv").empty();
 						$("#confirmDetailsDiv").append(out);
-						addItemToppingAndPrice("confirmOrderDetailsTable", data);						
-				    	var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
+						var deliveryDetailsInfo = createDeliveryDetailsInfo(data);    	
 				    	$("#confirmDeliveryDetails").append(deliveryDetailsInfo);    	
 				    	//$("#orderIdConfirmPayment").val(data.orderId);	
 				    	goToNextStep("confirm");
 				    	
-				    	$("#placeNewOrder").on("click", function() {
+				    	$(".placeNewOrder").on("click", function() {
 				    		location.reload(true);
 				    	});
 				    	hideOverlay();
@@ -904,28 +948,7 @@ $(document).ready(function () {
 	        });
 		});
     }
-	function addItemToppingAndPrice(tableId, data) {
-		$.each(data.itemList, function(i, item) {
-    		var individualItemRow =  createIndividualItemRow(item);
-    		$("#"+tableId+" > tbody").append(individualItemRow);
-    	});
-		$.each(data.toppingList, function(i, topping) {
-			var individualToppingRow =  createIndividualToppingRow(topping);
-    		
-    		$("#"+tableId+" > tbody").append(individualToppingRow);
-    	});
-		var totalPrice = 0.00;
-		$("#"+tableId+" .subtotal").each(function() {
-			if ($(this).html() && !isNaN($(this).html())) {
-				totalPrice += parseFloat($(this).html());
-			}
-		})	
-		var totalPriceHtml = '<tfoot><tr class="visible-xs"><td class="text-center">'+
-							 '<strong>Total <label id="totalAmount1">'+totalPrice.toFixed(2)+'</label></strong></td>'+
-							 '</tr><tr><td colspan="3" class="hidden-xs"></td><td class="hidden-xs text-center">'+
-							 '<strong>Total <label id="totalAmount2">'+totalPrice.toFixed(2)+'</label></strong></td><td></td></tr></tfoot>';
-		$("#"+tableId).append(totalPriceHtml);
-	}
+	
    
     
 });

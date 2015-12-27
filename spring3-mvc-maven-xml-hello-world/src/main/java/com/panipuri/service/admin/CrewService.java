@@ -1,12 +1,12 @@
 package com.panipuri.service.admin;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.panipuri.vo.AreaVo;
+import com.test.hibernate.Crew;
 import com.test.hibernate.dao.CrewDaoImpl;
 
 @Component
@@ -30,6 +30,10 @@ public class CrewService {
 	}
 	public void updateCrewDetailsLocation(String crewId, BigDecimal latitude, BigDecimal longitude) {
 		crewDaoImpl.updateCrewDetailsLocation(crewId, latitude, longitude);
+	}
+	public Crew loginCrew(String userId, String password) {
+		Crew crewInfo = crewDaoImpl.validateCrewCredential(userId, password);
+		return crewInfo;
 	}
 
 	/**

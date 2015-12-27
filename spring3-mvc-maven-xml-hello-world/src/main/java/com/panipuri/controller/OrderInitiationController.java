@@ -20,6 +20,7 @@ import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.DeliverySlotVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
+import com.test.hibernate.Customer;
 
 @Controller
 public class OrderInitiationController {
@@ -64,9 +65,9 @@ public class OrderInitiationController {
                     	toppingId = paramValues[1];
                     	toppingQuantity = request.getParameter(paramName);
                     	selectedTopping.setToppingId(new Long(toppingId));
-                        if(null!=itemQuantity && !itemQuantity.trim().equals(""))
+                        if(null!=toppingQuantity && !toppingQuantity.trim().equals(""))
                         	selectedTopping.setQuantity(new Integer(toppingQuantity));
-                        if(selectedTopping.getQuantity() >0) {
+                        if(null != selectedTopping.getQuantity() && selectedTopping.getQuantity() >0) {
                         	selectedToppings.add(selectedTopping);
                         }                       
                     }
@@ -86,8 +87,15 @@ public class OrderInitiationController {
 		ModelAndView mv = null;
 		//List<AddressVo> addressList = getAddressList();
 		List<AddressVo> addressList = customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
+		Customer customer = customerInformationFetchService.fetchCustomerinfo(phoneNumber);
+		String emailAddress = "";
+		if(null != customer && null != customer.getEmailAddress()) {
+			emailAddress =customer.getEmailAddress();
+		}
 		mv = new ModelAndView("deliveryDetails");
 		mv.addObject("addressList",addressList);
+		mv.addObject("emailAddress",emailAddress);
+		
 		return mv;
 	}
 	
@@ -95,11 +103,12 @@ public class OrderInitiationController {
 	public ModelAndView fetchDeliverySlots(HttpServletRequest request) {
 		System.out.println("in fetch deliverydetails controller");
 		String areaId = request.getParameter("searchId");
+		String orderId = request.getParameter("deliveryOrderId");
 		ModelAndView mv = null;
 		List<DeliverySlotVo> deliverySlots = null;
 		String errorMessage = "";
 		try {
-			deliverySlots = deliveryDetailsService.fetchDeliverySlots(areaId);
+			deliverySlots = deliveryDetailsService.fetchDeliverySlots(areaId, orderId);
 				//customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
 		} catch (Exception e) {
 			String message = e.getMessage();

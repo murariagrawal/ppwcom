@@ -1,5 +1,6 @@
 package com.test.hibernate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.engine.Cascade;
 
 @Entity
 @Table(name="order_toppings")
@@ -20,7 +23,8 @@ public class OrderToppings {
 	@ManyToOne
 	@JoinColumn(name="order_id")
 	private Order order;
-	@OneToOne(targetEntity=AvailableTopping.class)
+	@ManyToOne()
+	@JoinColumn(name="topping_id")
 	private AvailableTopping topping;
 	@Column
 	private int quantity;

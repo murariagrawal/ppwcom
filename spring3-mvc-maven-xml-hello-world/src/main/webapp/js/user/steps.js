@@ -40,10 +40,10 @@ $(document).ready(function () {
 	    			dataSet.push(areaObj);
 											
 				});
-	    		bindAreaEvents();
+	    		
 	    	});
 		}
-		
+		bindAreaEvents();
 	}
 	function getDeliverySlots() {	    	
 		ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {	
@@ -113,6 +113,17 @@ $(document).ready(function () {
 			}	
 		});		
 		
+		$(document).on("click", function(e) {	
+			if($(e.target).attr("id") !==  $('#areaAddr').attr('id')) {
+				$("#areaMenu").removeClass("show");
+				$("#areaMenu").addClass("hide");
+			}
+			if($(e.target).attr("id") !==  $('#subAreaAddr').attr('id')) {
+				$("#subAreaMenu").removeClass("show");
+				$("#subAreaMenu").addClass("hide");
+			}
+			
+		});
 		$("#areaAddr").on("input", function() {
 			if($(this).val() && $(this).val().length >0) {
 				var inputValue = $(this).val();
@@ -258,7 +269,7 @@ $(document).ready(function () {
 			$('#editAddress').removeClass("show").addClass("hide");
 			$("#addAddress").removeClass("show").addClass("hide");
 			$('#saveAddress').removeClass("hide").addClass("show");
-			fetchDeliveryArea();
+			
 		});
 	}
 	function createIndividualAddressRow(d) {
@@ -354,7 +365,7 @@ $(document).ready(function () {
 				
 					$("#emailDiv").removeClass("hide").addClass("show");
 					$("#emailAddress").val(email);
-				
+					fetchDeliveryArea();
 				if(addressList && addressList !== null && addressList.length===1) {
 					clearDeliveryForm();
 					var addressExistingDiv = $("#addressFieldsExisting");	
@@ -391,7 +402,7 @@ $(document).ready(function () {
 					$("#changeAddress").removeClass("show").addClass("hide");
 					$("#addAddress").removeClass("show").addClass("hide");
 					$('#saveAddress').removeClass("show").addClass("hide");
-					fetchDeliveryArea();
+					
 				}	
 				$("#addAddressButton").on('click', function(e) {  			
 					clearDeliveryForm();
@@ -401,7 +412,7 @@ $(document).ready(function () {
 					$("#addAddress").removeClass("show").addClass("hide");
 					$('#saveAddress').removeClass("hide").addClass("show");
 					$("#deliveryAddressId").val('');
-					fetchDeliveryArea();
+					
 				});
 				$("#changeAddresslink").on('click', function(e) {  			
 					$('#myModal').modal();
@@ -412,15 +423,18 @@ $(document).ready(function () {
 					
 				});
 				$( "#saveAddress" ).on('click', function(e) {
-					$("#editAddressRequested").val("true");
-					ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
-						$("#editAddressRequested").val("false");
-						getAddressDetails();				
-			        }).fail(function(data) {        	
-			        	showErrorMessage("Something went wrong. Please try again later.");
-			        	hideOverlay();
-			        });
-					
+					$('.has-error').removeClass('has-error');
+			    	hideErrorMessage();
+					if(validateDeliveryForm(true)) {
+						$("#editAddressRequested").val("true");
+						ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
+							$("#editAddressRequested").val("false");
+							getAddressDetails();				
+				        }).fail(function(data) {        	
+				        	showErrorMessage("Something went wrong. Please try again later.");
+				        	hideOverlay();
+				        });
+					}
 					
 				});
 	        }).fail(function(data) {
@@ -447,7 +461,7 @@ $(document).ready(function () {
 			$('#editAddress').removeClass("show").addClass("hide");
 			getDeliverySlots();
 		}
-		function validateDeliveryForm(){
+		function validateDeliveryForm(isSaveAddress){
 			  var phoneNumberVal =  $("#phoneNumber").val(),
 			  firstNameVal1 = $("#firstNameAddr").val(),
 			  lastNameVal1 = $("#lastNameAddr").val(),
@@ -498,17 +512,20 @@ $(document).ready(function () {
 					  errorMessage = "Email Address is a required field.";
 				  }	 
 			  } else {
-				  if($("#deliveryAddressId").val() === "") {
-					  noOfFieldsInError = noOfFieldsInError+1;
-					  errorMessage = "Something went wrong. Please try again later.";
+				  if(!isSaveAddress) {
+					  if($("#deliveryAddressId").val() === "") {
+						  noOfFieldsInError = noOfFieldsInError+1;
+						  errorMessage = "Something went wrong. Please try again later.";
+					  }
 				  }
 			  }
-			  if(deliverySlotVal === null || deliverySlotVal == "") {
-				  $("#selectDeliverySlot").parent().addClass('has-error');
-				  noOfFieldsInError = noOfFieldsInError+1;
-				  errorMessage = "Please select a delivery slot to continue.";
+			  if(!isSaveAddress) {
+				  if(deliverySlotVal === null || deliverySlotVal == "") {
+					  $("#selectDeliverySlot").parent().addClass('has-error');
+					  noOfFieldsInError = noOfFieldsInError+1;
+					  errorMessage = "Please select a delivery slot to continue.";
+				  }
 			  }
-			  
 			  if(noOfFieldsInError >1) {
 				  errorMessage = "There are two or more fields in error";
 			  }
@@ -570,11 +587,13 @@ $(document).ready(function () {
 
    function goToNextStep(nextStep) {
 	   hideErrorMessage();
+	   $('.has-error').removeClass('has-error');
 	   $("#pageContentCarousel").carousel('next');
 	   showHideButtons(nextStep);
     };
     function goToPreviousStep(previousStep) {
     	hideErrorMessage();
+    	$('.has-error').removeClass('has-error');
  	   $("#pageContentCarousel").carousel('prev');
  	  showHideButtons(previousStep);
      };
@@ -848,7 +867,7 @@ $(document).ready(function () {
     	
     	$('.has-error').removeClass('has-error');
     	hideErrorMessage();
-    	if(validateDeliveryForm()) {
+    	if(validateDeliveryForm(false)) {
     		showOverlay();
 			ajax.postForm("verifyDetails?F=J", $("#deliveryForm")).done(function(data) {			
 				ajax.loadFragment("html/orderverification.html").done(function(out) {

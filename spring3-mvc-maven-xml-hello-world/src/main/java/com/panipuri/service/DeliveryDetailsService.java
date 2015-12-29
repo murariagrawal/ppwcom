@@ -2,6 +2,7 @@ package com.panipuri.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -35,22 +36,26 @@ public class DeliveryDetailsService {
 			String startTime =null;
 			String deliverySlotTime = null;
 			System.out.println(orderId);
+			int noOfSlotsAvailable= 0;
+			
+			LinkedHashMap<String, List<String>> unavailbleItemList = new LinkedHashMap<String, List<String>>();
 			for(DeliverySlot deliverySlot : deliverySlots) {
 				List<DeliverySlotStock> stockList = deliverySlot.getDeliveryStockList();
 				boolean isValidSlot = false;
-			
-				System.out.println(deliverySlot.getDeliveryStockList().size());
-				outerloopItem:
+				List<String> unavailableItems = new ArrayList<String>();
+				List<String> unavailableStuffings = new ArrayList<String>();
+				
+				
 				for(ItemVo item :itemList) {
+					innerLoop:
 					for(DeliverySlotStock stock :stockList) {
 						if(!item.isComboItem()){
 							if(stock.getId() == item.getItemId() && !stock.isStuffing()) {
 								if(stock.getQuantity()>=item.getItemQuantity()) {
-									isValidSlot = true;
 									break;
 								} else {
-									isValidSlot = false;
-									break outerloopItem;
+									unavailableItems.add(item.getItemName());
+									break;
 								}
 								
 							}
@@ -60,12 +65,11 @@ public class DeliveryDetailsService {
 								for(ComboItemQuantity comboItem:comboItems) {
 									if(stock.getId() == comboItem.getComboItem().getItemId() && !stock.isStuffing()) {
 										int comboItemQuantity = comboItem.getQuantity() * item.getItemQuantity();
-										if(stock.getQuantity()>=comboItemQuantity) {
-											isValidSlot = true;
-											break;
+										if(stock.getQuantity()>=comboItemQuantity) {											
+											break innerLoop;
 										} else {
-											isValidSlot = false;
-											break outerloopItem;
+											unavailableItems.add(item.getItemName());											
+											break innerLoop;
 										}
 										
 									}
@@ -73,35 +77,29 @@ public class DeliveryDetailsService {
 							}
 						}
 					}
-					
-					
 				}
-				if(isValidSlot) {
-					outerloopStuffing:
-					for(ToppingVo stuffing :stuffingList) {
-						for(DeliverySlotStock stock :stockList) {
-							if(stock.getId() == stuffing.getToppingId() && stock.isStuffing()) {
-								if(stock.getQuantity()>=stuffing.getQuantity()) {
-									isValidSlot = true;
-									break;
-								} else {
-									isValidSlot = false;
-									break outerloopStuffing;
-								}
-							
+				for(ToppingVo stuffing :stuffingList) {
+					for(DeliverySlotStock stock :stockList) {
+						if(stock.getId() == stuffing.getToppingId() && stock.isStuffing()) {
+							if(stock.getQuantity()>=stuffing.getQuantity()) {
+								break;
+							} else {
+								unavailableStuffings.add(stuffing.getToppingName());
+								break;
 							}
+						
 						}
-						
-						
-					}
-				}
-				if(isValidSlot) {
+					}				
+				}				
+				if(unavailableItems.isEmpty()) {
+					
 					int hours = calendar.get(Calendar.HOUR_OF_DAY);
 					int minutes = calendar.get(Calendar.MINUTE);
 					startTime = deliverySlot.getStartTime();
 					deliverySlotTime = startTime.substring(0, startTime.indexOf("PM"));
 					int slotTime = Integer.parseInt(deliverySlotTime)+12;
-					//if(hours < slotTime || ((slotTime-hours)==1 && minutes<50)) {
+					if(hours < slotTime || ((slotTime-hours)==1 && minutes<50)) {
+						
 						deliverySlotVo = new DeliverySlotVo();
 						deliverySlotVo.setDeliverySlotId(deliverySlot.getDeliverySlotId());
 						deliverySlotVo.setEndTime(deliverySlot.getEndTime());
@@ -114,9 +112,21 @@ public class DeliveryDetailsService {
 							fullDeliverySlotsList.add(deliverySlotVo);
 						}
 						
-					//}
-				}
+					}
+				} 
+				unavailableItems.addAll(unavailableStuffings);
+				unavailbleItemList.put(deliverySlot.getStartTime()+"-"+deliverySlot.getEndTime(), unavailableItems);
+				
 				//}
+			}
+			
+			if(deliverySlotsList.isEmpty() && !fullDeliverySlotsList.isEmpty() ) {
+				
+			} else if(deliverySlotsList.isEmpty() && !unavailbleItemList.isEmpty()) {
+				
+			}
+			if(noOfSlotsAvailable == 0) {
+				
 			}
 		} else {
 			Exception e = new Exception("ERR_NO_SLOT");

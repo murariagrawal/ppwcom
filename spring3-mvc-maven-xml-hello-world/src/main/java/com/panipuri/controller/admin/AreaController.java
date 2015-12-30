@@ -68,7 +68,24 @@ public class AreaController {
 			deliverySlot.setDeliveryStockList(stockInfo);
 			deliverySlots.add(deliverySlot);
 		}
-		adminService.addMasterArea(areaName, areaCity, areaState, deliverySlots);
+		List<DeliverySlotStock> stockInfo = new ArrayList<DeliverySlotStock>();
+		DeliverySlotStock deliverySlotStock =  null;
+		for(int i = 0; i < itemIds.length; i++) {
+			deliverySlotStock = new DeliverySlotStock();
+			deliverySlotStock.setId(new Long(itemIds[i]));
+			deliverySlotStock.setQuantity(new Integer(itemQuantity[i]));
+			deliverySlotStock.setSlot(deliverySlot);
+			stockInfo.add(deliverySlotStock);
+		}
+		for(int j = 0; j < stuffingIds.length; j++) {
+			deliverySlotStock = new DeliverySlotStock();
+			deliverySlotStock.setId(new Long(stuffingIds[j]));
+			deliverySlotStock.setQuantity(new Integer(stuffingQuantity[j]));
+			deliverySlotStock.setStuffing(true);
+			deliverySlotStock.setSlot(deliverySlot);
+			stockInfo.add(deliverySlotStock);
+		}
+		adminService.addMasterArea(areaName, areaCity, areaState, deliverySlots, stockInfo);
 		mv = new ModelAndView("adminHome");
 		return mv;
 	}
@@ -117,6 +134,9 @@ public class AreaController {
 		ModelAndView mv = null;
 		
 		List<MasterDeliveryArea> allDeliveryAreas = adminService.fetchAllMasterArea();
+		for(MasterDeliveryArea area:allDeliveryAreas) {
+			area.setDeliveryStockList(null);
+		}
 		mv = new ModelAndView("adminHome");
 		mv.addObject("masterDeliveryArea", allDeliveryAreas);
 		return mv;

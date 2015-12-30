@@ -13,11 +13,15 @@ import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.StatusVo;
 import com.panipuri.vo.ToppingVo;
+import com.test.hibernate.Address;
+import com.test.hibernate.Customer;
+import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DiscountCondition;
 import com.test.hibernate.DiscountConditionEnum;
 import com.test.hibernate.DiscountInformation;
 import com.test.hibernate.DiscountOn;
 import com.test.hibernate.OneTimePassword;
+import com.test.hibernate.dao.AvailableDeliveryAreaDaoImpl;
 import com.test.hibernate.dao.DiscountDaoImpl;
 import com.test.hibernate.dao.OTPDaoImpl;
 import com.test.hibernate.dao.OderDaoImpl;
@@ -25,15 +29,22 @@ import com.test.hibernate.dao.OderDaoImpl;
 @Lazy
 public class OrderCreationService {
 	@Autowired
-	OderDaoImpl orderDaoImpl;
+	private OderDaoImpl orderDaoImpl;
 	@Autowired
-	DiscountDaoImpl discountDaoImpl;
+	private DiscountDaoImpl discountDaoImpl;
 	@Autowired
-	OTPDaoImpl otpDaoImpl;
+	private OTPDaoImpl otpDaoImpl;
+	@Autowired
+	private AvailableDeliveryAreaDaoImpl areaDaoImpl;
 	public Long createOrder(List<ItemVo> selectedItems, List<ToppingVo> selectedToppings, String orderId) {
-		Long orderIdLong = orderDaoImpl.addOrder(selectedItems, selectedToppings, orderId);
+		Long orderIdLong = orderDaoImpl.addOrder(selectedItems, selectedToppings, orderId, null, null);
 		
 		return orderIdLong;
+	}
+	public DeliveryArea fetchStockList(String phoneNumber, String selectedAreaId) {
+		DeliveryArea area = areaDaoImpl.getDeliveryArea(Long.parseLong(selectedAreaId));		
+		//Long orderIdLong = orderDaoImpl.addOrder(null, null, null, phoneNumber, Long.parseLong(selectedAreaId));
+		return area;
 	}
 	public StatusVo sendOTP(String orderId) {
 		StatusVo statusVo =new StatusVo();

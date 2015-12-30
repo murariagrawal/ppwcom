@@ -34,7 +34,7 @@ public class OderDaoImpl {
 		this.sessionFactory = sf;
 	}
 
-	public Long addOrder(List<ItemVo> itemList, List<ToppingVo> toppingList, String orderId) {
+	public Long addOrder(List<ItemVo> itemList, List<ToppingVo> toppingList, String orderId, String phoneNumber, Long areaId) {
 		Order order = null;
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();

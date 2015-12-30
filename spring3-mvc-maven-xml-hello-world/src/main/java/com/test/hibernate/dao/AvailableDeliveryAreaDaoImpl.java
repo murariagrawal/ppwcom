@@ -15,6 +15,7 @@ import com.test.hibernate.AvailableZipcodes;
 import com.test.hibernate.Crew;
 import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
+import com.test.hibernate.DeliverySlotStock;
 import com.test.hibernate.MasterDeliveryArea;
 
 public class AvailableDeliveryAreaDaoImpl {
@@ -53,7 +54,7 @@ public class AvailableDeliveryAreaDaoImpl {
 		session.close();
 	}*/
 
-	public void addMasterDeliveryArea(String areaName,String city, String state,  List<DeliverySlot> deliverySlots) {
+	public void addMasterDeliveryArea(String areaName,String city, String state,  List<DeliverySlot> deliverySlots,  List<DeliverySlotStock> stockInfo) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		MasterDeliveryArea masterDeliveryArea = new MasterDeliveryArea();
@@ -62,7 +63,10 @@ public class AvailableDeliveryAreaDaoImpl {
 		
 		masterDeliveryArea.setCity(city);
 		masterDeliveryArea.setState(state);
-			
+		masterDeliveryArea.setDeliveryStockList(stockInfo);
+		for(DeliverySlotStock stock :stockInfo) {
+			stock.setArea(masterDeliveryArea);
+		}
 		session.save(masterDeliveryArea);
 		if(null != deliverySlots) {
 			for(DeliverySlot deliverySlot:deliverySlots) {				
@@ -120,7 +124,8 @@ public class AvailableDeliveryAreaDaoImpl {
 			
 		}
 		return null;
-	}public DeliveryArea getDeliveryArea(Long areaId) {
+	}
+	public DeliveryArea getDeliveryArea(Long areaId) {
 		Session session = this.sessionFactory.openSession();
 
 		DeliveryArea deliveryArea = (DeliveryArea) session

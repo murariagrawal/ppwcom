@@ -21,6 +21,8 @@ import com.panipuri.vo.DeliverySlotVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.Customer;
+import com.test.hibernate.DeliveryArea;
+import com.test.hibernate.DeliverySlotStock;
 
 @Controller
 public class OrderInitiationController {
@@ -31,7 +33,22 @@ public class OrderInitiationController {
 	@Autowired
 	private DeliveryDetailsService deliveryDetailsService;
 	
-
+	@RequestMapping(method = RequestMethod.POST, value="/updateItemStock")
+	public ModelAndView updateItemStock(final HttpServletRequest request, @RequestParam(value = "selectedAreaId") String selectedAreaId,
+			 @RequestParam(value = "phoneNumber") String phoneNumber) {
+		System.out.println("in controller");
+		DeliveryArea area = orderCreationService.fetchStockList(phoneNumber, selectedAreaId);
+		ModelAndView mv = new ModelAndView("");
+		area.getMasterArea();
+		//mv.addObject("availableSlots", area.getMasterArea().getDeliverySlots());
+		List<DeliverySlotStock> stockList = area.getMasterArea().getDeliveryStockList();
+		for(DeliverySlotStock stock:stockList) {
+			stock.setSlot(null);
+			stock.setArea(null);
+		}
+		mv.addObject("availableStock", area.getMasterArea().getDeliveryStockList());
+		return mv;
+	}
 	@RequestMapping(method = RequestMethod.POST, value="/deliveryDetails")
 	public ModelAndView showDeliveryDetails(final HttpServletRequest request, @RequestParam(value = "orderId") String orderId) {
 		System.out.println("in controller");

@@ -1,10 +1,13 @@
 <div class="panel-group">
 	<div class="panel panel-primary">
 		<div class="panel-heading">Delivery Details</div>
-		<div class="panel-body" style="padding-bottom: 0px; padding: 5px; padding-left: 2px;">
-			<form role="form" autocomplete="off" class="form-horizontal" id="deliveryForm" action="verifyOrder" method="post">
-				<input type="hidden" name="deliveryOrderId" id="deliveryOrderId"> <input type="hidden"
-					name="editAddressRequested" id="editAddressRequested">
+		<div class="panel-body"
+			style="padding-bottom: 0px; padding: 5px; padding-left: 2px;">
+			<form role="form" autocomplete="off" class="form-horizontal"
+				id="deliveryForm" action="verifyOrder" method="post">
+				<input type="hidden" name="deliveryOrderId" id="deliveryOrderId">
+				<input type="hidden" name="editAddressRequested"
+					id="editAddressRequested">
 				<div class="row customrow">
 					<div class="col-xs-6 col-md-4">
 						<div class="list-inline">
@@ -16,19 +19,22 @@
 
 					<div class="row customrow">
 						<div class="col-xs-12 col-md-6 customformgroup">
-							<input class="form-control customformelements" type="text" maxlength="10" name="phoneNumber" id="phoneNumber"
+							<input class="form-control customformelements" type="text"
+								maxlength="10" name="phoneNumber" id="phoneNumber"
 								placeholder="Phone Number" value="" /><span class="icon-place"></span>
 						</div>
 
 						<div id="emailDiv" class="col-xs-12 col-md-6 customformgroup hide">
-							<input class="form-control customformelements" type="text" name="emailAddress" id="emailAddress"
+							<input class="form-control customformelements" type="text"
+								name="emailAddress" id="emailAddress"
 								placeholder="Email Address" value="" /><span class="icon-place"></span>
 						</div>
 					</div>
 				</fieldset>
 				<div id="addressDivElements" class="hide">
-					<input type="hidden" name="deliveryAddressId" id="deliveryAddressId"> <input type="hidden" name="searchId"
-						id="searchId">
+					<input type="hidden" name="deliveryAddressId"
+						id="deliveryAddressId"> <input type="hidden"
+						name="searchId" id="searchId">
 					<div class="row customrow">
 						<div class="col-xs-6 col-md-4">
 							<div class="list-inline">
@@ -43,7 +49,8 @@
 								<span><a id="editAddresslink">Edit Address</a> </span>
 							</div>
 							<div id="addAddress" class="col-xs-6 col-md-4 hide">
-								<span><button type="button" id="addAddressButton">Add Address</button> </span>
+								<span><button type="button" id="addAddressButton">Add
+										Address</button> </span>
 							</div>
 							<div id="saveAddress" class="col-xs-6 col-md-4 hide">
 								<span><a id="saveAddresslink">Save</a> </span>
@@ -55,75 +62,76 @@
 					<fieldset id="addressFields" style="margin-left: 15px;">
 
 						<div class="row customrow">
-
 							<div class="col-xs-12 col-md-6 control-group customformgroup">
-
-								<div class="controls" id="areaAddrDiv">
-
-									<input type="text" class="form-control customformelements" id="areaAddr" name="areaAddr"
-										placeholder="Search Area/Zipcode" />
-
+								<div class="controls" id="areaAddrDiv" class="areaAddrDiv">
+									<input type="text"
+										class="areaAddr form-control customformelements" id="areaAddr"
+										name="areaAddr" placeholder="Search Area/Zipcode" />
 								</div>
-
-								<div id="areaMenu" class="list-group hide"></div>
-
+								<div id="areaMenu" class="areaMenu list-group hide"></div>
 							</div>
-
 							<div class="col-xs-12 col-md-6 control-group customformgroup">
-								<div class="controls" id="subAreaAddrDiv">
-
-									<input type="text" class="form-control customformelements" id="subAreaAddr" name="subAreaAddr"
+								<div class="controls" id="subAreaAddrDiv" class="subAreaAddrDiv">
+									<input type="text"
+										class="subAreaAddr form-control customformelements"
+										id="subAreaAddr" name="subAreaAddr"
 										placeholder="Search Sub Area" />
-
 								</div>
-
-								<div id="subAreaMenu" class="list-group hide"></div>
-
+								<div id="subAreaMenu" class="subAreaMenu list-group hide"></div>
 							</div>
-
 						</div>
 
 						<div class="row customrow">
 							<div class="col-xs-6 col-md-6 control-group customformgroup">
 								<div class="controls">
-									<input placeholder="First Name" class="form-control customformelements" type="text" size="8" name="name[first]"
-										id="firstNameAddr" /> <span class="icon-place"></span>
+									<input placeholder="First Name"
+										class="form-control customformelements" type="text" size="8"
+										name="name[first]" id="firstNameAddr" /> <span
+										class="icon-place"></span>
 								</div>
 							</div>
 							<div class="col-xs-6 col-md-6 control-group customformgroup">
 								<div class="controls">
-									<input placeholder="Last Name" type="text" class="form-control customformelements" size="14" name="name[last]"
-										id="lastNameAddr" /> <span class="icon-place"></span>
+									<input placeholder="Last Name" type="text"
+										class="form-control customformelements" size="14"
+										name="name[last]" id="lastNameAddr" /> <span
+										class="icon-place"></span>
 								</div>
 							</div>
 						</div>
 
 						<div class="row customrow control-group">
 							<div class="col-xs-12 col-md-6 controls customformgroup">
-								<input placeholder="Address Line 1" class="form-control customformelements" type="text" name="addr1" id="addr1" />
-								<span class="icon-place"></span>
+								<input placeholder="Address Line 1"
+									class="form-control customformelements" type="text"
+									name="addr1" id="addr1" /> <span class="icon-place"></span>
 							</div>
 							<div class="col-xs-12 col-md-6 controls customformgroup">
-								<input placeholder="Address Line 2" class="form-control customformelements" type="text" name="addr2" id="addr2" />
-								<span class="icon-place"></span>
+								<input placeholder="Address Line 2"
+									class="form-control customformelements" type="text"
+									name="addr2" id="addr2" /> <span class="icon-place"></span>
 							</div>
 						</div>
 
 						<div class="row customrow control-group">
 							<div class="col-xs-12 col-md-6 controls customformgroup">
-								<input placeholder="LandMark (Optional)" type="text" class="form-control customformelements" name="landmarkAddr"
+								<input placeholder="LandMark (Optional)" type="text"
+									class="form-control customformelements" name="landmarkAddr"
 									id="landmarkAddr" /> <span class="icon-place"></span>
 							</div>
 						</div>
 
 					</fieldset>
-					<fieldset id="addressFieldsExisting" class="hide" style="margin-left: 15px;"></fieldset>
+					<fieldset id="addressFieldsExisting" class="hide"
+						style="margin-left: 15px;"></fieldset>
 					<fieldset id="slotFields" style="margin-left: 15px;">
 
 
 						<div class="row customrow control-group" style="margin-top: 10px;">
 							<div class="col-xs-12 col-md-6 controls">
-								<span> <select id="selectDeliverySlot" class="form-control customformelements" name="selectDeliverySlot">
+								<span> <select id="selectDeliverySlot"
+									class="form-control customformelements"
+									name="selectDeliverySlot">
 										<option value="">Select Delivery Slot</option>
 								</select> <span class="icon-place"></span>
 								</span>

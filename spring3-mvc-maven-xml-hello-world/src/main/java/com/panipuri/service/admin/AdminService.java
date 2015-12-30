@@ -11,6 +11,7 @@ import com.panipuri.vo.StatusVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.AvailableTopping;
 import com.test.hibernate.DeliverySlot;
+import com.test.hibernate.DeliverySlotStock;
 import com.test.hibernate.MasterDeliveryArea;
 import com.test.hibernate.dao.AvailableDeliveryAreaDaoImpl;
 import com.test.hibernate.dao.ItemDaoImpl;
@@ -49,8 +50,8 @@ public class AdminService {
 		itemDaoImpl.deleteItem(itemId);
 		return new StatusVo();
 	}
-	public StatusVo addMasterArea(String areaName, String areaCity, String areaState, List<DeliverySlot> deliverySlots) {
-		availableDeliveryAreaDaoImpl.addMasterDeliveryArea(areaName, areaCity , areaState, deliverySlots);
+	public StatusVo addMasterArea(String areaName, String areaCity, String areaState, List<DeliverySlot> deliverySlots, List<DeliverySlotStock> stockInfo) {
+		availableDeliveryAreaDaoImpl.addMasterDeliveryArea(areaName, areaCity , areaState, deliverySlots, stockInfo);
 		return new StatusVo();
 	}
 	public StatusVo addArea(String areaName, String subAreaName, Long zipcode, Long masterAreaId, boolean serving, boolean servingParty) {

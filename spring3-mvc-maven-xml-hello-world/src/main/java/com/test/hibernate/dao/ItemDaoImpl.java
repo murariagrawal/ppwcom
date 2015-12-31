@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
@@ -59,6 +60,31 @@ public class ItemDaoImpl {
 		session.beginTransaction();
 		List<Item> allAvailableItems = (List<Item>)session.createCriteria(Item.class).list();
 		List<ItemVo> itemVoList = convertItemToItemVo(allAvailableItems);
+		for(ItemVo item:itemVoList) {
+			if(item.isComboItem()) {
+				item.setComboQuantityList(null);
+			}
+		}
+		session.getTransaction().commit();
+		session.close();
+		return itemVoList;
+	}
+	@SuppressWarnings("unchecked")
+	public List<ItemVo> getAllComboItems() {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		List<Item> allAvailableItems = (List<Item>)session.createCriteria(Item.class).add(Restrictions.eq("comboItem", true)).list();
+		List<ItemVo> itemVoList = convertItemToItemVo(allAvailableItems);
+		for(ItemVo itemVo: itemVoList) {
+			for(Item item :allAvailableItems) {
+				if(item.getItemId() == itemVo.getItemId()) {
+					Hibernate.initialize(item.getComboQuantityList());
+					itemVo.setComboQuantityList(item.getComboQuantityList());
+				}
+			}
+			
+		}
+		
 		session.getTransaction().commit();
 		session.close();
 		return itemVoList;
@@ -106,6 +132,9 @@ public class ItemDaoImpl {
 					Hibernate.initialize(item.getPartyQuantitylist());
 					itemVo.setPartyQuantitylist(item.getPartyQuantitylist());
 										
+				} else if(item.isComboItem()) {
+					itemVo.setItemPrice(item.getItemPrice());
+					
 				} else {
 					itemVo.setItemPrice(item.getItemPrice());
 					

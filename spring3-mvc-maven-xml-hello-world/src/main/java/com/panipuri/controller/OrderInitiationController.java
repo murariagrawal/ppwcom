@@ -15,11 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.panipuri.service.CustomerInformationFetchService;
 import com.panipuri.service.DeliveryDetailsService;
+import com.panipuri.service.MasterDataFetchService;
 import com.panipuri.service.OrderCreationService;
 import com.panipuri.vo.AddressVo;
+import com.panipuri.vo.ComboItemVo;
 import com.panipuri.vo.DeliverySlotVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.ToppingVo;
+import com.test.hibernate.ComboItemQuantity;
 import com.test.hibernate.Customer;
 import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlotStock;
@@ -32,21 +35,64 @@ public class OrderInitiationController {
 	private OrderCreationService orderCreationService;
 	@Autowired
 	private DeliveryDetailsService deliveryDetailsService;
-	
+	@Autowired
+	private MasterDataFetchService masterDataFetchService;
 	@RequestMapping(method = RequestMethod.POST, value="/updateItemStock")
 	public ModelAndView updateItemStock(final HttpServletRequest request, @RequestParam(value = "selectedAreaId") String selectedAreaId,
 			 @RequestParam(value = "phoneNumber") String phoneNumber) {
 		System.out.println("in controller");
 		DeliveryArea area = orderCreationService.fetchStockList(phoneNumber, selectedAreaId);
-		ModelAndView mv = new ModelAndView("");
-		area.getMasterArea();
-		//mv.addObject("availableSlots", area.getMasterArea().getDeliverySlots());
+		List<ItemVo> itemList = masterDataFetchService.fetchAllComboItem();
 		List<DeliverySlotStock> stockList = area.getMasterArea().getDeliveryStockList();
+		List<String> itemIds = null;
+		List<String> quantity = null;
+		List<ComboItemVo> comboItems = new ArrayList<ComboItemVo>();
+		for(ItemVo item:itemList) {
+			if(item.isComboItem()) {
+				int comboQuantity = 0;
+				ComboItemVo comboItemVo = new ComboItemVo();
+				List<ComboItemQuantity> itemQuantityList = item.getComboQuantityList();
+				itemIds = new ArrayList<String>();
+				quantity = new ArrayList<String>();
+				for(ComboItemQuantity comboItemQuantity :itemQuantityList) {
+					itemIds.add(""+comboItemQuantity.getItemIds());
+					quantity.add(""+comboItemQuantity.getQuantity());
+					comboItemVo.setItemIds(itemIds);
+					comboItemVo.setQuantity(quantity);
+					int itemQuantity= 0;
+					int itemQuantityValue= 0;
+					for(DeliverySlotStock stock:stockList) {
+						if(!stock.isStuffing() && stock.getId() == Long.parseLong(comboItemQuantity.getItemIds()) ) {
+							if(stock.getQuantity() >0) {
+								itemQuantityValue = stock.getQuantity()/comboItemQuantity.getQuantity();
+							}
+							break;
+						}
+					}
+					if(itemQuantityValue >0) {
+						
+						if(comboQuantity == 0 || comboQuantity > itemQuantityValue) {
+							comboQuantity = itemQuantityValue;
+						} 
+					}					
+				}
+				DeliverySlotStock comboStock  =  new DeliverySlotStock();
+				
+				comboStock.setId(item.getItemId());
+				comboStock.setQuantity(comboQuantity);
+				comboStock.setStuffing(false);
+				stockList.add(comboStock);
+				comboItems.add(comboItemVo);
+			}
+		}
+		ModelAndView mv = new ModelAndView("");
+		
 		for(DeliverySlotStock stock:stockList) {
 			stock.setSlot(null);
 			stock.setArea(null);
 		}
 		mv.addObject("availableStock", area.getMasterArea().getDeliveryStockList());
+		mv.addObject("comboItems", comboItems);
 		return mv;
 	}
 	@RequestMapping(method = RequestMethod.POST, value="/deliveryDetails")

@@ -4,10 +4,14 @@ $(document).ready(function() {// plugin bootstrap minus and plus
 
 		var $button = $(this);
 		var fieldName = $(this).attr('data-field');
+		var maxValue = $(this).parent().find(".quantity-counter-input").attr('data-maxvalue');
 		var oldValue = $(this).parent().find(".quantity-counter-input").text();
-
+		oldValue = oldValue*1;
+		maxValue = maxValue*1;
 		if ($(this).children().hasClass("glyphicon-plus")) {
-			var newVal = parseFloat(oldValue) + 1;
+			if(oldValue < maxValue) {
+				var newVal = parseFloat(oldValue) + 1;
+			}
 		} else {
 			// Don't allow decrementing below zero
 			if (oldValue > 0) {

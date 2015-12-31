@@ -24,6 +24,11 @@ public class MasterDataFetchService {
 		
 		return itemsList;
 	}
+	public List<ItemVo> fetchAllComboItem() {
+		List<ItemVo> itemsList = itemDaoImpl.getAllComboItems();		
+		
+		return itemsList;
+	}
 	public List<ToppingVo> fetchAllAvailableStuffing() {
 		
 		List<AvailableTopping> stuffingList = itemDaoImpl.getAllAvailableStuffing();		

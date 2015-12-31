@@ -22,16 +22,18 @@ $(document).ready(function () {
 	    if(data.availableStock) {
 		 $.each(data.availableStock, function(i, stock) {
 		     if(stock.stuffing) {
-			 
+		    	 id= "stuffing~"+stock.id;
+		    	 $("span[id='"+id+"'").attr("data-maxvalue",stock.quantity);
 		     } else {
-			 
+		    	 id= "item~"+stock.id;
+		    	 $("span[id='"+id+"'").attr("data-maxvalue",stock.quantity);
 		     }
 		     
 		 });
 		
 	    }
     	    $("#orderId").val(data.orderId);
-    	   
+    	    hideOverlay(); 
     	}).fail(function(data) {
     	    alert("failed");
     	    hideOverlay();

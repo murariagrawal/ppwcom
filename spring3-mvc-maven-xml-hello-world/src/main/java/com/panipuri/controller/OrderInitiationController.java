@@ -21,6 +21,7 @@ import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.ComboItemVo;
 import com.panipuri.vo.DeliverySlotVo;
 import com.panipuri.vo.ItemVo;
+import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
 import com.test.hibernate.ComboItemQuantity;
 import com.test.hibernate.Customer;
@@ -43,6 +44,7 @@ public class OrderInitiationController {
 		System.out.println("in controller");
 		DeliveryArea area = orderCreationService.fetchStockList(phoneNumber, selectedAreaId);
 		List<ItemVo> itemList = masterDataFetchService.fetchAllComboItem();
+		OrderVo orderIdLong = orderCreationService.createOrder(null, null, null, phoneNumber, selectedAreaId);
 		List<DeliverySlotStock> stockList = area.getMasterArea().getDeliveryStockList();
 		List<String> itemIds = null;
 		List<String> quantity = null;
@@ -51,6 +53,7 @@ public class OrderInitiationController {
 			if(item.isComboItem()) {
 				int comboQuantity = 0;
 				ComboItemVo comboItemVo = new ComboItemVo();
+				comboItemVo.setComboItemId(""+item.getItemId());
 				List<ComboItemQuantity> itemQuantityList = item.getComboQuantityList();
 				itemIds = new ArrayList<String>();
 				quantity = new ArrayList<String>();
@@ -58,12 +61,11 @@ public class OrderInitiationController {
 					itemIds.add(""+comboItemQuantity.getItemIds());
 					quantity.add(""+comboItemQuantity.getQuantity());
 					comboItemVo.setItemIds(itemIds);
-					comboItemVo.setQuantity(quantity);
-					int itemQuantity= 0;
+					comboItemVo.setQuantity(quantity);					
 					int itemQuantityValue= 0;
 					for(DeliverySlotStock stock:stockList) {
 						if(!stock.isStuffing() && stock.getId() == Long.parseLong(comboItemQuantity.getItemIds()) ) {
-							if(stock.getQuantity() >0) {
+							if(stock.getQuantity() >0 && comboItemQuantity.getQuantity()  >0) {
 								itemQuantityValue = stock.getQuantity()/comboItemQuantity.getQuantity();
 							}
 							break;
@@ -91,6 +93,7 @@ public class OrderInitiationController {
 			stock.setSlot(null);
 			stock.setArea(null);
 		}
+		mv.addObject("orderId", orderIdLong.getOrderId());
 		mv.addObject("availableStock", area.getMasterArea().getDeliveryStockList());
 		mv.addObject("comboItems", comboItems);
 		return mv;
@@ -137,9 +140,11 @@ public class OrderInitiationController {
                 }
             }            
         }
-        Long orderIdLong = orderCreationService.createOrder(selectedItems, selectedToppings, orderId);
+        OrderVo orderIdLong = orderCreationService.createOrder(selectedItems, selectedToppings, orderId, null, null);
         mv = new ModelAndView("deliveryDetails");
-        mv.addObject("orderId", orderIdLong);
+        mv.addObject("orderId", orderIdLong.getOrderId());
+        mv.addObject("contactNumber", orderIdLong.getContactNo());
+        
 		return mv;
 	}
 	
@@ -147,9 +152,10 @@ public class OrderInitiationController {
 	public ModelAndView fetchDeliveryDetails(HttpServletRequest request) {
 		System.out.println("in fetch deliverydetails controller");
 		String phoneNumber = request.getParameter("phoneNumber");
+		String addressId = request.getParameter("deliveryAreaID");
 		ModelAndView mv = null;
 		//List<AddressVo> addressList = getAddressList();
-		List<AddressVo> addressList = customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
+		List<AddressVo> addressList = customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber, addressId);
 		Customer customer = customerInformationFetchService.fetchCustomerinfo(phoneNumber);
 		String emailAddress = "";
 		if(null != customer && null != customer.getEmailAddress()) {

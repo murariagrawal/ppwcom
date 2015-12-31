@@ -5,6 +5,7 @@ import java.util.List;
 public class ComboItemVo {
 	private List<String> itemIds;
 	private List<String> quantity;
+	private String comboItemId;
 	/**
 	 * @return the itemIds
 	 */
@@ -28,6 +29,18 @@ public class ComboItemVo {
 	 */
 	public void setQuantity(List<String> quantity) {
 		this.quantity = quantity;
+	}
+	/**
+	 * @return the comboItemId
+	 */
+	public String getComboItemId() {
+		return comboItemId;
+	}
+	/**
+	 * @param comboItemId the comboItemId to set
+	 */
+	public void setComboItemId(String comboItemId) {
+		this.comboItemId = comboItemId;
 	}
 
 }

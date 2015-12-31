@@ -6,6 +6,15 @@ function showOverlay() {
     $('#spinnerModal').modal();
     // $('container').addClass("overlay");
 }
+function hideAreaErrorMessage() {
+	$("#areaErrorDiv").empty();
+	$("#areaErrorDiv").addClass("hide");
+}
+function showAreaErrorMessage(errorMessage) {
+	$("#areaErrorDiv").empty();
+	$("#areaErrorDiv").removeClass("hide");
+	$("#areaErrorDiv").append("<Strong>" + errorMessage + "");
+}
 function hideErrorMessage() {
     $("#errorDiv").empty();
     $("#errorDiv").addClass("hide");

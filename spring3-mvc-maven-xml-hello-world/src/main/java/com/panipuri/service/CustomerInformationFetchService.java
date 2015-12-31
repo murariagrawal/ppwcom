@@ -16,9 +16,9 @@ public class CustomerInformationFetchService {
 	@Autowired
 	CustomerDaoImpl customerDaoImpl;
 	
-	public List<AddressVo> getCustomerDeliveryAddressList(String phoneNumber) {
+	public List<AddressVo> getCustomerDeliveryAddressList(String phoneNumber, String addressId) {
 		
-		List<AddressVo> addressList = customerDaoImpl.fetchCustomerAddressFromContact(phoneNumber);
+		List<AddressVo> addressList = customerDaoImpl.fetchCustomerAddressFromContact(phoneNumber, addressId);
 		
 		
 		return addressList;

@@ -167,7 +167,7 @@
 																						class="quantity-counter"> <span
 																						class="glyphicon glyphicon-minus"> </span>
 																					</span> <span data-field="item~${item.itemId}"
-																						id="item~${item.itemId}"
+																						id="item~${item.itemId}" data-itemId="${item.itemId}"
 																						class="quantity-counter-input"
 																						style="margin: 15px;">0</span> <span
 																						data-field="item~${item.itemId}"
@@ -593,6 +593,7 @@
 					</h4>
 				</div>
 				<div class="modal-body" style="padding: 10px 10px;">
+					<div id="areaErrorDiv"  class="alert alert-danger hide"></div>
 					<form role="form" id="areaForm">
 						<input type="hidden" id="selectedAreaId" class="form-control"
 							name="selectedAreaId" />

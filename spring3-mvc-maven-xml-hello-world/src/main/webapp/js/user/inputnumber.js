@@ -4,7 +4,8 @@ $(document).ready(function() {// plugin bootstrap minus and plus
 
 		var $button = $(this);
 		var fieldName = $(this).attr('data-field');
-		var maxValue = $(this).parent().find(".quantity-counter-input").attr('data-maxvalue');
+		var maxValue = $(this).parent().find(".quantity-counter-input").attr('data-availablevalue');
+		
 		var oldValue = $(this).parent().find(".quantity-counter-input").text();
 		oldValue = oldValue*1;
 		maxValue = maxValue*1;
@@ -20,6 +21,8 @@ $(document).ready(function() {// plugin bootstrap minus and plus
 				newVal = 0;
 			}
 		}
+		var availableVal = maxValue - newVal;
+		
 		$(this).parent().find(".quantity-counter-input").text(newVal)
 		$($(this).parent()).trigger( "change" );
 

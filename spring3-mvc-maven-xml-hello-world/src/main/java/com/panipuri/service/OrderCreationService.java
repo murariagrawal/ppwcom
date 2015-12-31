@@ -36,8 +36,9 @@ public class OrderCreationService {
 	private OTPDaoImpl otpDaoImpl;
 	@Autowired
 	private AvailableDeliveryAreaDaoImpl areaDaoImpl;
-	public Long createOrder(List<ItemVo> selectedItems, List<ToppingVo> selectedToppings, String orderId) {
-		Long orderIdLong = orderDaoImpl.addOrder(selectedItems, selectedToppings, orderId, null, null);
+	public OrderVo createOrder(List<ItemVo> selectedItems, List<ToppingVo> selectedToppings, String orderId, String phoneNumber, String selectedAreaId) {
+		
+		OrderVo orderIdLong = orderDaoImpl.addOrder(selectedItems, selectedToppings, orderId, phoneNumber, selectedAreaId);
 		
 		return orderIdLong;
 	}

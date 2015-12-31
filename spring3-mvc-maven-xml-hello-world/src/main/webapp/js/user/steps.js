@@ -11,33 +11,85 @@ $(document).ready(function () {
     }
     function bindAreaModalEvents() {
 	$("#enterArea").on("click" , function() {
-	    $("#areaModal").modal('hide');
+	   
 	    showOverlay();
 	    updateItemStocks();
 	    hideOverlay();
 	});
     }
+    function validateAreaForm() {
+	 var phoneNumberVal = $("#phoneNumberInit").val(), 
+	 selectedAreaIdVal = $("#selectedAreaId").val(),
+	 areaAddrVal = $("#areaAddr").val(),
+	 subAreaAddrVal = $("#subAreaAddr").val(),
+	 errorMessage="",
+	 noOfFieldsInError = 0;
+	 if (phoneNumberVal === null || phoneNumberVal == "" || phoneNumberVal.length < 10) {
+	     $("#phoneNumberInit").parent().addClass('has-error');
+	     noOfFieldsInError = noOfFieldsInError + 1;
+	     errorMessage = "Phone Number is a required field.";
+	}
+	if (areaAddrVal === null || areaAddrVal == "") {
+	    $("#areaAddr").parent().addClass('has-error');
+	    noOfFieldsInError = noOfFieldsInError + 1;
+	    errorMessage = "Area is a required field.";
+	}
+	if (subAreaAddrVal === null || subAreaAddrVal == "") {
+	    $("#subAreaAddr").parent().addClass('has-error');
+	    noOfFieldsInError = noOfFieldsInError + 1;
+	    errorMessage = "SubArea is a required field.";
+	}
+	if (selectedAreaIdVal === null || selectedAreaIdVal == "") {
+	    $("#areaAddr").parent().addClass('has-error');
+	    $("#subAreaAddr").parent().addClass('has-error');
+	    noOfFieldsInError = noOfFieldsInError + 1;
+	    errorMessage = "Please select a appropriate area and subarea to continue";
+	}
+	
+	if (errorMessage !== "") {
+	    showAreaErrorMessage(errorMessage);
+	    return false;
+	} else {
+	    hideAreaErrorMessage();
+	    return true;
+	}
+    }
     function updateItemStocks() {
-	ajax.postForm("updateItemStock?F=J", $("#areaForm")).done(function(data) {
-	    if(data.availableStock) {
-		 $.each(data.availableStock, function(i, stock) {
-		     if(stock.stuffing) {
-		    	 id= "stuffing~"+stock.id;
-		    	 $("span[id='"+id+"'").attr("data-maxvalue",stock.quantity);
-		     } else {
-		    	 id= "item~"+stock.id;
-		    	 $("span[id='"+id+"'").attr("data-maxvalue",stock.quantity);
-		     }
-		     
-		 });
-		
-	    }
-    	    $("#orderId").val(data.orderId);
-    	    hideOverlay(); 
-    	}).fail(function(data) {
-    	    alert("failed");
-    	    hideOverlay();
-    	});
+	if(validateAreaForm()) {
+	    $("#areaModal").modal('hide');
+	    ajax.postForm("updateItemStock?F=J", $("#areaForm")).done(function(data) {
+        	    if(data.availableStock) {
+        		 $.each(data.availableStock, function(i, stock) {
+        		     if(stock.stuffing) {
+        		    	 id= "stuffing~"+stock.id;
+        		    	 $("span[id='"+id+"'").attr("data-maxvalue",stock.quantity);
+        		    	 $("span[id='"+id+"'").attr("data-availablevalue",stock.quantity);
+        		     } else {			
+        		    	 id= "item~"+stock.id;
+        		    	 $("span[id='"+id+"'").attr("data-maxvalue",stock.quantity);
+        		    	 $("span[id='"+id+"'").attr("data-availablevalue",stock.quantity);
+        		     }
+        		     
+        		 });
+        		
+        	    }
+        	    if(data.comboItems) {
+        		 $.each(data.comboItems, function(i, comboItem) {		     			
+        		    	 id= "item~"+comboItem.comboItemId;
+        		    	 $("span[id='"+id+"'").attr("data-itemids",comboItem.itemIds);
+        		    	$("span[id='"+id+"'").attr("data-itemquantity",comboItem.quantity);
+        		     
+        		     
+        		 });
+        		
+        	    }
+            	    $("#orderId").val(data.orderId);
+            	    
+        	}).fail(function(data) {
+        	    alert("failed");
+        	    hideOverlay();
+        	});
+	}
     }
     function createDeliveryDetailsInfo(data) {
         var addressInfo = "<div class='row'><div class='col-lg-12'>Delivery Address :</div></div><div class='row'><div class='col-lg-12'><label>"
@@ -114,6 +166,58 @@ $(document).ready(function () {
     	    createStuffingSummary();
     	    calculateTotal();
     	});
+    function calculateAvailableQuantity(thisval) {
+	
+	
+	$("#individualOrder").find(".quantity-counter-input").each(function() {
+	    var itemIdSelected =  $(this).attr("data-itemId");
+	    var itemMaxQuantity=$(this).attr("data-maxvalue")*1;
+	    var itemQuantityConsumedByCombo = 0;
+	    $("#comboOrder").find(".quantity-counter-input").each(function() {
+		var requiredAttr = $(this).attr("data-itemids");
+		 var comboattrArray = requiredAttr.split(",");
+		 var itemQuantArray = $(this).attr("data-itemquantity").split(",");
+		var comboQuantitySelected =  $(this).text()*1;
+		 $.each(comboattrArray, function(i, itemid) {
+			individualItemQuantity = itemQuantArray[i]*1;
+			if(itemid === itemIdSelected) {
+			    if(individualItemQuantity >0) {
+				itemQuantityConsumedByCombo = itemQuantityConsumedByCombo + (comboQuantitySelected * individualItemQuantity);
+			    }			  
+			}
+		 });
+		
+	    });
+	    var itemAvailableQuantity = itemMaxQuantity - itemQuantityConsumedByCombo;
+	    $(this).attr("data-availablevalue", itemAvailableQuantity);
+	});
+	 $("#comboOrder").find(".quantity-counter-input").each(function() {
+	     	var comboQuantityBasedOnItem = 0,
+		requiredAttr = $(this).attr("data-itemids"),
+		comboattrArray = requiredAttr.split(","),
+		itemQuantArray = $(this).attr("data-itemquantity").split(","),
+		comboAvailableQuantity = $(this).attr("data-availablevalue")*1
+		 $.each(comboattrArray, function(i, itemid) {
+			individualItemQuantity = itemQuantArray[i]*1;
+			 id= "item~"+itemid;
+		    	 var itemAvailableQuantity= $("span[id='"+id+"'").attr("data-availablevalue")*1,
+		    	 itemQuantityAdded = $("span[id='"+id+"'").text()*1;
+		    	 itemAvailableQuantity = itemAvailableQuantity - itemQuantityAdded;		    	
+		    	 if(itemAvailableQuantity >0 && individualItemQuantity >0) {
+				comboQuantityBasedOnItem = itemAvailableQuantity/individualItemQuantity;
+			    } else if(itemAvailableQuantity ===0 && individualItemQuantity >0) {
+				comboQuantityBasedOnItem = 0;
+			    } else if(individualItemQuantity ===0) {
+				comboQuantityBasedOnItem = comboAvailableQuantity;
+			    }
+		    	 if(comboQuantityBasedOnItem< comboAvailableQuantity) {
+		    	     comboAvailableQuantity = comboQuantityBasedOnItem
+		    	 }
+		 });
+	     	
+	     	$(this).attr("data-availablevalue",comboAvailableQuantity);
+	    });
+    }
     function createItemSummary() {
         $("#itemQuantitySummary").empty();
         var itemAdded = false;
@@ -180,6 +284,7 @@ $(document).ready(function () {
         resetPartyOrder();
         createItemSummary();
         calculateTotal();
+        calculateAvailableQuantity(this);
     });
     $('[data-th="QuantityStuffing"]').on('change', function(e) {
         resetPartyOrder();
@@ -229,6 +334,9 @@ $(document).ready(function () {
     		    $("#deliveryDetailsDiv").append(out);
     		    $("input[id=deliveryOrderId]").val(data.orderId);
     		    bindDeliveryEvents();
+    		    $('#phoneNumber').val(data.contactNumber);
+    		    $("#deliveryAreaID").val($("#selectedAreaId").val());
+    		    getAddressDetails();
     		    hideErrorMessage();
     		    goToNextStep("address");
     		    hideOverlay();

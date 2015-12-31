@@ -20,10 +20,10 @@ public class CustomerDaoImpl {
         this.sessionFactory = sf;
     }
     
-    public List<AddressVo> fetchCustomerAddressFromContact(String phoneNumber) {
+    public List<AddressVo> fetchCustomerAddressFromContact(String phoneNumber, String areaId) {
     	Session session = this.sessionFactory.openSession();
-    	List<Address> addressList = session.createCriteria(Address.class, "address").createAlias("address.customer","customer")
-    	.add(Restrictions.eq("customer.contactNo1", phoneNumber)).list();
+    	List<Address> addressList = session.createCriteria(Address.class, "address").createAlias("address.customer","customer").createAlias("address.area","area")
+    	.add(Restrictions.eq("customer.contactNo1", phoneNumber)).add(Restrictions.eq("area.deliveryAreaId", Long.parseLong(areaId))).list();
     	List<AddressVo> addressVoList = new ArrayList<AddressVo>();
     	if(null != addressList && !addressList.isEmpty()) {
 			String firstName = addressList.get(0).getCustomer().getCustomerFirstName();

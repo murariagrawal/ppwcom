@@ -34,7 +34,7 @@ public class OderDaoImpl {
 		this.sessionFactory = sf;
 	}
 
-	public Long addOrder(List<ItemVo> itemList, List<ToppingVo> toppingList, String orderId, String phoneNumber, Long areaId) {
+	public OrderVo addOrder(List<ItemVo> itemList, List<ToppingVo> toppingList, String orderId, String phoneNumber, String areaId) {
 		Order order = null;
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
@@ -156,14 +156,32 @@ public class OderDaoImpl {
 				
 			}
 		}
+		
+		if(phoneNumber !=  null && !phoneNumber.equals("")) {
+			Customer cust = null;
+			List<Customer> sessionCustomerList = (List<Customer>) session.createCriteria(Customer.class)
+					.add(Restrictions.eq("contactNo1", phoneNumber)).list();
+			if (null == sessionCustomerList || sessionCustomerList.isEmpty()) {
+				cust = new Customer();
+				cust.setContactNo1(phoneNumber);
+				session.save(cust);
+			} else {
+				cust = sessionCustomerList.get(0);
+			}
+			order.setCustomer(cust);
+		}
+		
+		
 		order.setOrderItems(existingOrderItems);
 		order.setOrderToppings(existingOrderToppings);
 		order.setStatus(Status.INITIATED.name());
-
+		
 		session.saveOrUpdate(order);
+		OrderVo orderVo = createOrderVO(order);
 		session.getTransaction().commit();
 		session.close();
-		return order.getOrderId();
+		
+		return orderVo;
 	}
 
 	public OrderVo getOrderDetails(String orderId, Address address, Customer customer, String slotId,
@@ -292,8 +310,8 @@ public class OderDaoImpl {
 		List<ItemVo> itemList = convertOrderItemToItemVo(orderItems);
 		List<ToppingVo> toppingsVo = convertOrderToppingToToppingVo(toppings);
 		DeliverySlot slot = orderDetails.getDeliverySlotSelected();
-		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
 		
+		AddressVo addressVo = convertAddressToAddressVo(orderDetails.getDeliveryAddress());
 		OrderVo orderVo = new OrderVo();
 		String deliverySlot = "";
 		if (null != slot) {
@@ -390,7 +408,7 @@ public class OderDaoImpl {
 	}
 
 	private AddressVo convertAddressToAddressVo(Address address) {
-		AddressVo addressVo = null;
+		AddressVo addressVo = new AddressVo();
 		AreaVo areaVo = null;
 		if (null != address) {
 			DeliveryArea area = address.getArea();

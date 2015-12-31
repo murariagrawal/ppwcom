@@ -317,7 +317,7 @@ function validateDeliveryForm(isSaveAddress) {
     }
 }
 function bindDeliveryEvents() {
-    $('#phoneNumber').on("keyup", function() {
+    $('#phoneNumber').on("keyup change", function() {
 	var length = $(this).val().length;
 	if (length && length == 10) {
 	    getAddressDetails();

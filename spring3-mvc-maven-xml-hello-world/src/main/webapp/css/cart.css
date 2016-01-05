@@ -14,9 +14,12 @@
 }
 
 .cutomColorBg {
-	background-image: linear-gradient(to bottom, #286090 0, #286090 100%);
+	background-image: linear-gradient(white 0, white 100%);
 }
 
+.customColorbgBody {
+	    background-color: #F3AC1F;
+}
 .overlay {
 	position: absolute;
 	top: 0;
@@ -28,7 +31,36 @@
 	color: white;
 	display: inline-block;
 }
-
+.customcontent {
+	background-color: white;
+    border: 5px solid red;
+    box-shadow: none;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.pannelfootercustom {
+	padding: 0px;
+	background-color: red;
+	border: 0px;
+}
+.pannelheadercustom {
+	background-image: linear-gradient(red 0,red 100%); 
+	color:white;
+	border-bottom: 5px solid yellow;
+	padding: 10px 15px;
+}
+.pannelbuttonscustom {
+	background-image: linear-gradient(yellow 0,yellow 100%);
+    color: black;
+    border-radius: 0px;
+    border: 0px;
+}
+.pannelbuttonscustom:hover {
+	background-position: 0 0px;
+    background-color: yellow;
+    border-color: yellow;
+    
+}
 .customFormStyle {
 	border: 1px solid #6F8AA5
 }
@@ -71,6 +103,23 @@
 .customformgroup {
 	margin-bottom: 15px;
 }
+.nav-tabs>li>a.customnav {
+	   	border-radius: 0px 0px 0 0;	   
+    	background-color: red;
+    	border: 0px;
+   	 	border-radius: 0px;
+   	 	color: yellow;
+	   
+}
+
+.nav-tabs>li.active>a.customnav {
+		border-radius: 0px 0px 0 0;	   
+    	background-color: yellow;
+    	border: 0px;
+   	 	border-radius: 0px;
+   	 	color: black;
+	
+	}
 @media screen and (max-width: 600px) {
 	.panel-collapse .collapse .orderSummary {
 	
@@ -89,5 +138,9 @@
 	}
 	.navtabcustom {
 		font-size: 12px;
+	}
+	.nav-tabs>li>a .customnav {
+	    padding: 5px;
+	    border-radius: 0px 0px 0 0;
 	}
 }

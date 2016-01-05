@@ -24,6 +24,8 @@ public class DeliverySlot {
 	@Column
 	private String startTime;
 	@Column
+	private int startTimeNum;
+	@Column
 	private String endTime;
 	@Column
 	private int slotQuantity;
@@ -118,6 +120,18 @@ public class DeliverySlot {
 	 */
 	public void setDeliveryStockList(List<DeliverySlotStock> deliveryStockList) {
 		this.deliveryStockList = deliveryStockList;
+	}
+	/**
+	 * @return the startTimeNum
+	 */
+	public int getStartTimeNum() {
+		return startTimeNum;
+	}
+	/**
+	 * @param startTimeNum the startTimeNum to set
+	 */
+	public void setStartTimeNum(int startTimeNum) {
+		this.startTimeNum = startTimeNum;
 	}
 	
 

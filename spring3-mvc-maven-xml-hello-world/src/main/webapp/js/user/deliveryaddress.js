@@ -1,9 +1,7 @@
 function clearDeliveryForm() {
     $("#addressFields input[type=text]").val("");
     $("#addressFieldsExisting").empty();
-    $('.error-field').removeClass('error-field');
-    $('#selectDeliverySlot').find('option').remove().end().append('<option value="">Select Delivery Slot</option>')
-	    .val('');
+    $('.error-field').removeClass('error-field');    
     $(".areaMenu").empty();
     $(".subAreaMenu").empty();
     $('#addressDivElements').removeClass("hide").addClass("show");
@@ -55,8 +53,7 @@ function bindAddressModelEvents() {
 	$('#editAddress').removeClass("hide").addClass("show");
 	$('#saveAddress').removeClass("show").addClass("hide");
 	$('#myModal').modal('hide');
-	// $('#addressFields').removeClass("hide").addClass("show");
-	getDeliverySlots();
+	
     });
     $(".editbutton").on('click', function(e) {
 	editAddress($(this).parent().parent().parent().parent().find("[data-th='individualAddress']"));
@@ -175,7 +172,7 @@ function getAddressDetails() {
 		    $("#addAddress").removeClass("hide").addClass("show");
 		    $('#saveAddress').removeClass("show").addClass("hide");
 		    $("#searchId").val($("#addressFieldsExisting").find("#areaId").val());
-		    getDeliverySlots();
+		   
 		} else if (addressList && addressList !== null && addressList.length > 1) {
 		    $('#myModal').modal();
 		    var addressDiv = $("#addressDiv");
@@ -236,8 +233,6 @@ function editAddress(address) {
     $("#addr1").val($(address).find("#addressLine1").html());
     $("#addr2").val($(address).find("#addressLine2").html());
     $("#landmarkAddr").val($(address).find("#landmark").html());
-    $("#areaAddr").val($(address).find("#area").html());
-    $("#subAreaAddr").val($(address).find("#subArea").html());
     $("#deliveryAddressId").val($(address).find("#addressId").val());
     $("#searchId").val($(address).find("#areaId").val());
     $('#myModal').modal('hide');
@@ -246,7 +241,7 @@ function editAddress(address) {
     $('#addressDivElements').removeClass("hide").addClass("show");
     $('#saveAddress').removeClass("hide").addClass("show");
     $('#editAddress').removeClass("show").addClass("hide");
-    getDeliverySlots();
+    
 }
 function validateDeliveryForm(isSaveAddress) {
     var phoneNumberVal = $("#phoneNumber").val(), firstNameVal1 = $("#firstNameAddr").val(), lastNameVal1 = $(
@@ -276,12 +271,12 @@ function validateDeliveryForm(isSaveAddress) {
 	    errorMessage = "Address Line 1 is a required field.";
 	}
 	if (areaAddrVal === null || areaAddrVal == "") {
-	    $("#areaAddr").parent().addClass('has-error');
+	    $("#areaAddrDisplay").parent().addClass('has-error');
 	    noOfFieldsInError = noOfFieldsInError + 1;
 	    errorMessage = "Area is a required field.";
 	}
 	if (subAreaAddrVal === null || subAreaAddrVal == "") {
-	    $("#subAreaAddr").parent().addClass('has-error');
+	    $("#subAreaAddrDisplay").parent().addClass('has-error');
 	    noOfFieldsInError = noOfFieldsInError + 1;
 	    errorMessage = "SubArea is a required field.";
 	}

@@ -25,6 +25,7 @@ $(document).ready(function() {
 	$("#errorDiv").removeClass("hide");
 	$("#errorDiv").append("<Strong>" + errorMessage + "");
     }
+    
     function goToNextStep(nextStep) {
 	hideErrorMessage();
 	$('.has-error').removeClass('has-error');

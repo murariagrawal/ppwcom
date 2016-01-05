@@ -153,6 +153,8 @@ function bindAreaEvents() {
 	$(".subAreaAddr").attr("data-name", $(this).attr('data-name'));
 	$(".searchId").val($(this).attr('id'));
 	$("#selectedAreaId").val($(this).attr('id'));
+	$("#selectedSubArea").val($(this).attr('data-name'));
+	
 	$(".subAreaMenu").removeClass("show");
 	$(".subAreaMenu").addClass("hide");
 	//getDeliverySlots();
@@ -164,6 +166,8 @@ function bindAreaEvents() {
 	$(".areaAddr").attr("data-name", $(this).attr('data-areaName'));
 	$("#searchId").val($(this).attr('id'));
 	$("#selectedAreaId").val($(this).attr('id'));
+	$("#selectedArea").val($(this).attr('data-areaName'));
+	$("#selectedSubArea").val($(this).attr('data-name'));
 	$(".areaMenu").removeClass("show").addClass("hide");
 	$(".subAreaMenu").removeClass("show").addClass("hide");
 	//getDeliverySlots();
@@ -172,6 +176,8 @@ function bindAreaEvents() {
 	if ($(".areaAddr").val() !== $(this).attr('data-name')) {
 	    $(".areaAddr").attr("data-name", $(this).attr('data-name'));
 	    $(".areaAddr").val($(this).attr('data-name'));
+	    
+		$("#selectedArea").val($(this).attr('data-name'));
 	    $(".subAreaAddr").val('');
 	}
 	$(".areaMenu").removeClass("show");

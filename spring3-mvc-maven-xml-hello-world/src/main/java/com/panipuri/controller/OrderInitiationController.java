@@ -19,7 +19,7 @@ import com.panipuri.service.MasterDataFetchService;
 import com.panipuri.service.OrderCreationService;
 import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.ComboItemVo;
-import com.panipuri.vo.DeliverySlotVo;
+import com.panipuri.vo.DeliverySlotInfoVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
 import com.panipuri.vo.ToppingVo;
@@ -45,6 +45,7 @@ public class OrderInitiationController {
 		DeliveryArea area = orderCreationService.fetchStockList(phoneNumber, selectedAreaId);
 		List<ItemVo> itemList = masterDataFetchService.fetchAllComboItem();
 		OrderVo orderIdLong = orderCreationService.createOrder(null, null, null, phoneNumber, selectedAreaId);
+		
 		List<DeliverySlotStock> stockList = area.getMasterArea().getDeliveryStockList();
 		List<String> itemIds = null;
 		List<String> quantity = null;
@@ -88,7 +89,13 @@ public class OrderInitiationController {
 			}
 		}
 		ModelAndView mv = new ModelAndView("");
-		
+		DeliverySlotInfoVo deliverySlotInfo = null;
+		try {
+			deliverySlotInfo = deliveryDetailsService.fetchDeliverySlots(selectedAreaId, ""+orderIdLong.getOrderId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(DeliverySlotStock stock:stockList) {
 			stock.setSlot(null);
 			stock.setArea(null);
@@ -96,6 +103,7 @@ public class OrderInitiationController {
 		mv.addObject("orderId", orderIdLong.getOrderId());
 		mv.addObject("availableStock", area.getMasterArea().getDeliveryStockList());
 		mv.addObject("comboItems", comboItems);
+		mv.addObject("availableSlots", deliverySlotInfo.getAvailableDeliverySlotList());
 		return mv;
 	}
 	@RequestMapping(method = RequestMethod.POST, value="/deliveryDetails")
@@ -171,13 +179,13 @@ public class OrderInitiationController {
 	@RequestMapping(method = RequestMethod.POST, value="/fetchDeliverySlots")
 	public ModelAndView fetchDeliverySlots(HttpServletRequest request) {
 		System.out.println("in fetch deliverydetails controller");
-		String areaId = request.getParameter("searchId");
+		String areaId = request.getParameter("deliveryAreaID");
 		String orderId = request.getParameter("deliveryOrderId");
 		ModelAndView mv = null;
-		List<DeliverySlotVo> deliverySlots = null;
+		DeliverySlotInfoVo deliverySlotsInfo = null;
 		String errorMessage = "";
 		try {
-			deliverySlots = deliveryDetailsService.fetchDeliverySlots(areaId, orderId);
+			deliverySlotsInfo = deliveryDetailsService.fetchDeliverySlots(areaId, orderId);
 				//customerInformationFetchService.getCustomerDeliveryAddressList(phoneNumber);
 		} catch (Exception e) {
 			String message = e.getMessage();
@@ -192,7 +200,9 @@ public class OrderInitiationController {
 		}
 		mv = new ModelAndView("deliveryDetails");
 		if(errorMessage.equals("")) {
-			mv.addObject("deliverySlots",deliverySlots);
+			mv.addObject("deliverySlots",deliverySlotsInfo.getAvailableDeliverySlotList());
+			mv.addObject("fullDeliverySlots",deliverySlotsInfo.getFullDeliverySlotsList());
+			mv.addObject("unavailableItems",deliverySlotsInfo.getUnavailbleItemList());
 		} else {
 			mv.addObject("errormessage",errorMessage);
 		}

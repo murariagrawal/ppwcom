@@ -107,7 +107,7 @@ $(document).ready(function () {
 	    	loadFragment("html/admin/areaManagement.html");
 	    	ajax.getJSON("getAllItemAndStuffing").done(function(data) {
 	    		var itemSet= data;
-	    		
+	    		var itemOrderDetailsDiv = "<div class='row'><div class='col-md-4'>Slots</div>";
 	    		$.each(itemSet.itemList, function (i, item) {
 	    			var itemText =item.itemName;
 				    var itemid = item.itemId;
@@ -115,7 +115,12 @@ $(document).ready(function () {
 	    				var itemDiv = '<div class="form-group"><div class="col-md-6"><input id="itemName'+itemid+'"  name="itemName" type="text" disabled class="form-control" value="'+itemText+'">'
 	    								+'<input id="itemId'+itemid+'"  name="itemId" type="hidden" class="form-control" value="'+itemid+'">'
 	    								+'</div><div class="col-md-6"><input id="itemQuantity'+itemid+'" type="text" name="itemQuantity" class="form-control" value="0" ></div></div>';
-	    								
+	    				var itemDivStockAdd = '<div class="form-group"><div class="col-md-6"><input id="itemNameStock'+itemid+'"  name="itemNameStock" type="text" disabled class="form-control" value="'+itemText+'">'
+						+'<input id="itemIdStock'+itemid+'"  name="itemIdStock" type="hidden" class="form-control" value="'+itemid+'">'
+						+'</div><div class="col-md-6"><input id="itemQuantityStock'+itemid+'" type="text" name="itemQuantityStock" class="form-control" value="0" ></div></div>';
+	    				var itemDetailsDiv = "<div class='col-md-2'>"+itemText+"</div>";
+	    				itemOrderDetailsDiv = itemOrderDetailsDiv +itemDetailsDiv;
+	    				$("#slotItemStockAdd").append(itemDivStockAdd);
 	    				$("#slotItemStock").append(itemDiv);
 	    			}
 	    			
@@ -126,10 +131,16 @@ $(document).ready(function () {
 	    			var stuffingDiv = '<div class="form-group"><div class="col-md-6"><input id="stuffingName'+itemid+'"  name="stuffingName" type="text" disabled class="form-control" value="'+itemText+'">'
 					+'<input id="stuffingId'+itemid+'"  name="stuffingId" type="hidden" class="form-control" value="'+itemid+'">'
 					+'</div><div class="col-md-6"><input id="stuffingQuantity'+itemid+'" type="text" name="stuffingQuantity" class="form-control" value="0" ></div></div>';
-					
+	    			var stuffingDivStockAdd = '<div class="form-group"><div class="col-md-6"><input id="stuffingNameStock'+itemid+'"  name="stuffingNameStock" type="text" disabled class="form-control" value="'+itemText+'">'
+					+'<input id="stuffingIdStock'+itemid+'"  name="stuffingIdStock" type="hidden" class="form-control" value="'+itemid+'">'
+					+'</div><div class="col-md-6"><input id="stuffingQuantityStock'+itemid+'" type="text" name="stuffingQuantityStock" class="form-control" value="0" ></div></div>';
+	    			var stuffingDetailsDiv = "<div class='col-md-2'>"+itemText+"</div>";
+	    			itemOrderDetailsDiv = itemOrderDetailsDiv +stuffingDetailsDiv;
+	    			$("#slotStuffingStockAdd").append(stuffingDivStockAdd);
 					$("#slotStuffingStock").append(stuffingDiv);
 	    		});
-	    		
+	    		itemOrderDetailsDiv = itemOrderDetailsDiv + "</div>";
+	    		$("#slotInfoDiv").append(itemOrderDetailsDiv);
 	    	});
 	    	ajax.getJSON("fetchAllMasterArea").done(function(data) {
 	    		$.each(data.masterDeliveryArea, function (i, area) {					
@@ -139,11 +150,45 @@ $(document).ready(function () {
 					    
 						/// jquerify the DOM object 'o' so we can use the html method
 						$(option).html(areaName);
-						$("#masterArea").append(option);
+						$(".masterArea").append(option);
 											
 				});
 	    		
 	    	});
+	    	$(document).on("change", "#masterAreaStock",function() {
+	    		var areaId = $(this).val();
+	    		ajax.getJSON("getAreaStockAndSlot?masterAreaStock="+areaId).done(function(data) {
+	    			
+		    		$.each(data.areaSlots, function (i, slot) {					
+							var startTimeNum =slot.startTimeNum;
+						    var slotId = slot.deliverySlotId;
+						    var option = new Option(startTimeNum, startTimeNum);
+						    
+							/// jquerify the DOM object 'o' so we can use the html method
+							$(option).html(startTimeNum);
+							$("#slotStock").append(option);
+							var slotTime = slot.startTime + "-"+slot.endTime;
+							var slotOrderDetailsDiv = "<div class='row'><div class='col-md-4'>"+slotTime+"</div>";
+							$.each(slot.deliveryStockList, function (i, slotStock) {
+								
+								var slotStockDiv = "<div class='col-md-2'>"+slotStock.quantityOrdered+"</div>"
+								slotOrderDetailsDiv = slotOrderDetailsDiv + slotStockDiv;
+							});
+							slotOrderDetailsDiv = slotOrderDetailsDiv+"</div>";
+							$("#slotInfoDiv").append(slotOrderDetailsDiv);
+							
+					});
+		    		
+		    		$(document).on("click","#addStockButton", function() {
+			    		ajax.postForm("addStockToArea?F=J", $("#addStockForm")).done(function(data) {			
+							
+						}).fail(function(data) {        	
+							alert("failed");
+						});
+			    	});
+		    	});
+	    	});
+	    	
 	    });
     }
 	function loadFragment(fagmentName) {

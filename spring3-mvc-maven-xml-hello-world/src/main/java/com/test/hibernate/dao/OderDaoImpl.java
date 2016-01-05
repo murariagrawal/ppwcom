@@ -20,6 +20,7 @@ import com.test.hibernate.DeliveryArea;
 import com.test.hibernate.DeliverySlot;
 import com.test.hibernate.DeliverySlotStock;
 import com.test.hibernate.Item;
+import com.test.hibernate.MasterDeliveryArea;
 import com.test.hibernate.Order;
 import com.test.hibernate.OrderItems;
 import com.test.hibernate.OrderToppings;
@@ -264,18 +265,23 @@ public class OderDaoImpl {
 		if (null != orderDetails.getDeliveryAddress() && null != orderDetails.getDeliveryAddress().getArea()) {
 			if (null != orderDetails.getDeliveryAddress().getArea().getMasterArea()
 					&& null != orderDetails.getDeliveryAddress().getArea().getMasterArea().getDeliverySlots()) {
-				List<DeliverySlot> slots = orderDetails.getDeliveryAddress().getArea().getMasterArea()
-						.getDeliverySlots();
+				MasterDeliveryArea area = orderDetails.getDeliveryAddress().getArea().getMasterArea();
+				List<DeliverySlot> slots = area.getDeliverySlots();
 				List<DeliverySlotStock> stockList = null;
 				List<OrderItems> orderItems = orderDetails.getOrderItems();
 				List<OrderToppings> toppings = orderDetails.getOrderToppings();
+				DeliverySlot selectedSlot = orderDetails.getDeliverySlotSelected();
 				for (DeliverySlot slot : slots) {
 					stockList = slot.getDeliveryStockList();
 					for (DeliverySlotStock stock : stockList) {
-
+						
 						if (stock.isStuffing()) {
 							for (OrderToppings stuffing : toppings) {
 								if(stock.getId() == stuffing.getTopping().getToppingId()) {
+									if(selectedSlot.getDeliverySlotId() == slot.getDeliverySlotId()) {
+										int finalQuantity = stock.getQuantityOrdered()+stuffing.getQuantity();
+										stock.setQuantityOrdered(finalQuantity);
+									}
 									int finalQuantity = stock.getQuantity()-stuffing.getQuantity();
 									stock.setQuantity(finalQuantity);
 								}
@@ -283,12 +289,34 @@ public class OderDaoImpl {
 						} else {
 							for (OrderItems item : orderItems) {
 								if(stock.getId() == item.getItem().getItemId()) {
+									if(selectedSlot.getDeliverySlotId() == slot.getDeliverySlotId()) {
+										int finalQuantity = stock.getQuantityOrdered()+item.getQuantity();
+										stock.setQuantityOrdered(finalQuantity);
+									}
 									int finalQuantity = stock.getQuantity()-item.getQuantity();
 									stock.setQuantity(finalQuantity);
 								}
 							}
 						}
 					}
+				}
+				for(DeliverySlotStock stock : area.getDeliveryStockList()) {
+					if (stock.isStuffing()) {
+						for (OrderToppings stuffing : toppings) {
+							if(stock.getId() == stuffing.getTopping().getToppingId()) {
+								int finalQuantity = stock.getQuantity()-stuffing.getQuantity();
+								stock.setQuantity(finalQuantity);
+							}
+						}
+					} else {
+						for (OrderItems item : orderItems) {
+							if(stock.getId() == item.getItem().getItemId()) {
+								int finalQuantity = stock.getQuantity()-item.getQuantity();
+								stock.setQuantity(finalQuantity);
+							}
+						}
+					}
+					
 				}
 			}
 		}
@@ -343,6 +371,24 @@ public class OderDaoImpl {
 		session.getTransaction().commit();
 		session.close();
 		return orderVo;
+	}
+	public List<OrderVo> getOrdersForAnArea(String areaId) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		List<Order> orderDetails = (List<Order>) session.createCriteria(Order.class,"order").createAlias("order.deliveryAddress.area.masterArea", "masterArea")
+				.add(Restrictions.eq("masterArea.deliveryAreaId",  new Long(areaId))).add(Restrictions.eq("order.status", Status.ACCEPTED.name())).list();
+		OrderVo orderVo =null;
+		List<OrderVo> orderList = new ArrayList<OrderVo>();
+		if(orderDetails != null) {
+			for(Order order :orderDetails) {
+				 orderVo = createOrderVO(order);
+				 orderList.add(orderVo);
+			}
+		}
+		
+		session.getTransaction().commit();
+		session.close();
+		return orderList;
 	}
 
 	private List<ItemVo> convertOrderItemToItemVo(List<OrderItems> orderItems) {

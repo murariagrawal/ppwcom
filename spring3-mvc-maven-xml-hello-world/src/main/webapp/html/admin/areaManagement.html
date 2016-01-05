@@ -1,138 +1,142 @@
 
 
 <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Add Master Area</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-	                 <div class="row">
-	                     <div class="col-lg-12">
-	                        <form role="form" id="addMasterAreaForm">
-	                            <div class="form-group">
-	                                <label>Area Name</label>
-	                                <input id="areaName" name="areaName" class="form-control">
-	                            </div>
-	                            <div class="form-group">
-	                                <label>City</label>
-	                                <input id="areaCity" name="areaCity" class="form-control" value="Pune">
-	                            </div>
-	                            <div class="form-group">
-	                                <label>State</label>
-	                                <input id="areaState" name="areaState" class="form-control" value="Maharashtra">
-	                            </div>
-	                           
-	                            <div id="addAreaDeliverySlots">
-	                            	<label>DeliverySlots:</label>
-				                    <div class="form-group multiple-form-group input-group">
-				                        <div class="input-group-btn input-group-select">
-				                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-				                                <span class="concept">Select Slot</span> <span class="caret"></span>
-				                            </button>
-				                            <ul class="dropdown-menu" role="menu">
-				                                <li><a href="#3-4">3-4</a></li>
-				                                <li><a href="#4-5">4-5</a></li>
-				                                <li><a href="#5-6">5-6</a></li>
-				                                <li><a href="#6-7">6-7</a></li>
-				                                <li><a href="#7-8">7-8</a></li>
-				                                <li><a href="#8-9">8-9</a></li>
-				                                <li><a href="#9-10">9-10</a></li>
-				                            </ul>
-				                            <input type="hidden" class="input-group-select-val" name="deliverySlots" value="">
-				                        </div>
-				                        <input type="text" name="dliveryQuantity" placeholder="Slot Quantity" class="form-control">
-				                        <span class="input-group-btn">
-				                            <button type="button" class="btn btn-success btn-add">+</button>
-				                        </span>
-				                    </div>
-                                  </div>
-                                  <div id="slotItemStock"></div>
-                                  <div id="slotStuffingStock"></div>
-                                  
-	                           
-                                  <button type="button" id="submitAddMasterArea"class="btn btn-default">Add Master Area</button>
-	                        </form>
-	                     </div>
-	                   </div>
-                   </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-success">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Add Delivery Area</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                <div class="row">
-	                     <div class="col-lg-6">
-	                        <form role="form" id="addAreaForm">
-	                            <div class="form-group">
-	                                <label>Area Name</label>
-	                                <input id="deliveryAreaName" name="deliveryAreaName" class="form-control">
-	                            </div>
-	                            <div class="form-group">
-	                                <label>Sub Area Name</label>
-	                                <input id="deliverySubAreaName" name="deliverySubAreaName" class="form-control" >
-	                            </div>
-	                            
-	                            <div class="form-group">
-	                                <label>Zipcode</label>
-	                                <input id="areaZipcode" name="areaZipcode" class="form-control">
-	                                <p class="help-block">Multiple Zipcodes Comma (,) seperated.</p>
-	                            </div>
-	                             <div class="form-group">
-	                                <label>MasterDeliveryArea</label>
-	                                <select id="masterArea" name="masterArea" class="form-control">
-	                                	<option value="">Select Master Delivery Area</option>
-	                                </select>
-	                            </div>
-	                            <div class="form-group">
-	                                <label>Serving</label>
-	                                <input id="serving" name="serving" type = "checkbox" class="form-control">
-	                                	
-	                            </div>
-	                             <div class="form-group">
-	                                <label>Serving Party</label>
-	                                <input id="serving" name="servingParty" type = "checkbox" class="form-control" checked="checked">
-	                                	
-	                            </div>
-                                  <button type="button" id="submitAddArea"class="btn btn-default">Add Area</button>
-	                        </form>
-	                     </div>
-	                   </div>
-                    </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Display all Area and Zipcodes</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                    </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-warning">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Update Crew</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                    </div>
-            </div>
-        </div>
-    </div>
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Add Master Area</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<form role="form" id="addMasterAreaForm">
+							<div class="form-group">
+								<label>Area Name</label> <input id="areaName" name="areaName" class="form-control">
+							</div>
+							<div class="form-group">
+								<label>City</label> <input id="areaCity" name="areaCity" class="form-control" value="Pune">
+							</div>
+							<div class="form-group">
+								<label>State</label> <input id="areaState" name="areaState" class="form-control" value="Maharashtra">
+							</div>
+
+							<div id="addAreaDeliverySlots">
+								<label>DeliverySlots:</label>
+								<div class="form-group multiple-form-group input-group">
+									<div class="input-group-btn input-group-select">
+										<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+											<span class="concept">Select Slot</span> <span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="#3-4">3-4</a></li>
+											<li><a href="#4-5">4-5</a></li>
+											<li><a href="#5-6">5-6</a></li>
+											<li><a href="#6-7">6-7</a></li>
+											<li><a href="#7-8">7-8</a></li>
+											<li><a href="#8-9">8-9</a></li>
+											<li><a href="#9-10">9-10</a></li>
+										</ul>
+										<input type="hidden" class="input-group-select-val" name="deliverySlots" value="">
+									</div>
+									<input type="text" name="dliveryQuantity" placeholder="Slot Quantity" class="form-control"> <span
+										class="input-group-btn">
+										<button type="button" class="btn btn-success btn-add">+</button>
+									</span>
+								</div>
+							</div>
+							<div id="slotItemStock" class="slotItemStock"></div>
+							<div id="slotStuffingStock" class="slotStuffingStock"></div>
+
+
+							<button type="button" id="submitAddMasterArea" class="btn btn-default">Add Master Area</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-success">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Add Delivery Area</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<form role="form" id="addAreaForm">
+							<div class="form-group">
+								<label>Area Name</label> <input id="deliveryAreaName" name="deliveryAreaName" class="form-control">
+							</div>
+							<div class="form-group">
+								<label>Sub Area Name</label> <input id="deliverySubAreaName" name="deliverySubAreaName" class="form-control">
+							</div>
+
+							<div class="form-group">
+								<label>Zipcode</label> <input id="areaZipcode" name="areaZipcode" class="form-control">
+								<p class="help-block">Multiple Zipcodes Comma (,) seperated.</p>
+							</div>
+							<div class="form-group">
+								<label>MasterDeliveryArea</label> <select id="masterArea" name="masterArea" class="masterArea form-control">
+									<option value="">Select Master Delivery Area</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Serving</label> <input id="serving" name="serving" type="checkbox" class="form-control">
+
+							</div>
+							<div class="form-group">
+								<label>Serving Party</label> <input id="serving" name="servingParty" type="checkbox" class="form-control"
+									checked="checked">
+
+							</div>
+							<button type="button" id="submitAddArea" class="btn btn-default">Add Area</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Add Stock To Area</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<form id="addStockForm">
+					<div class="form-group">
+						<label>MasterDeliveryArea</label> <select id="masterAreaStock" name="masterAreaStock"
+							class="masterArea form-control">
+							<option value="">Select Master Delivery Area</option>
+						</select>
+					</div>
+					<div id="slotInfoDiv"></div>
+					<div class="form-group">
+						<label>Select Slot For stock update</label> <select id="slotStock" name="slotStock" class="form-control">
+							<option value="">Select Slot</option>
+						</select>
+					</div>
+					<div id="slotItemStockAdd" class="slotItemStock"></div>
+					<div id="slotStuffingStockAdd" class="slotStuffingStock"></div>
+					<button type="button" id="addStockButton" class="btn btn-default">Add Stock</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-warning">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Update Crew</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body"></div>
+		</div>
+	</div>
+</div>
 <script src="js/admin/panel.js"></script>
 <script src="js/admin/area.js"></script>
- <link rel="stylesheet" href="css/admin/panel.css">
+<link rel="stylesheet" href="css/admin/panel.css">

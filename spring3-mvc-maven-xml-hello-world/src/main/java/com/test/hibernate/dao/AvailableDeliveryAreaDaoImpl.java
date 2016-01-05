@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -114,16 +115,18 @@ public class AvailableDeliveryAreaDaoImpl {
 	}
 
 	@SuppressWarnings("unchecked")
-	public MasterDeliveryArea getMasterDeliveryArea(String areaName) {
+	public MasterDeliveryArea getMasterDeliveryArea(String areaId) {
 		Session session = this.sessionFactory.openSession();
 
-		List<MasterDeliveryArea> allAvailableDeliveryArea = (List<MasterDeliveryArea>) session
-				.createCriteria(MasterDeliveryArea.class).add(Restrictions.eq("areaName", areaName)).list();
-		if(null!= allAvailableDeliveryArea && !allAvailableDeliveryArea.isEmpty()) {
-			return allAvailableDeliveryArea.get(0);
-			
+		MasterDeliveryArea allAvailableDeliveryArea = (MasterDeliveryArea) session.get(MasterDeliveryArea.class, new Long(areaId));
+		Hibernate.initialize(allAvailableDeliveryArea.getDeliveryStockList());
+		Hibernate.initialize(allAvailableDeliveryArea.getDeliverySlots());
+		if(allAvailableDeliveryArea.getDeliverySlots() != null) {
+			for(DeliverySlot slot:allAvailableDeliveryArea.getDeliverySlots()) {
+				Hibernate.initialize(slot.getDeliveryStockList());
+			}
 		}
-		return null;
+		return allAvailableDeliveryArea;
 	}
 	public DeliveryArea getDeliveryArea(Long areaId) {
 		Session session = this.sessionFactory.openSession();
@@ -226,7 +229,37 @@ public class AvailableDeliveryAreaDaoImpl {
 		}
 
 	}
-
+	public void updateStockList(List<DeliverySlotStock> stockListTobeAddedPrevious, List<DeliverySlotStock> stockListTobeAddedLater, String masterAreaId) {
+		Session session = this.sessionFactory.openSession();
+		session.beginTransaction();
+		MasterDeliveryArea allAvailableDeliveryArea = (MasterDeliveryArea) session.get(MasterDeliveryArea.class, new Long(masterAreaId));
+		for(DeliverySlot slot : allAvailableDeliveryArea.getDeliverySlots() ) {
+			for(DeliverySlotStock stockAdded :stockListTobeAddedPrevious) {
+				if(stockAdded.getSlot().getDeliverySlotId() == slot.getDeliverySlotId()) {
+					for(DeliverySlotStock slotStock : slot.getDeliveryStockList()) {
+						if(slotStock.getId() == stockAdded.getId() && slotStock.isStuffing()==stockAdded.isStuffing()) {
+							int finalQuantity  =  slotStock.getQuantity()+stockAdded.getQuantity();
+							slotStock.setQuantity(finalQuantity);
+						}
+					}
+				}
+			}
+			for(DeliverySlotStock stockAdded :stockListTobeAddedLater) {
+				if(stockAdded.getSlot().getDeliverySlotId() == slot.getDeliverySlotId()) {
+					for(DeliverySlotStock slotStock : slot.getDeliveryStockList()) {
+						if(slotStock.getId() == stockAdded.getId() && slotStock.isStuffing()==stockAdded.isStuffing()) {
+							int finalQuantity  =  slotStock.getQuantity()+stockAdded.getQuantity();
+							slotStock.setQuantity(finalQuantity);
+							int finalIntialQuantity  =  slotStock.getInitialQuantity()+stockAdded.getInitialQuantity();
+							slotStock.setInitialQuantity(finalIntialQuantity);
+						}
+					}
+				}
+			}
+		}
+		session.getTransaction().commit();
+		session.close();
+	}
 	public void deleteMasterDeliveryArea(long areaID) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();

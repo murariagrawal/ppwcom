@@ -9,6 +9,7 @@ import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.panipuri.vo.DeliverySlotInfoVo;
 import com.panipuri.vo.DeliverySlotVo;
 import com.panipuri.vo.ItemVo;
 import com.panipuri.vo.OrderVo;
@@ -23,7 +24,8 @@ import com.test.hibernate.dao.OderDaoImpl;
 public class DeliveryDetailsService {
 	@Autowired DeliverySlotDaoImpl deliverySlotDaoImpl;
 	@Autowired OderDaoImpl orderDaoImpl;
-	public List<DeliverySlotVo> fetchDeliverySlots(String areaId, String orderId) throws Exception {
+	public DeliverySlotInfoVo fetchDeliverySlots(String areaId, String orderId) throws Exception {
+		DeliverySlotInfoVo deliverySlotInfoVo =  new DeliverySlotInfoVo();
 		List<DeliverySlotVo> deliverySlotsList = new ArrayList<DeliverySlotVo>();
 		List<DeliverySlotVo> fullDeliverySlotsList = new ArrayList<DeliverySlotVo>();
 		List<DeliverySlot> deliverySlots = deliverySlotDaoImpl.getAvailableDeliverySlots(areaId);
@@ -45,60 +47,63 @@ public class DeliveryDetailsService {
 				List<String> unavailableItems = new ArrayList<String>();
 				List<String> unavailableStuffings = new ArrayList<String>();
 				
-				
-				for(ItemVo item :itemList) {
-					innerLoop:
-					for(DeliverySlotStock stock :stockList) {
-						if(!item.isComboItem()){
-							if(stock.getId() == item.getItemId() && !stock.isStuffing()) {
-								if(stock.getQuantity()>=item.getItemQuantity()) {
-									break;
-								} else {
-									unavailableItems.add(item.getItemName());
-									break;
+				if(null != itemList) {
+					for(ItemVo item :itemList) {
+						innerLoop:
+						for(DeliverySlotStock stock :stockList) {
+							if(!item.isComboItem()){
+								if(stock.getId() == item.getItemId() && !stock.isStuffing()) {
+									if(stock.getQuantity()>=item.getItemQuantity()) {
+										break;
+									} else {
+										unavailableItems.add(item.getItemName());
+										break;
+									}
+									
 								}
-								
-							}
-						} else {
-							if(null !=item.getComboQuantityList()) {
-								List<ComboItemQuantity> comboItems = item.getComboQuantityList();
-								for(ComboItemQuantity comboItem:comboItems) {
-									if(stock.getId() == comboItem.getComboItem().getItemId() && !stock.isStuffing()) {
-										int comboItemQuantity = comboItem.getQuantity() * item.getItemQuantity();
-										if(stock.getQuantity()>=comboItemQuantity) {											
-											break innerLoop;
-										} else {
-											unavailableItems.add(item.getItemName());											
-											break innerLoop;
+							} else {
+								if(null !=item.getComboQuantityList()) {
+									List<ComboItemQuantity> comboItems = item.getComboQuantityList();
+									for(ComboItemQuantity comboItem:comboItems) {
+										if(stock.getId() == comboItem.getComboItem().getItemId() && !stock.isStuffing()) {
+											int comboItemQuantity = comboItem.getQuantity() * item.getItemQuantity();
+											if(stock.getQuantity()>=comboItemQuantity) {											
+												break innerLoop;
+											} else {
+												unavailableItems.add(item.getItemName());											
+												break innerLoop;
+											}
+											
 										}
-										
 									}
 								}
 							}
 						}
 					}
 				}
-				for(ToppingVo stuffing :stuffingList) {
-					for(DeliverySlotStock stock :stockList) {
-						if(stock.getId() == stuffing.getToppingId() && stock.isStuffing()) {
-							if(stock.getQuantity()>=stuffing.getQuantity()) {
-								break;
-							} else {
-								unavailableStuffings.add(stuffing.getToppingName());
-								break;
+				if(null != stuffingList) {
+					for(ToppingVo stuffing :stuffingList) {
+						for(DeliverySlotStock stock :stockList) {
+							if(stock.getId() == stuffing.getToppingId() && stock.isStuffing()) {
+								if(stock.getQuantity()>=stuffing.getQuantity()) {
+									break;
+								} else {
+									unavailableStuffings.add(stuffing.getToppingName());
+									break;
+								}
+							
 							}
-						
-						}
-					}				
-				}				
-				if(unavailableItems.isEmpty()) {
+						}				
+					}
+				}
+				if(unavailableItems.isEmpty() && unavailableStuffings.isEmpty()) {
 					
 					int hours = calendar.get(Calendar.HOUR_OF_DAY);
 					int minutes = calendar.get(Calendar.MINUTE);
 					startTime = deliverySlot.getStartTime();
 					deliverySlotTime = startTime.substring(0, startTime.indexOf("PM"));
 					int slotTime = Integer.parseInt(deliverySlotTime)+12;
-					if(hours < slotTime || ((slotTime-hours)==1 && minutes<50)) {
+					//if(hours < slotTime || ((slotTime-hours)==1 && minutes<50)) {
 						
 						deliverySlotVo = new DeliverySlotVo();
 						deliverySlotVo.setDeliverySlotId(deliverySlot.getDeliverySlotId());
@@ -112,14 +117,16 @@ public class DeliveryDetailsService {
 							fullDeliverySlotsList.add(deliverySlotVo);
 						}
 						
-					}
+					//}
 				} 
 				unavailableItems.addAll(unavailableStuffings);
 				unavailbleItemList.put(deliverySlot.getStartTime()+"-"+deliverySlot.getEndTime(), unavailableItems);
 				
 				//}
 			}
-			
+			deliverySlotInfoVo.setAvailableDeliverySlotList(deliverySlotsList);
+			deliverySlotInfoVo.setFullDeliverySlotsList(fullDeliverySlotsList);
+			deliverySlotInfoVo.setUnavailbleItemList(unavailbleItemList);
 			if(deliverySlotsList.isEmpty() && !fullDeliverySlotsList.isEmpty() ) {
 				
 			} else if(deliverySlotsList.isEmpty() && !unavailbleItemList.isEmpty()) {
@@ -132,7 +139,7 @@ public class DeliveryDetailsService {
 			Exception e = new Exception("ERR_NO_SLOT");
 			throw e;
 		}
- 		return deliverySlotsList;
+ 		return deliverySlotInfoVo;
 	}
 	/**
 	 * @param deliverySlotDaoImpl the deliverySlotDaoImpl to set

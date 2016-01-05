@@ -55,8 +55,9 @@ public class OrderCreationService {
 			String contactNo = otpDaoImpl.addOTP(orderId,otp);
 			String message = "Dear Customer, You have initiated an order with us. Your One time Password for verification is "+otp;
 			SMSSender smsSender = new SMSSender();
-			smsSender.sendCustomerSMS(contactNo, message);
+			//smsSender.sendCustomerSMS(contactNo, message);
 			statusVo.setStatus(true);
+			statusVo.setMessage(otp);
 		} catch (Exception e) {
 			statusVo.setStatus(false);
 		}
@@ -118,7 +119,7 @@ public class OrderCreationService {
 			
 			String message = "Dear Customer, Thank you for placing and order with PaniPuri Bites. Your order Details: "+orderDetailsString.toString();
 			SMSSender smsSender = new SMSSender();
-			smsSender.sendCustomerSMS(orderDetails.getContactNo(), message);
+			//smsSender.sendCustomerSMS(orderDetails.getContactNo(), message);
 			
 		} else {
 			Exception e = new Exception("ERR_INVALID_OTP");

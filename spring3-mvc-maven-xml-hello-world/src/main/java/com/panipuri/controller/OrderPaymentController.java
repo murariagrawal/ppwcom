@@ -33,10 +33,11 @@ public class OrderPaymentController {
 		String orderId = request.getParameter("orderIdPayment");
 		
 		StatusVo status = orderCreationService.sendOTP(orderId);
-		status.setMessage("SMS has been sent. Please verify the 6 digit code.");
+		
 		mv = new ModelAndView("");
-		mv.addObject("message",status.getMessage());
+		mv.addObject("message","SMS has been sent. Please verify the 6 digit code.");
 		mv.addObject("success",status.isStatus());
+		mv.addObject("otp",status.getMessage());
 		
 		return mv;
 	}

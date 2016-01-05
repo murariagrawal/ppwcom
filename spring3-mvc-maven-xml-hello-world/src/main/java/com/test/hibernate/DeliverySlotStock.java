@@ -20,6 +20,10 @@ public class DeliverySlotStock {
 	@Column
 	private int quantity;
 	@Column
+	private int initialQuantity;
+	@Column
+	private int quantityOrdered;
+	@Column
 	private boolean stuffing;
 	@ManyToOne
 	@JoinColumn(name = "delivery_slot_id")
@@ -99,5 +103,29 @@ public class DeliverySlotStock {
 	 */
 	public void setArea(MasterDeliveryArea area) {
 		this.area = area;
+	}
+	/**
+	 * @return the initialQuantity
+	 */
+	public int getInitialQuantity() {
+		return initialQuantity;
+	}
+	/**
+	 * @param initialQuantity the initialQuantity to set
+	 */
+	public void setInitialQuantity(int initialQuantity) {
+		this.initialQuantity = initialQuantity;
+	}
+	/**
+	 * @return the quantityOrdered
+	 */
+	public int getQuantityOrdered() {
+		return quantityOrdered;
+	}
+	/**
+	 * @param quantityOrdered the quantityOrdered to set
+	 */
+	public void setQuantityOrdered(int quantityOrdered) {
+		this.quantityOrdered = quantityOrdered;
 	}
 }

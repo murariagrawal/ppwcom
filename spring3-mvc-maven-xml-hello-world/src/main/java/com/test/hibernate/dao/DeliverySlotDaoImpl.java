@@ -85,10 +85,12 @@ public class DeliverySlotDaoImpl {
 				area = slot.getDeliveryArea();
 				
 				if(area.getDeliveryStockList() != null) {
-					for(DeliverySlotStock stock:area.getDeliveryStockList()) {
-						for(DeliverySlotStock stockdelivery: slot.getDeliveryStockList()) {
-							if(stock.getId() == stockdelivery.getId() && stockdelivery.isStuffing()==stock.isStuffing()) {
-								stockdelivery.setQuantity(stock.getQuantity());
+					for(DeliverySlotStock areaStock:area.getDeliveryStockList()) {
+						for(DeliverySlotStock slotStock: slot.getDeliveryStockList()) {
+							if(areaStock.getId() == slotStock.getId() && slotStock.isStuffing()==areaStock.isStuffing()) {
+								slotStock.setQuantity(areaStock.getQuantity());
+								slotStock.setInitialQuantity(areaStock.getQuantity());
+								slotStock.setQuantityOrdered(0);
 							}
 						}
 					}

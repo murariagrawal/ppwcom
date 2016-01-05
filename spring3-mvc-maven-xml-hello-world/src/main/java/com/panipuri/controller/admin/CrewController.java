@@ -84,14 +84,15 @@ public class CrewController {
 	public ModelAndView loginCrew(@RequestParam("userId") String userId,@RequestParam("password") String password ) {
 		Crew crew = crewService.loginCrew(userId, password);
 		ModelAndView mv = null;
+		mv = new ModelAndView("");
 		if(null != crew) {
-			mv = new ModelAndView();
+			
 			mv.addObject("loginSucceded", true);
 		} else {
-			mv = new ModelAndView();
+			
 			mv.addObject("loginSucceded", false);
 		}
-		mv = new ModelAndView("adminHome");
+	
 		return mv;
 		
 	}

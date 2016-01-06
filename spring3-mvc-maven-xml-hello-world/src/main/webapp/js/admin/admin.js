@@ -31,7 +31,33 @@ $(document).ready(function () {
 	    	loadFragment("html/admin/ItemManagement.html");
 	    });
 	    $('#crew, #crewMenu').on("click",function() {
-	    	loadFragment("html/admin/ItemManagement.html");
+	    	loadFragment("html/admin/CrewManagement.html");
+	    	ajax.getJSON("fetchAllMasterArea").done(function(data) {
+	    		$.each(data.masterDeliveryArea, function (i, area) {					
+						var areaName =area.areaName;
+					    var areaId = area.deliveryAreaId;
+					    var option = new Option(areaName, areaId);
+					    
+						/// jquerify the DOM object 'o' so we can use the html method
+						$(option).html(areaName);
+						$("#masterAreaCrew").append(option);
+											
+				});
+	    		
+	    	});
+	    	$(document).on("click", "#partySelectedCrew", function() {				
+				$("#partyCrew").val("true");
+			});
+	    	$(document).on("click","#partyNotSelectedCrew", function() {				
+				$("#partyCrew").val("false");
+			});
+	    	$(document).on("click", "#submitAddCrew", function(){
+	    		ajax.postForm("addCrew?F=J", $("#addCrewForm")).done(function(data) {			
+					
+				}).fail(function(data) {        	
+					alert("failed");
+				});
+	    	});
 	    });
 	    $('#items, #itemsMenu').on("click",function() {
 	    	loadFragment("html/admin/ItemManagement.html");

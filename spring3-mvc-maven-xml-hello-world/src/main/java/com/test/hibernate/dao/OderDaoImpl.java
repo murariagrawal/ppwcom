@@ -1,12 +1,14 @@
 package com.test.hibernate.dao;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import com.panipuri.service.admin.AdminService;
 import com.panipuri.vo.AddressVo;
 import com.panipuri.vo.AreaVo;
 import com.panipuri.vo.ItemVo;
@@ -271,6 +273,10 @@ public class OderDaoImpl {
 				List<OrderItems> orderItems = orderDetails.getOrderItems();
 				List<OrderToppings> toppings = orderDetails.getOrderToppings();
 				DeliverySlot selectedSlot = orderDetails.getDeliverySlotSelected();
+				LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> stuffingInitialOrder = new LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>>();
+				LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> itemInitialOrder = new LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>>();
+
+				
 				for (DeliverySlot slot : slots) {
 					stockList = slot.getDeliveryStockList();
 					for (DeliverySlotStock stock : stockList) {
@@ -281,9 +287,7 @@ public class OderDaoImpl {
 									if(selectedSlot.getDeliverySlotId() == slot.getDeliverySlotId()) {
 										int finalQuantity = stock.getQuantityOrdered()+stuffing.getQuantity();
 										stock.setQuantityOrdered(finalQuantity);
-									}
-									int finalQuantity = stock.getQuantity()-stuffing.getQuantity();
-									stock.setQuantity(finalQuantity);
+									}									
 								}
 							}
 						} else {
@@ -293,12 +297,48 @@ public class OderDaoImpl {
 										int finalQuantity = stock.getQuantityOrdered()+item.getQuantity();
 										stock.setQuantityOrdered(finalQuantity);
 									}
-									int finalQuantity = stock.getQuantity()-item.getQuantity();
-									stock.setQuantity(finalQuantity);
+									
+									
 								}
 							}
 						}
 					}
+				}
+				AdminService adminService = new AdminService();
+				for (DeliverySlot slot : slots) {
+					List<DeliverySlotStock> slotStocks = slot.getDeliveryStockList();
+					for (DeliverySlotStock slotStock : slotStocks) {
+						if (!slotStock.isStuffing()) {
+							adminService.deriveIntialOrderQuantity(itemInitialOrder, slotStock, slotStock.getInitialQuantity());
+						} else {
+							adminService.deriveIntialOrderQuantity(stuffingInitialOrder, slotStock, slotStock.getInitialQuantity());
+						}
+
+					}
+					
+				}
+				for (DeliverySlot slot : slots) {
+					List<DeliverySlotStock> slotStocks = slot.getDeliveryStockList();
+					for (DeliverySlotStock slotStock : slotStocks) {
+						
+						if (!slotStock.isStuffing()) {
+							if(null != itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())) && null !=itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity())) {
+								int finalQuantity = slotStock.getInitialQuantity() - itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity());
+								if(finalQuantity<slotStock.getQuantity()) {
+									slotStock.setQuantity(finalQuantity);
+								}
+							}							
+						} else {
+							if(null != stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())) && null !=stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity())) {
+								int finalQuantity = slotStock.getInitialQuantity() - stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity());
+								if(finalQuantity<slotStock.getQuantity()) {
+									slotStock.setQuantity(finalQuantity);
+								}
+							}	
+						}
+
+					}
+					
 				}
 				for(DeliverySlotStock stock : area.getDeliveryStockList()) {
 					if (stock.isStuffing()) {

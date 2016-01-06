@@ -1,146 +1,138 @@
 <script src="js/admin/panel.js"></script>
-<script src="js/admin/crew.js"></script>
- <link rel="stylesheet" href="css/admin/panel.css">
+<link rel="stylesheet" href="css/admin/panel.css">
 
 <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Add Crew</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-	                 <div class="row">
-	                     <div class="col-lg-12">
-	                        <form role="form" id="addCrewForm">
-	                         	<div class="row">
-		                    		<div class="col-lg-12">
-			                            <div class="form-group">
-			                                <label>Crew Name:</label>
-			                                <input id="crewName" name="crewName" type="text" class="form-control">
-			                            </div>
-		                            </div>
-	                            </div>
-	                            <div class="row">
-		                    		<div class="col-lg-12">
-			                            <div class="form-group">
-			                                <label>Crew Phone Number:</label>
-			                                <input id="crewPhone" name="crewPhone" type="text" class="form-control">
-			                            </div>  
-		                            </div>
-	                            </div>
-	                            <div class="row">
-		                    		<div class="col-lg-12">
-			                            <div class="form-group">
-			                                <label>App userid:</label>
-			                                <input id="crewUserId" name="crewUserId" type="text" class="form-control">
-			                            </div>  
-		                            </div>
-	                            </div>
-	                            <div class="row">
-		                    		<div class="col-lg-12">
-			                            <div class="form-group">
-			                                <label>App password:</label>
-			                                <input id="crewPassword" name="crewPassword" type="text" class="form-control">
-			                            </div>  
-		                            </div>
-	                            </div>
-                                <div class="row">
-	                    			<div class="col-lg-12">                 
-			                             <div class="form-group">
-								    		<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Is Party Crew?</label>
-								    		<div class="col-sm-7 col-md-7">
-								    			<div class="input-group">
-								    				<div class="radioBtn btn-group">
-								    					<a class="btn btn-primary  notActive" id="partySelectedCrew">YES</a>
-								    					<a class="btn btn-primary  notActive" id="partyNotSelectedCrew">NO</a>
-								    				</div>
-								    				<input type="hidden" name="partyCrew" id="partyCrew" class="partyCrew">
-								    			</div>
-								    		</div>
-								    	</div>
-								     </div>
-	                            </div>
-	                            <div class="row">
-	                    			<div class="col-lg-12"> 
-								    	
-	                                  </div>
-                                  </div>
-                                  <div class="row">
-	                    			<div class="col-lg-12"> 
-                                  		<button type="button" id="submitAddCrew" class="btn btn-default">Add Crew</button>
-                               		</div>
-                           		</div>
-	                        </form>
-	                     </div>
-	                   </div>
-                   </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-success">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                        Update Crew</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                 <div class="row">
-	                     <div class="col-lg-12">
-	                        <form role="form" id="updateItemForm">
-	                            <div class="form-group">
-	                                <label>Item Name:</label>
-	                                <select id="selectUpdateItem" class = "form-control"name="selectUpdateItem">
-										<option value="">Select Item</option>									
-									</select>
-	                               
-	                            </div>
-	                            <div class="form-group">
-	                                <label>Item Price:</label>
-	                                <input id="itemUpdatePrice" name="itemUpdatePrice" type="text" class="form-control">
-	                            </div>                            
-	                            <div class="form-group">
-	                                <label>Item Details:</label>
-	                                <input id="itemUpdateDetails" name="itemUpdateDetails" type="text" class="form-control">
-	                            </div> 
-                                  <button type="button" id="submitUpdateItem" class="btn btn-default">Update Item</button>
-	                        </form>
-	                     </div>
-	                   </div>
-                    </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-heading clickable panel-collapsed">
-                    <h3 class="panel-title">
-                       Delete Item</h3>
-                    <span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
-                </div>
-                <div class="panel-body">
-                	<form role="form" id="deleteItemForm">
-                         <div class="form-group">
-                         <label>Item Name:</label>
-                         <select id="selectDeleteItem" class = "form-control"name="selectDeleteItem">
-									<option value="">Select Item</option>									
-							</select>
-                             
-                            
-                         </div>
-                         <div class="form-group">
-                             <label>Item Price:</label>
-                             <input id="itemDeletePrice" name="itemDeletePrice" type="text" class="form-control">
-                         </div>                            
-                         
-                              <button type="button" id="submitDeleteItem" class="btn btn-default">Delete Item</button>
-                     </form>
-               </div>
-            </div>
-        </div>        
-    </div>
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Add Crew</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<form role="form" id="addCrewForm">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>Crew Name:</label> <input id="crewName" name="crewName" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>Crew Phone Number:</label> <input id="crewPhone" name="crewPhone" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>App userid:</label> <input id="crewUserId" name="crewUserId" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>App password:</label> <input id="crewPassword" name="crewPassword" type="text" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label for="Party Item" class="col-sm-4 col-md-4 control-label text-right">Is Party Crew?</label>
+										<div class="col-sm-7 col-md-7">
+											<div class="input-group">
+												<div class="radioBtn btn-group">
+													<a class="btn btn-primary  notActive" id="partySelectedCrew">YES</a> <a class="btn btn-primary  notActive"
+														id="partyNotSelectedCrew">NO</a>
+												</div>
+												<input type="hidden" name="partyCrew" id="partyCrew" class="partyCrew">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label>MasterDeliveryArea</label> <select id="masterAreaCrew" name="masterAreaCrew" class="form-control">
+											<option value="">Select Master Delivery Area</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<button type="button" id="submitAddCrew" class="btn btn-default">Add Crew</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-success">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Update Crew</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<form role="form" id="updateItemForm">
+							<div class="form-group">
+								<label>Item Name:</label> <select id="selectUpdateItem" class="form-control" name="selectUpdateItem">
+									<option value="">Select Item</option>
+								</select>
+
+							</div>
+							<div class="form-group">
+								<label>Item Price:</label> <input id="itemUpdatePrice" name="itemUpdatePrice" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label>Item Details:</label> <input id="itemUpdateDetails" name="itemUpdateDetails" type="text"
+									class="form-control">
+							</div>
+							<button type="button" id="submitUpdateItem" class="btn btn-default">Update Item</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-info">
+			<div class="panel-heading clickable panel-collapsed">
+				<h3 class="panel-title">Delete Item</h3>
+				<span class="pull-right "><i class="glyphicon glyphicon-minus"></i></span>
+			</div>
+			<div class="panel-body">
+				<form role="form" id="deleteItemForm">
+					<div class="form-group">
+						<label>Item Name:</label> <select id="selectDeleteItem" class="form-control" name="selectDeleteItem">
+							<option value="">Select Item</option>
+						</select>
+
+
+					</div>
+					<div class="form-group">
+						<label>Item Price:</label> <input id="itemDeletePrice" name="itemDeletePrice" type="text" class="form-control">
+					</div>
+
+					<button type="button" id="submitDeleteItem" class="btn btn-default">Delete Item</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 

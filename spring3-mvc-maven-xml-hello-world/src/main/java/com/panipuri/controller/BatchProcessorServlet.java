@@ -58,15 +58,19 @@ public class BatchProcessorServlet extends GenericServlet implements Application
 			 scheduledExecutorService.scheduleAtFixedRate(delteOtps, 0, 5*60, TimeUnit.SECONDS);
 		Calendar cal =Calendar.getInstance(TimeZone.getTimeZone("IST"));
 		Calendar cal2 =Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		
+		
+		
 		cal2.set(Calendar.HOUR_OF_DAY,23);
 		cal2.set(Calendar.MINUTE,55);
 		cal2.set(Calendar.SECOND,0);
 		cal2.set(Calendar.MILLISECOND,0);
 		Date d = cal.getTime();
 		Date d2 = cal2.getTime();
+		System.out.println("calenderTIme : "+cal.getTime()+" delayed time: "+cal2.getTime()+" current time: "+new Date().getTime());
 		long delay = d2.getTime() -d.getTime();
 		final ScheduledFuture<?> stockUpdater =
-				 scheduledExecutorService.scheduleAtFixedRate(stockUpdate, delay, 24*60*60, TimeUnit.SECONDS);
+				 scheduledExecutorService.scheduleAtFixedRate(stockUpdate, 0, 24*60*60, TimeUnit.SECONDS);
 	}
 
 	@Override

@@ -20,21 +20,16 @@ public class CrewDaoImpl {
         this.sessionFactory = sf;
     }
 	
-	public void addCrew(String crewName, String contactNumber, String address, long salary, AreaVo areaVo) {
-		Session session = this.sessionFactory.getCurrentSession();
+	public void addCrew(Crew crewInfo, AreaVo areaVo) {
+		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
-		Crew crew = new Crew();
-		crew.setContactnumber(contactNumber);
-		crew.setAddress(crewName);
-		crew.setName(crewName);
-		crew.setSalary(salary);
 		if(areaVo != null) {
 			MasterDeliveryArea masterDeliveryArea = (MasterDeliveryArea)session.get(MasterDeliveryArea.class, areaVo.getDeliveryAreaId());
-			crew.setArea(masterDeliveryArea);
+			crewInfo.setArea(masterDeliveryArea);
 		}
 		
 		
-		session.save(crew);
+		session.save(crewInfo);
 		session.getTransaction().commit();
 		session.close();
 	}

@@ -2,6 +2,7 @@ package com.test.hibernate.dao;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -229,9 +230,11 @@ public class AvailableDeliveryAreaDaoImpl {
 		}
 
 	}
-	public void updateStockList(List<DeliverySlotStock> stockListTobeAddedPrevious, List<DeliverySlotStock> stockListTobeAddedLater, String masterAreaId) {
+	public void updateStockList(List<DeliverySlotStock> stockListTobeAddedPrevious, List<DeliverySlotStock> stockListTobeAddedLater, 
+			String masterAreaId, LinkedHashMap<Long, Integer> itemMaxQuantity, LinkedHashMap<Long, Integer> stuffingMaxQuantity ) {
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
+		
 		MasterDeliveryArea allAvailableDeliveryArea = (MasterDeliveryArea) session.get(MasterDeliveryArea.class, new Long(masterAreaId));
 		for(DeliverySlot slot : allAvailableDeliveryArea.getDeliverySlots() ) {
 			for(DeliverySlotStock stockAdded :stockListTobeAddedPrevious) {
@@ -255,6 +258,24 @@ public class AvailableDeliveryAreaDaoImpl {
 						}
 					}
 				}
+			}
+		}
+		for(DeliverySlotStock slotStock: allAvailableDeliveryArea.getDeliveryStockList()) {
+			if(slotStock.isStuffing()) {
+				if(null != stuffingMaxQuantity.get(slotStock.getId())) {
+					int finalQuantity = slotStock.getQuantity() + stuffingMaxQuantity.get(slotStock.getId());
+					if(finalQuantity <= slotStock.getInitialQuantity()) {
+						slotStock.setQuantity(finalQuantity);
+					}
+				}
+			} else {
+				if(null != itemMaxQuantity.get(slotStock.getId())) {
+					int finalQuantity = slotStock.getQuantity() + itemMaxQuantity.get(slotStock.getId());
+					if(finalQuantity <= slotStock.getInitialQuantity()) {
+						slotStock.setQuantity(finalQuantity);
+					}
+				}
+								
 			}
 		}
 		session.getTransaction().commit();

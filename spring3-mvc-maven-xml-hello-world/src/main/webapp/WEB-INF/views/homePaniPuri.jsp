@@ -480,16 +480,14 @@
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header" style="padding: 10px 10px;">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+					
 					<h4>
 						<span class="glyphicon glyphicon-lock"></span>Select Delivery Area
 					</h4>
 				</div>
 				<div class="modal-body" style="padding: 10px 10px;">
 					<div id="areaErrorDiv" class="alert alert-danger hide"></div>
-					<form role="form" id="areaForm">
+					<form role="form" autocomplete="off"  id="areaForm">
 						<input type="hidden" id="selectedAreaId" class="form-control" name="selectedAreaId" /> 
 						<input type="hidden" id="selectedArea" class="form-control" name="selectedArea" /> 
 						<input type="hidden" id="selectedSubArea" class="form-control" name="selectedSubArea" />

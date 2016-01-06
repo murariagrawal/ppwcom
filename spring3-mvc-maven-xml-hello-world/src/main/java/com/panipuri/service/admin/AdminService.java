@@ -135,7 +135,8 @@ public class AdminService {
 			}
 
 		}
-		
+		LinkedHashMap<Long, Integer> itemMaxQuantity = new LinkedHashMap<Long, Integer>();
+		LinkedHashMap<Long, Integer> stuffingMaxQuantity = new LinkedHashMap<Long, Integer>();
 		List<DeliverySlotStock> stockListTobeAddedPrevious = new ArrayList<DeliverySlotStock>();
 		List<DeliverySlotStock> stockListTobeAddedLater = new ArrayList<DeliverySlotStock>();
 		for (DeliverySlotStock addedStock : stockInfo) {
@@ -143,20 +144,20 @@ public class AdminService {
 				for (DeliverySlot slot : slots) {
 					if (slotStartTime > slot.getStartTimeNum()) {
 						deriveStockTobeAdded(stuffingInitialOrder, itemInitialOrder, stockListTobeAddedPrevious,
-								addedStock, slot);
+								addedStock, slot, itemMaxQuantity, stuffingMaxQuantity);
 					} else {
 						deriveStockTobeAdded(stuffingLaterOrder, itemLaterOrder, stockListTobeAddedLater,
-								addedStock, slot);						
+								addedStock, slot, itemMaxQuantity, stuffingMaxQuantity);						
 					}
 				}
 
 			}
 		}
-		availableDeliveryAreaDaoImpl.updateStockList(stockListTobeAddedPrevious, stockListTobeAddedLater, masterAreaId);
+		availableDeliveryAreaDaoImpl.updateStockList(stockListTobeAddedPrevious, stockListTobeAddedLater, masterAreaId, itemMaxQuantity,stuffingMaxQuantity);
 
 	}
 
-	private void deriveIntialOrderQuantity(LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> itemInitialOrder,
+	public void deriveIntialOrderQuantity(LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> itemInitialOrder,
 			DeliverySlotStock slotStock, Integer initialQuantity) {
 		LinkedHashMap<Integer, Integer> intialQuantityOrderd;
 		int quantityOrdered;
@@ -190,17 +191,20 @@ public class AdminService {
 
 	private void deriveStockTobeAdded(LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> stuffingInitialOrder,
 			LinkedHashMap<Integer, LinkedHashMap<Integer, Integer>> itemInitialOrder,
-			List<DeliverySlotStock> stockListTobeAddedPrevious, DeliverySlotStock addedStock, DeliverySlot slot) {
+			List<DeliverySlotStock> stockListTobeAddedPrevious, DeliverySlotStock addedStock, DeliverySlot slot, LinkedHashMap<Long, Integer> itemMaxQuantity,
+			LinkedHashMap<Long, Integer> stuffingMaxQuantity) {
 		LinkedHashMap<Integer, Integer> intialQuantityOrderd;
 		DeliverySlotStock stockAdded= null;
 		if (!addedStock.isStuffing()) {
-			intialQuantityOrderd = itemInitialOrder.get(addedStock.getId());
+			intialQuantityOrderd = itemInitialOrder.get(Integer.parseInt(""+addedStock.getId()));
 			Set<Integer> intialQuantitySet = intialQuantityOrderd.keySet();
 			for (Integer initialQuant : intialQuantitySet) {
 				for (DeliverySlotStock slotStock : slot.getDeliveryStockList()) {
 					if (!slotStock.isStuffing()) {
 						if (slotStock.getId() == addedStock.getId()
 								&& slotStock.getInitialQuantity() == initialQuant) {
+							int maxQuantity = 0;
+							
 							stockAdded = new DeliverySlotStock();
 							stockAdded.setSlot(slot);
 							stockAdded.setId(addedStock.getId());
@@ -215,6 +219,14 @@ public class AdminService {
 								// add only balance quantity
 								stockAdded.setQuantity(balanceQuantity);
 							}
+							if(null != itemMaxQuantity.get(slotStock.getId())) {
+								maxQuantity = itemMaxQuantity.get(slotStock.getId());
+								if(stockAdded.getQuantity() >maxQuantity) {
+									itemMaxQuantity.put(slotStock.getId(), stockAdded.getQuantity());
+								}
+							} else {
+								itemMaxQuantity.put(slotStock.getId(), stockAdded.getQuantity());
+							}
 							stockAdded.setInitialQuantity(addedStock.getQuantity());
 							stockListTobeAddedPrevious.add(stockAdded);
 						}
@@ -222,7 +234,7 @@ public class AdminService {
 				}
 			}
 		} else {
-			intialQuantityOrderd = stuffingInitialOrder.get(addedStock.getId());
+			intialQuantityOrderd = stuffingInitialOrder.get(Integer.parseInt(""+addedStock.getId()));
 			Set<Integer> intialQuantitySet = intialQuantityOrderd.keySet();
 			for (Integer initialQuant : intialQuantitySet) {
 
@@ -230,6 +242,7 @@ public class AdminService {
 					if (slotStock.isStuffing()) {
 						if (slotStock.getId() == addedStock.getId()
 								&& slotStock.getInitialQuantity() == initialQuant) {
+							int maxQuantity = 0;
 							stockAdded = new DeliverySlotStock();
 							stockAdded.setSlot(slot);
 							stockAdded.setId(addedStock.getId());
@@ -242,6 +255,14 @@ public class AdminService {
 							} else if (balanceQuantity < addedStock.getQuantity()) {
 								// add only balance quantity
 								stockAdded.setQuantity(balanceQuantity);
+							}
+							if(null != stuffingMaxQuantity.get(slotStock.getId())) {
+								maxQuantity = stuffingMaxQuantity.get(slotStock.getId());
+								if(stockAdded.getQuantity() >maxQuantity) {
+									stuffingMaxQuantity.put(slotStock.getId(), stockAdded.getQuantity());
+								}
+							} else {
+								stuffingMaxQuantity.put(slotStock.getId(), stockAdded.getQuantity());
 							}
 							stockAdded.setInitialQuantity(addedStock.getQuantity());
 							stockListTobeAddedPrevious.add(stockAdded);

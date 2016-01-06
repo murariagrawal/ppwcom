@@ -22,12 +22,14 @@ public class Crew {
 	private String name;
 	@Column
 	private String address;
-	@Column(unique=true, nullable=false, length=10)
+	@Column(length=10)
 	private String contactnumber;
 	@Column
 	private long salary;
 	@Column(name="is_available")
 	private boolean isAvailable;
+	@Column(name="is_party")
+	private boolean isParty;
 	@ManyToOne
 	@JoinColumn(name="delivery_area_id")
 	private MasterDeliveryArea area;
@@ -171,6 +173,18 @@ public class Crew {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	/**
+	 * @return the isParty
+	 */
+	public boolean isParty() {
+		return isParty;
+	}
+	/**
+	 * @param isParty the isParty to set
+	 */
+	public void setParty(boolean isParty) {
+		this.isParty = isParty;
 	}
 	
 }

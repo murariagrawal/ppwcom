@@ -21,13 +21,16 @@ public class CrewController {
 	@Autowired
 	private CrewService crewService;
 	@RequestMapping(method = RequestMethod.POST, value="/addCrew")
-	public ModelAndView addCrew(final HttpServletRequest request,
-			@RequestParam(value = "crewName") String crewName, 
-			@RequestParam(value = "contactNumber") String contactNumber) {
+	public ModelAndView addCrew(final HttpServletRequest request) {
+		String crewName = request.getParameter("crewName");
+		String contactNumber = request.getParameter("crewPhone");
 		String address = request.getParameter("crewAddress");
 		String salary = request.getParameter("salary");
+		String userId = request.getParameter("crewUserId");
+		String password = request.getParameter("crewPassword");
+		String partyCrew = request.getParameter("partyCrew");
 		
-		String areaId = request.getParameter("areaId");
+		String areaId = request.getParameter("masterAreaCrew");
 		AreaVo area = null;	
 		if (areaId != null) {            
 			 area = new AreaVo();
@@ -37,7 +40,19 @@ public class CrewController {
 		if(salary != null && salary.equals("")) {
 			salaryLong =  new Long(salary);
 		}
-		crewService.addCrew(crewName, contactNumber, address, salaryLong, area);
+		Crew crewInfo = new Crew();
+		crewInfo.setAddress(address);
+		crewInfo.setContactnumber(contactNumber);
+		crewInfo.setName(crewName);
+		crewInfo.setPassword(password);
+		if(null != partyCrew && partyCrew.equals("true")) {
+			crewInfo.setParty(true);
+		}
+		if(salary != null && !salary.equals("")) {
+			crewInfo.setSalary(new Long(salary));
+		}
+		crewInfo.setUserId(userId);
+		crewService.addCrew(crewInfo, area);
 		return null;
 	}
 	@RequestMapping(method = RequestMethod.POST, value="/updateCrew")

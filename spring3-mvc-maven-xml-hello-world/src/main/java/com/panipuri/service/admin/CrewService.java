@@ -13,8 +13,8 @@ import com.test.hibernate.dao.CrewDaoImpl;
 public class CrewService {
 	@Autowired
 	private CrewDaoImpl crewDaoImpl;
-	public void addCrew(String crewName, String contactNumber, String address, long salary, AreaVo area) {
-		crewDaoImpl.addCrew(crewName, contactNumber, address, salary, area);
+	public void addCrew(Crew crewInfo, AreaVo area) {
+		crewDaoImpl.addCrew(crewInfo, area);
 	}
 	public void updateCrew(String crewId,String crewName, String contactNumber, String address, long salary,AreaVo area) {
 		crewDaoImpl.updateCrewDetails(crewName, contactNumber, salary, address, crewId);

@@ -14,7 +14,16 @@ $(document).ready(function () {
 		   
 		    showOverlay();
 		    updateItemStocks();
+		    $("#selectedAreaDiv").empty();
+		    var subAreaVal = $("#subAreaAddr").val();
+		    var selectedAreaDivContent=  "<span>Selected Area : "+subAreaVal+" </span><button type='button' style='background-color: yellow;border: 0px;color: black;' id='changeAreaButton'>Change</button>";
+		    $("#selectedAreaDiv").append(selectedAreaDivContent);
+		    $("#selectedAreaDiv").removeClass("hide").addClass("show");
 		    hideOverlay();
+		    $(document).on("click","#changeAreaButton", function(){
+		    	$("#areaModal").modal();
+		    });
+		   
 		});
     }
     $("#partyOrdernav").on("click", function() {
@@ -75,6 +84,9 @@ $(document).ready(function () {
 	    $("#areaModal").modal('hide');
 	    ajax.postForm("updateItemStock?F=J", $("#areaForm")).done(function(data) {
 	    	hideErrorMessage();
+	    	if(data.servingIndividual) {
+	    		$("#individualOrdernav").trigger("click");
+	    		hideErrorMessage();
         	    if(data.availableStock) {
         	    	var unavailbleStock ="";
         	    	
@@ -114,6 +126,7 @@ $(document).ready(function () {
 	        			showErrorMessage(errorMessage)
 	        		}
         	    }
+	    	
         	    if(data.comboItems) {
         		 $.each(data.comboItems, function(i, comboItem) {		     			
         		    	 id= "item~"+comboItem.comboItemId;
@@ -124,6 +137,12 @@ $(document).ready(function () {
         		 });
         		
         	    }
+	    	} else {
+	    		$("#partyOrdernav").trigger("click");
+	    		var errorMessage = "We are currently not serving individual orders in selected area.";
+	    		showErrorMessage(errorMessage)
+	    		
+	    	}
             	    $("#orderId").val(data.orderId);
             	    
         	}).fail(function(data) {
@@ -347,6 +366,7 @@ $(document).ready(function () {
     }
     $(".continueToDelivery").on("click", function(e) {
     	hideMaxErrorMessage();
+    	hideErrorMessage();
         showOverlay();
         var noIfItemsSelected = 0;
         $('[data-th="Quantity"]').each(function() {
@@ -369,31 +389,31 @@ $(document).ready(function () {
     	ajax.postForm("deliveryDetails?F=J", $("#homeForm")).done(function(data) {
     	    $("#orderId").val(data.orderId);
     	    if (deliveryAddressId && deliveryAddressId !== "") {
-    		goToNextStep("address");
-    		hideOverlay();
-    		getDeliverySlots();
+    	    	goToNextStep("address");    		
+    	    	hideOverlay();
+    	    	getDeliverySlots();
     	    } else {
-    		ajax.loadFragment("html/deliverydetails.html").done(function(out) {
-    		    $("#deliveryDetailsDiv").empty();
-    		    $("#deliveryDetailsDiv").append(out);
-    		    $("input[id=deliveryOrderId]").val(data.orderId);
-    		    bindDeliveryEvents();
-    		    $('#phoneNumberDisplay').val(data.contactNumber);
-    		    $('#phoneNumber').val(data.contactNumber);
-    		    $("#deliveryAreaID").attr("value",$("#selectedAreaId").val());	
-    		    $("#areaAddrDisplay").attr("placeholder",$("#selectedArea").val());
-    			$("#subAreaAddrDisplay").attr("placeholder",$("#selectedSubArea").val());
-    			 $("#areaAddr").val($("#selectedArea").val());
-     			$("#subAreaAddr").val($("#selectedSubArea").val());
-    		    getAddressDetails();
-    		    getDeliverySlots();
-    		    hideErrorMessage();
-    		    goToNextStep("address");
-    		    hideOverlay();
-    		}).fail(function(data) {
-    		    alert("failed");
-    		    hideOverlay();
-    		});
+    	    	ajax.loadFragment("html/deliverydetails.html").done(function(out) {
+    	    		$("#deliveryDetailsDiv").empty();
+    	    		$("#deliveryDetailsDiv").append(out);
+    	    		$("input[id=deliveryOrderId]").val(data.orderId);
+    	    		bindDeliveryEvents();
+    	    		$('#phoneNumberDisplay').val(data.contactNumber);
+    	    		$('#phoneNumber').val(data.contactNumber);
+    	    		$("#deliveryAreaID").attr("value",$("#selectedAreaId").val());	
+    	    		$("#areaAddrDisplay").attr("placeholder",$("#selectedArea").val());
+    	    		$("#subAreaAddrDisplay").attr("placeholder",$("#selectedSubArea").val());
+    	    		$("#areaAddr").val($("#selectedArea").val());
+    	    		$("#subAreaAddr").val($("#selectedSubArea").val());
+    	    		getAddressDetails();
+    	    		getDeliverySlots();
+    	    		hideErrorMessage();
+    	    		goToNextStep("address");
+    	    		hideOverlay();
+    	    	}).fail(function(data) {
+    	    		alert("failed");
+    	    		hideOverlay();
+    	    	});
     	    }
     	}).fail(function(data) {
     	    alert("failed");

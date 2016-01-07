@@ -98,6 +98,7 @@ public class CrewController {
 	@RequestMapping(method = RequestMethod.POST, value="/loginCrew")
 	public ModelAndView loginCrew(@RequestParam("userId") String userId,@RequestParam("password") String password ) {
 		Crew crew = crewService.loginCrew(userId, password);
+		int i = 0;
 		ModelAndView mv = null;
 		mv = new ModelAndView("");
 		if(null != crew) {

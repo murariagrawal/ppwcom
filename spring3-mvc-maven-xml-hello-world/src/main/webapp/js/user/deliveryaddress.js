@@ -8,12 +8,33 @@ function clearDeliveryForm() {
     hideErrorMessage();
 }
 function getDeliverySlots() {
-    ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(
-	    function(data) {
+    ajax.postForm("fetchDeliverySlots?F=J", $("#deliveryForm")).done(function(data) {
 		$("#selectDeliverySlot").prop("disabled", false);
+		$("#slotMessageDiv").removeClass("show").addClass("hide");
+		$("#slotMessageDiv").empty();
 		if (data.errormessage && data.errormessage !== "") {
 		    showErrorMessage(data.errormessage);
 		} else if (data.deliverySlots) {
+			
+			if(data.fullDeliverySlots && data.fullDeliverySlots.length >0) {
+				var slotFullMessage = "";
+				$.each(data.fullDeliverySlots, function(i, fullSlot) {					
+					if(i!==0) {
+						slotFullMessage = slotFullMessage +", "+ fullSlot.startTime +"-"+fullSlot.endTime;
+					} else {
+						slotFullMessage = slotFullMessage + fullSlot.startTime +"-"+fullSlot.endTime;
+					}					
+				});
+				if(data.fullDeliverySlots.length ===1) {
+					slotFullMessage =slotFullMessage + " slot is ";
+				} else {
+					slotFullMessage =slotFullMessage + " slot are ";
+				}
+				slotFullMessage =slotFullMessage + "currently full in your area."
+				
+				$("#slotMessageDiv").append(slotFullMessage);
+				$("#slotMessageDiv").removeClass("hide").addClass("show");
+			}
 		    hideErrorMessage();
 		    $('#selectDeliverySlot').find('option').remove().end().append(
 			    '<option value="">Select Delivery Slot</option>').val('');
@@ -29,6 +50,8 @@ function getDeliverySlots() {
 			    $("#selectDeliverySlot").append(option);
 			}
 		    });
+		} else {
+			showErrorMessage("All the delivery slots in your area are full. Please try again tommorow.");
 		}
 	    }).fail(function(data) {
 	alert("failed");

@@ -32,6 +32,7 @@ public class CrewService {
 		crewDaoImpl.updateCrewDetailsLocation(crewId, latitude, longitude);
 	}
 	public Crew loginCrew(String userId, String password) {
+		int i =0;
 		Crew crewInfo = crewDaoImpl.validateCrewCredential(userId, password);
 		return crewInfo;
 	}

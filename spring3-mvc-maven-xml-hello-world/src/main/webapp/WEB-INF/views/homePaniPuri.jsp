@@ -37,41 +37,29 @@
 			</div>
 		</div>
 	</div>
-	<div id="myCarousel" class="carousel slide">
-		<!-- Carousel indicators -->
-
-		<!-- Wrapper for carousel items -->
-		<div class="carousel-inner">
-			<div class="active item"></div>
-			<div class="item"></div>
-			<div class="item"></div>
-		</div>
-
+	
+	<div class="customrow" style="margin-top: 52px;margin-right: -15px;height: 60px">
+  		<img src="fonts/panipuri2.JPG" style="width: 100%;height: 250;">
 	</div>
-	<div class="container customColorbgBody">
+	<div class="container" style="margin-top: 200px;">
 		<div class="row">
 			<section>
 
-				<div class="tab-pane item active" role="tabpanel" id="step1">
-					<div class="row">
-						<div class="jumbotron hidden-xs">
-							<h1>Stall At Home</h1>
-							<p>Book a stall at your home for a minimum consumption of 100 Puris</p>
-
-							<p>You can consume Sev puri, Dahi puri, Masala Puri or Pani puri whatever u want</p>
-						</div>
-					</div>
+				<div class="tab-pane item active" role="tabpanel" id="step1">		
+					
 					<div class="row hidden-md hidden-lg" style="height: 60px"></div>
+					<div id="selectedAreaDiv" style="color: floralwhite;" class="customrow hide">
+						</div>
 					<div class="row" style="margin-left: 2px; margin-right: 2px;">
 						<form role="form" id="homeForm" action="deliveryDetails" method="post">
 
 							<div id="pageContentCarousel" class="col-sm-12 col-md-8 col-lg-8 carousel slide" data-interval="false">
 								<div class="carousel-inner">
-									<div id="errorDiv" class="alert alert-danger hide" style="padding: 8px;margin-left: 5px;margin-right: 5px;"></div>
-									<div id="errorQuantityDiv" class="alert alert-danger hide" style="padding: 8px;margin-left: 5px;margin-right: 5px;"></div>
+									<div id="errorDiv" class="hide" style="background-color: #714C0B;color: burlywood;padding: 3px; margin-bottom: 10px;margin-top: 10px;"></div>
+									<div id="errorQuantityDiv" class="hide" style="background-color: #714C0B;color: burlywood;padding: 3px; margin-bottom: 10px;margin-top: 10px;"></div>
 									<div class="active item">
-										<div class="panel panel-primary" style="border: 0px;">
-											<div class="panel-body" style="padding: 8px;background-color: #F3AC1F;">
+										<div class="panel panel-primary" style="background-color: rgba(210, 0, 02, 0.2);border: 0px;">
+											<div class="panel-body" style="padding: 0px;">
 												<ul class="nav nav-tabs navtabcustom">
 													<li class="active"><a data-toggle="tab" class="customnav" href="#individualOrder"
 														id="individualOrdernav">Place Order</a></li>
@@ -81,8 +69,8 @@
 												<div class="tab-content customcontent">
 													<div id="individualOrder" class="tab-pane fade in active">
 														<div class="form-group">
-															<table id="cart" class="table table-hover table-condensed">
-																<thead style="color:red;">
+															<table id="cart" class="table-condensed" style="width: 100%;color: bisque;">
+																<thead style="border-bottom: 1px solid yellow;">
 																	<tr>
 																		<th style="width: 40%;padding-left: 8%;">Panipuri Box</th>
 																		<th style="width: 20%">Price</th>
@@ -102,7 +90,7 @@
 																							<c:out value="${item.itemName}"></c:out>
 																						</h4>
 																						<p>
-																							<a data-toggle="modal" data-target="#collapseOne${item.itemId}"> <span style="color:red;">View Details</span>
+																							<a data-toggle="modal" style="color: white;" data-target="#collapseOne${item.itemId}"> <span>View Details</span>
 																							</a>
 																						</p>
 																					</div>
@@ -140,11 +128,11 @@
 																			<td data-th="Quantity" data-itemId="${item.itemId}" data-itemName="${item.itemName}" colspan="1">
 																				<div class="input-group" style="margin-left: 30px;">
 																					<input type="hidden" name="item~${item.itemId}"> <span data-field="item~${item.itemId}"
-																						class="quantity-counter"> <span style="color:red;" class="glyphicon glyphicon-minus"> </span>
+																						class="quantity-counter"> <span style="color:black;" class="glyphicon glyphicon-minus"> </span>
 																					</span> <span data-field="item~${item.itemId}" id="item~${item.itemId}" data-itemId="${item.itemId}"
 																						class="quantity-counter-input" style="margin: 15px;">0</span> <span
 																						data-field="item~${item.itemId}" data-itemName="${item.itemName}" class="quantity-counter"> <span
-																						style="color:red;"class="glyphicon glyphicon-plus"></span>
+																						style="color:black;"class="glyphicon glyphicon-plus"></span>
 
 																					</span>
 																				</div>
@@ -152,7 +140,7 @@
 																		</tr>
 																	</c:forEach>
 																	<tr>
-																		<td colspan="4"><span style="color: red;padding-left: 7%;"><strong>Extra Stuffing</strong></span></td>
+																		<td colspan="4"><span style="padding-left: 7%;"><strong>Extra Stuffing</strong></span></td>
 																	</tr>
 																	<c:forEach items="${stuffingList}" var="stuffing">
 																		<tr>
@@ -174,11 +162,11 @@
 																				data-stuffingId="${stuffing.toppingId}" colspan="1">
 																				<div class="input-group" style="margin-left: 30px;">
 																					<input type="hidden" name="stuffing~${stuffing.toppingId}"> <span
-																						data-field="stuffing~${stuffing.toppingId}" class="quantity-counter"> <span style="color:red;"
+																						data-field="stuffing~${stuffing.toppingId}" class="quantity-counter"> <span style="color:black;"
 																						class="glyphicon glyphicon-minus"></span>
 																					</span> <span data-field="stuffing~${stuffing.toppingId}" id="stuffing~${stuffing.toppingId}"
 																						class="quantity-counter-input" style="margin: 15px;">0</span> <span
-																						data-field="stuffing~${stuffing.toppingId}" data-itemName="${stuffing.toppingName}" class="quantity-counter"> <span style="color:red;"
+																						data-field="stuffing~${stuffing.toppingId}" data-itemName="${stuffing.toppingName}" class="quantity-counter"> <span style="color:black;"
 																						class="glyphicon glyphicon-plus"></span>
 
 																					</span>
@@ -192,7 +180,7 @@
 													</div>
 													<div id="comboOrder" class="tab-pane fade">
 														<div class="form-group">
-															<table id="cart" class="table table-hover table-condensed">
+															<table id="cart" class="table table-condensed">
 																<thead>
 																	<tr>
 																		<th style="width: 40%">Combo Box</th>
@@ -213,7 +201,7 @@
 																							<c:out value="${item.itemName}"></c:out>
 																						</h4>
 																						<p>
-																							<a class="accordion-toggle" data-toggle="modal" href="#collapseOne${item.itemId}"> <span style="color:red;">View
+																							<a class="accordion-toggle" style="color: white;" data-toggle="modal" href="#collapseOne${item.itemId}"> <span>View
 																									Details</span>
 																							</a>
 																						</p>
@@ -253,9 +241,9 @@
 																				data-itemName="${item.itemName}" colspan="1">
 																				<div class="input-group" style="margin-left: 30px;">
 																					<input type="hidden" name="item~${item.itemId}"> <span data-field="item~${item.itemId}"
-																						class="quantity-counter-combo"> <span style="color:red;" class="glyphicon glyphicon-minus"></span>
+																						class="quantity-counter-combo"> <span style="color:black;" class="glyphicon glyphicon-minus"></span>
 																					</span> <span id="item~${item.itemId}" data-field="item~${item.itemId}" class="quantity-counter-input"
-																						style="margin: 15px;">0</span> <span class="quantity-counter-combo" data-itemName="${item.itemName}"> <span style="color:red;"
+																						style="margin: 15px;">0</span> <span class="quantity-counter-combo" data-itemName="${item.itemName}"> <span style="color:black;"
 																						data-field="item~${item.itemId}"  class="glyphicon glyphicon-plus"></span>
 
 																					</span>
@@ -270,7 +258,7 @@
 													<div id="partyOrder" class="tab-pane fade">
 														<div class="customrow">
 															<div class="form-group">
-																<table id="cart" class="table table-hover table-condensed">
+																<table id="cart" class="table table-condensed">
 																	<thead>
 																		<tr>
 																			<th style="width: 45%">Stall</th>
@@ -343,7 +331,7 @@
 								</div>
 							</div>
 							<div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-								<div class="panel panel-primary" style="background: red;border: 0px;">
+								<div class="panel panel-primary" style="background-color: rgba(210, 0, 02, 0.2);border: 0px;">
 									<div class="hidden-xs hidden-sm pannelheadercustom" >Order Summary</div>
 									<div class="hidden-md hidden-lg pannelheadercustom" >
 										Order Summary <a data-toggle="collapse" data-target="#viewDetails"> </a>
@@ -374,7 +362,7 @@
 														</div>
 													</div>
 													<div class="customrow">
-														<div class="col-md-8 col-lg-8 col-xs-8">Delivery Charges</div>
+														<div class="col-md-6 col-lg-6 col-xs-6">Delivery Charges</div>
 														<div class="col-md-2 col-lg-2 col-xs-2"></div>
 														<div class="col-md-2 col-lg-2 col-xs-2" style="margin-left: 10px">
 															<label id="deliveryAmount">0.00</label>
@@ -555,7 +543,7 @@
 		<div class="modal-dialog">
 			<div>
 				<div>
-					<span><img src="fonts/Loading.gif" alt="Loading...." style="width:128px;height:128px;"></span>
+					<span><img src="fonts/Loading.gif" alt="Loading...." style="width:100px;height:97px;"></span>
 				</div>
 			</div>
 		</div>

@@ -61,7 +61,7 @@ $(document).ready(function () {
 	    });
 	    $('#items, #itemsMenu').on("click",function() {
 	    	loadFragment("html/admin/ItemManagement.html");
-	    	
+	    	var iii = 0;
 	    	ajax.getJSON("getAllItems").done(function(data) {
 	    		itemSet= data;
 	    		

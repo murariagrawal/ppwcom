@@ -104,6 +104,10 @@ public class OrderInitiationController {
 		mv.addObject("availableStock", area.getMasterArea().getDeliveryStockList());
 		mv.addObject("comboItems", comboItems);
 		mv.addObject("availableSlots", deliverySlotInfo.getAvailableDeliverySlotList());
+		mv.addObject("servingIndividual", area.isServing());
+		mv.addObject("servingParty", area.isServingParty());
+		
+		
 		return mv;
 	}
 	@RequestMapping(method = RequestMethod.POST, value="/deliveryDetails")

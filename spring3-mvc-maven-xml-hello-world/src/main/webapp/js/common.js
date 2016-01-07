@@ -46,24 +46,28 @@ $(document).ready(function() {
 	    $(".continueToVerifySummary").removeClass("show").addClass("hide");
 	    $(".continueToConfirmSummary").removeClass("show").addClass("hide");
 	    $(".placeNewOrderSummary").removeClass("show").addClass("hide");
+	    $("#selectedAreaDiv").removeClass("hide").addClass("show");
 	    $("#couponCode").removeClass("show").addClass("hide");
 	} else if (nextStep === "address") {
 	    $(".continueToDeliverySummary").removeClass("show").addClass("hide");
 	    $(".continueToVerifySummary").removeClass("hide").addClass("show");
 	    $(".continueToConfirmSummary").removeClass("show").addClass("hide");
 	    $(".placeNewOrderSummary").removeClass("show").addClass("hide");
+	    $("#selectedAreaDiv").removeClass("show").addClass("hide");
 	    $("#couponCode").removeClass("show").addClass("hide");
 	} else if (nextStep === "verify") {
 	    $(".continueToDeliverySummary").removeClass("show").addClass("hide");
 	    $(".continueToVerifySummary").removeClass("show").addClass("hide");
 	    $(".continueToConfirmSummary").removeClass("hide").addClass("show");
 	    $(".placeNewOrderSummary").removeClass("show").addClass("hide");
+	    $("#selectedAreaDiv").removeClass("show").addClass("hide");
 	    $("#couponCode").removeClass("hide").addClass("show");
 	} else if (nextStep === "confirm") {
 	    $(".continueToDeliverySummary").removeClass("show").addClass("hide");
 	    $(".continueToVerifySummary").removeClass("show").addClass("hide");
 	    $(".continueToConfirmSummary").removeClass("show").addClass("hide");
 	    $(".placeNewOrderSummary").removeClass("hide").addClass("show");
+	    $("#selectedAreaDiv").removeClass("show").addClass("hide");
 	    $("#couponCode").removeClass("show").addClass("hide");
 	}
     }

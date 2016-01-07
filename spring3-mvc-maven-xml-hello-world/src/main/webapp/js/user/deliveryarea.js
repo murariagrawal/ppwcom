@@ -120,7 +120,7 @@ function bindAreaEvents() {
     });
     $(".subAreaAddr").on("input", function() {
 		if ($(this).val() && $(this).val().length > 0) {
-		    var inputValueArea = $(this).closest("customrow").find("input:text[name=areaAddr]").val();
+		    var inputValueArea = $(this).parent().parent().parent().find("input:text[name=areaAddr]").val();
 		    var inputValue = $(this).val();
 		    $(".subAreaMenu").empty();
 		    var regexArea = new RegExp('(' + inputValueArea + ')', 'gi');

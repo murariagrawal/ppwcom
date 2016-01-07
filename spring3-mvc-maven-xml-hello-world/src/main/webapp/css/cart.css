@@ -1,7 +1,9 @@
 .table>tbody>tr>td, .table>tfoot>tr>td {
 	vertical-align: middle;
 }
-
+.table-condensed>tbody>tr {
+	    border-bottom: 1px solid yellow;
+}
 .input-group .input-group-btn.quantity-counter {
 	width: 39px;
 	float: left
@@ -18,7 +20,8 @@
 }
 
 .customColorbgBody {
-	    background-color: #F3AC1F;
+	background-image: url("../fonts/BG.jpg");
+	background-size: contain;	   
 }
 .overlay {
 	position: absolute;
@@ -32,19 +35,17 @@
 	display: inline-block;
 }
 .customcontent {
-	background-color: white;
-    border: 5px solid red;
+	background-color: transparent;
     box-shadow: none;
     padding-left: 15px;
     padding-right: 15px;
 }
 .pannelfootercustom {
 	padding: 0px;
-	background-color: red;
+	background-color: transparent;
 	border: 0px;
 }
 .pannelheadercustom {
-	background-image: linear-gradient(red 0,red 100%); 
 	color:white;
 	border-bottom: 5px solid yellow;
 	padding: 10px 15px;
@@ -95,6 +96,8 @@
 }
 .navtabcustom {
 	font-size: 14px;
+	border-bottom: 5px solid;
+    border-color: yellow;
 }
 .customformelements {
 	box-shadow: none;
@@ -105,7 +108,7 @@
 }
 .nav-tabs>li>a.customnav {
 	   	border-radius: 0px 0px 0 0;	   
-    	background-color: red;
+    	background-color: #714C0B;
     	border: 0px;
    	 	border-radius: 0px;
    	 	color: yellow;

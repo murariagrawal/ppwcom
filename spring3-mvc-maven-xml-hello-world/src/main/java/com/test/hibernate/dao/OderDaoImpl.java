@@ -3,7 +3,9 @@ package com.test.hibernate.dao;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -316,7 +318,38 @@ public class OderDaoImpl {
 
 					}
 					
+					
 				}
+				LinkedHashMap<Long, Integer> itemMaxCapacity = new LinkedHashMap<Long, Integer>();
+				LinkedHashMap<Long, Integer> stuffingMaxCapacity = new LinkedHashMap<Long, Integer>();
+				for(DeliverySlotStock slotStock :selectedSlot.getDeliveryStockList()) {
+					if (!slotStock.isStuffing()) {
+						if(null != itemInitialOrder.get(Integer.parseInt(""+slotStock.getId()))) {
+							Set<Integer> capacitySet = itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())).keySet();
+							int maxCapacity = 0;
+							for(Integer capacity:capacitySet) {
+								if(maxCapacity <capacity) {
+									maxCapacity = capacity;
+								}
+							}
+							maxCapacity = maxCapacity-itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(maxCapacity);
+							itemMaxCapacity.put(slotStock.getId(), maxCapacity);
+						}
+					} else {
+						if(null != stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId()))) {
+							Set<Integer> capacitySet = stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())).keySet();
+							int maxCapacity = 0;
+							for(Integer capacity:capacitySet) {
+								if(maxCapacity <capacity) {
+									maxCapacity = capacity;
+								}
+							}
+							maxCapacity = maxCapacity-stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(maxCapacity);
+							stuffingMaxCapacity.put(slotStock.getId(), maxCapacity);
+						}
+					}
+				}
+				
 				for (DeliverySlot slot : slots) {
 					List<DeliverySlotStock> slotStocks = slot.getDeliveryStockList();
 					for (DeliverySlotStock slotStock : slotStocks) {
@@ -324,6 +357,12 @@ public class OderDaoImpl {
 						if (!slotStock.isStuffing()) {
 							if(null != itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())) && null !=itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity())) {
 								int finalQuantity = slotStock.getInitialQuantity() - itemInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity());
+								if(null != itemMaxCapacity.get(slotStock.getId())) {
+									if(finalQuantity > itemMaxCapacity.get(slotStock.getId())) {
+										finalQuantity = itemMaxCapacity.get(slotStock.getId());
+									}
+								}
+								
 								if(finalQuantity<slotStock.getQuantity()) {
 									slotStock.setQuantity(finalQuantity);
 								}
@@ -331,6 +370,11 @@ public class OderDaoImpl {
 						} else {
 							if(null != stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())) && null !=stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity())) {
 								int finalQuantity = slotStock.getInitialQuantity() - stuffingInitialOrder.get(Integer.parseInt(""+slotStock.getId())).get(slotStock.getInitialQuantity());
+								if(null != stuffingMaxCapacity.get(slotStock.getId())) {
+									if(finalQuantity > stuffingMaxCapacity.get(slotStock.getId())) {
+										finalQuantity = stuffingMaxCapacity.get(slotStock.getId());
+									}
+								}								
 								if(finalQuantity<slotStock.getQuantity()) {
 									slotStock.setQuantity(finalQuantity);
 								}
@@ -453,6 +497,7 @@ public class OderDaoImpl {
 
 				} else if (item.isComboItem()) {
 					itemVo.setComboItem(true);
+					Hibernate.initialize(item.getComboQuantityList());
 					itemVo.setComboQuantityList(item.getComboQuantityList());
 					itemVo.setItemPrice(item.getItemPrice());
 

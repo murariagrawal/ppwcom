@@ -125,6 +125,7 @@ public class CrewDaoImpl {
 	
 	public Crew validateCrewCredential(String userId, String password) {
 		Crew selectedCrew = null;
+		int i = 0;
 		Session session = this.sessionFactory.openSession();
 		session.beginTransaction();
 		List<Crew> selectedCrewlist = (List<Crew>)session.createCriteria(Crew.class).add(Restrictions.eq("userId", userId)).add(Restrictions.eq("password", password)).list();

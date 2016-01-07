@@ -46,20 +46,17 @@ public class DeliveryDetailsService {
 				boolean isValidSlot = false;
 				List<String> unavailableItems = new ArrayList<String>();
 				List<String> unavailableStuffings = new ArrayList<String>();
-				
-				if(null != itemList) {
-					for(ItemVo item :itemList) {
-						innerLoop:
-						for(DeliverySlotStock stock :stockList) {
+				for(DeliverySlotStock stock :stockList) {
+					if(null != itemList && !stock.isStuffing()) {
+						for(ItemVo item :itemList) {
 							if(!item.isComboItem()){
-								if(stock.getId() == item.getItemId() && !stock.isStuffing()) {
+								if(stock.getId() == item.getItemId()) {
 									if(stock.getQuantity()>=item.getItemQuantity()) {
-										break;
+										continue;
 									} else {
 										unavailableItems.add(item.getItemName());
-										break;
+										continue;
 									}
-									
 								}
 							} else {
 								if(null !=item.getComboQuantityList()) {
@@ -68,34 +65,31 @@ public class DeliveryDetailsService {
 										if(stock.getId() == comboItem.getComboItem().getItemId() && !stock.isStuffing()) {
 											int comboItemQuantity = comboItem.getQuantity() * item.getItemQuantity();
 											if(stock.getQuantity()>=comboItemQuantity) {											
-												break innerLoop;
+												continue;
 											} else {
 												unavailableItems.add(item.getItemName());											
-												break innerLoop;
+												continue;
 											}
-											
 										}
 									}
 								}
 							}
 						}
 					}
-				}
-				if(null != stuffingList) {
-					for(ToppingVo stuffing :stuffingList) {
-						for(DeliverySlotStock stock :stockList) {
+					if(null != stuffingList && stock.isStuffing()) {
+						for(ToppingVo stuffing :stuffingList) {								
 							if(stock.getId() == stuffing.getToppingId() && stock.isStuffing()) {
 								if(stock.getQuantity()>=stuffing.getQuantity()) {
-									break;
+									continue;
 								} else {
 									unavailableStuffings.add(stuffing.getToppingName());
-									break;
+									continue;
 								}
-							
-							}
-						}				
+							}				
+						}
 					}
 				}
+				
 				if(unavailableItems.isEmpty() && unavailableStuffings.isEmpty()) {
 					
 					int hours = calendar.get(Calendar.HOUR_OF_DAY);
@@ -122,7 +116,7 @@ public class DeliveryDetailsService {
 				unavailableItems.addAll(unavailableStuffings);
 				unavailbleItemList.put(deliverySlot.getStartTime()+"-"+deliverySlot.getEndTime(), unavailableItems);
 				
-				//}
+				
 			}
 			deliverySlotInfoVo.setAvailableDeliverySlotList(deliverySlotsList);
 			deliverySlotInfoVo.setFullDeliverySlotsList(fullDeliverySlotsList);
